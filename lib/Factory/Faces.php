@@ -7,7 +7,7 @@
  * @license  http://www.fsf.org/copyleft/gpl.html GPL
  * @package  Ansel
  */
-class Ansel_Injector_Factory_Faces
+class Ansel_Factory_Faces
 {
     public function create (Horde_Injector $injector)
     {

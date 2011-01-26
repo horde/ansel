@@ -9,7 +9,7 @@
  * @license  http://www.fsf.org/copyleft/gpl.html GPL
  * @package  Ansel
  */
-class Ansel_Injector_Factory_Storage
+class Ansel_Factory_Storage
 {
     /**
      * Array of already instantiated instances
