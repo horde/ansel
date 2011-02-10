@@ -1,10 +1,6 @@
 <?php
-
-$block_name = _("Random photo");
-
 /**
- * This file provides a random photo through the Horde_Blocks, by extending
- * the Horde_Blocks class.
+ * Display a random photo in a block.
  *
  * Copyright 2003-2007 Duck <duck@obla.net>
  *
@@ -13,16 +9,9 @@ $block_name = _("Random photo");
  *
  * @author  Duck <Duck@obla.net>
  * @author  Ben Chavet <ben@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_random_photo extends Horde_Block
+class Ansel_Block_RandomPhoto extends Horde_Block
 {
-    /**
-     *
-     * @var string
-     */
-    protected $_app = 'ansel';
-
     /**
      *
      * @var boolean
@@ -30,17 +19,20 @@ class Horde_Block_ansel_random_photo extends Horde_Block
     public $updateable = true;
 
     /**
-     *
-     * @return string
      */
-    protected function _title()
+    public function getName()
     {
         return _("Random photo");
     }
 
     /**
-     *
-     * @return string
+     */
+    protected function _title()
+    {
+        return $this->getName();
+    }
+
+    /**
      */
     protected function _content()
     {

@@ -1,7 +1,4 @@
 <?php
-
-$block_name = _("Tag Cloud");
-
 /**
  * Display Tag Cloud
  *
@@ -11,39 +8,37 @@ $block_name = _("Tag Cloud");
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
  * @author  Michael Rubinsky <mrubinsk@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_cloud extends Horde_Block
+class Ansel_Block_Cloud extends Horde_Block
 {
     /**
-     *
-     * @var string
      */
-    protected $_app = 'ansel';
-
-    /**
-     *
-     * @return array
-     */
-    protected function _params()
-    {
-        return array('count' => array(
-                         'name' => _("Number of tags to display"),
-                         'type' => 'int',
-                         'default' => 20));
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function _title()
+    public function getName()
     {
         return _("Tag Cloud");
     }
 
     /**
-     * @return string
+     */
+    protected function _params()
+    {
+        return array(
+            'count' => array(
+                'name' => _("Number of tags to display"),
+                'type' => 'int',
+                'default' => 20
+            )
+        );
+    }
+
+    /**
+     */
+    protected function _title()
+    {
+        return $this->getName();
+    }
+
+    /**
      */
     protected function _content()
     {
@@ -62,4 +57,5 @@ class Horde_Block_ansel_cloud extends Horde_Block
         }
         return $html;
     }
+
 }

@@ -1,7 +1,4 @@
 <?php
-
-$block_name = _("Gallery");
-
 /**
  * Displays mini thumbnails of images in the selected (or random) gallery.
  *
@@ -12,41 +9,43 @@ $block_name = _("Gallery");
  *
  * @author  Duck <Duck@obla.net>
  * @author  Marcus Ryan <marcus@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_gallery extends Horde_Block
+class Ansel_Block_Gallery extends Horde_Block
 {
     /**
-     *
-     * @var string
-     */
-    protected $_app = 'ansel';
-    
-    /**
-     *
      * @var Ansel_Gallery
      */
     private $_gallery = null;
 
     /**
-     *
-     * @return array
+     */
+    public function getName()
+    {
+        return _("Gallery");
+    }
+
+    /**
      */
     protected function _params()
     {
-        $params = array('gallery' => array(
-                            'name' => _("Gallery"),
-                            'type' => 'enum',
-                            'default' => '__random',
-                            'values' => array('__random' => _("Random gallery"))),
-                        'perpage' => array(
-                            'name' => _("Maximum number of photos to display (0 means unlimited)"),
-                            'type' => 'int',
-                            'default' => 20),
-                        'use_lightbox' => array(
-                            'name' => _("Use a lightbox to view photos"),
-                            'type' => 'checkbox',
-                            'default' => true));
+        $params = array(
+            'gallery' => array(
+                'name' => _("Gallery"),
+                'type' => 'enum',
+                'default' => '__random',
+                'values' => array('__random' => _("Random gallery"))
+            ),
+            'perpage' => array(
+                'name' => _("Maximum number of photos to display (0 means unlimited)"),
+                'type' => 'int',
+                'default' => 20
+            ),
+            'use_lightbox' => array(
+                'name' => _("Use a lightbox to view photos"),
+                'type' => 'checkbox',
+                'default' => true
+            )
+        );
 
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
         if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
@@ -61,15 +60,13 @@ class Horde_Block_ansel_gallery extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _title()
     {
         try {
             $gallery = $this->_getGallery();
         } catch (Horde_Exception $e) {
-            return Ansel::getUrlFor('view', array('view' => 'List'), true)->link() . _("Gallery") . '</a>';
+            return Ansel::getUrlFor('view', array('view' => 'List'), true)->link() . $this->getName() . '</a>';
         }
 
         // Build the gallery name.
@@ -89,8 +86,6 @@ class Horde_Block_ansel_gallery extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _content()
     {
@@ -127,8 +122,8 @@ class Horde_Block_ansel_gallery extends Horde_Block
     }
 
     /**
-     *
      * @param boolean $retry
+     *
      * @return Ansel_Gallery
      */
     private function _getGallery($retry = false)

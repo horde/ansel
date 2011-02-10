@@ -1,7 +1,4 @@
 <?php
-
-$block_name = _("My Galleries");
-
 /**
  * Display summary information on top level galleries.
  *
@@ -11,32 +8,30 @@ $block_name = _("My Galleries");
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
  * @author  Michael Rubinsky <mrubinsk@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_my_galleries extends Horde_Block
+class Ansel_Block_MyGalleries extends Horde_Block
 {
-    /**
-     *
-     * @var string
-     */
-    protected $_app = 'ansel';
+   /**
+    */
+   public function getName()
+   {
+        return _("My Galleries");
+   }
 
     /**
-     *
-     * @return array
      */
     protected function _params()
     {
-        $params = array('limit' => array(
-                            'name' => _("Maximum number of galleries"),
-                            'type' => 'int',
-                            'default' => 0));
-        return $params;
+        return array(
+            'limit' => array(
+                'name' => _("Maximum number of galleries"),
+                'type' => 'int',
+                'default' => 0
+            )
+        );
     }
 
     /**
-     *
-     * @return string
      */
     protected function _title()
     {
@@ -48,8 +43,6 @@ class Horde_Block_ansel_my_galleries extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _content()
     {
@@ -105,4 +98,5 @@ HEADER;
 
         return $html;
     }
+
 }

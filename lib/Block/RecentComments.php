@@ -1,10 +1,4 @@
 <?php
-
-if ($GLOBALS['registry']->images->hasComments() &&
-    $GLOBALS['registry']->hasMethod('forums/getThreadsBatch')) {
-    $block_name = _("Recent Photo Comments");
-}
-
 /**
  * Display most recent image comments for galleries.
  *
@@ -14,20 +8,24 @@ if ($GLOBALS['registry']->images->hasComments() &&
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
  * @author  Michael Rubinsky <mrubinsk@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_recent_comments extends Horde_Block
+class Ansel_Block_Comments extends Horde_Block
 {
     /**
-     * @var string
-     */
-    protected $_app = 'ansel';
-    
-    /**
+     * TODO
      *
      * @var Ansel_Gallery
      */
     private $_gallery = null;
+
+    /**
+     */
+    public function getName()
+    {
+        return ($GLOBALS['registry']->images->hasComments() && $GLOBALS['registry']->hasMethod('forums/getThreadsBatch'))
+            ? _("Recent Photo Comments")
+            : parent::getName();
+    }
 
     /**
      *
@@ -35,11 +33,14 @@ class Horde_Block_ansel_recent_comments extends Horde_Block
      */
     protected function _params()
     {
-        $params = array('gallery' => array(
-                        'name' => _("Gallery"),
-                        'type' => 'enum',
-                        'default' => '__random',
-                        'values' => array('all' => 'All')));
+        $params = array(
+            'gallery' => array(
+                'name' => _("Gallery"),
+                'type' => 'enum',
+                'default' => '__random',
+                'values' => array('all' => 'All')
+            )
+        );
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
         if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
             ($storage->countGalleries($GLOBALS['registry']->getAuth(), Horde_Perms::READ) < $GLOBALS['conf']['gallery']['listlimit'])) {
@@ -53,8 +54,6 @@ class Horde_Block_ansel_recent_comments extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _title()
     {
@@ -82,9 +81,6 @@ class Horde_Block_ansel_recent_comments extends Horde_Block
     }
 
     /**
-     *
-     * @global Horde_Registry $registry
-     * @return string
      */
     protected function _content()
     {
@@ -150,7 +146,6 @@ class Horde_Block_ansel_recent_comments extends Horde_Block
     }
 
     /**
-     *
      * @return Ansel_Gallery
      * @throws Horde_Exception_NotFound
      * @throws Horde_Exception_PermissionDenied
@@ -190,7 +185,8 @@ class Horde_Block_ansel_recent_comments extends Horde_Block
      * @param string $index      The index that contains the numerical value
      *                           to sort by.
      */
-    private function _asortbyindex ($sortarray, $index) {
+    private function _asortbyindex ($sortarray, $index)
+    {
         $lastindex = count ($sortarray) - 1;
         for ($subindex = 0; $subindex < $lastindex; $subindex++) {
             $lastiteration = $lastindex - $subindex;

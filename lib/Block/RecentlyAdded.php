@@ -1,7 +1,4 @@
 <?php
-
-$block_name = _("Recently Added Photos");
-
 /**
  * Display most recently added images.
  *
@@ -11,37 +8,39 @@ $block_name = _("Recently Added Photos");
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
  * @author  Michael Rubinsky <mrubinsk@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_recently_added extends Horde_Block
+class Ansel_Block_Recentlyadded extends Horde_Block
 {
     /**
-     *
-     * @var string
      */
-    protected $_app = 'ansel';
+    public function getName()
+    {
+        return _("Recently Added Photos");
+    }
 
     /**
+     * TODO
      *
      * @var Ansel_Gallery
      */
     private $_gallery = null;
 
     /**
-     *
-     * @return array
      */
     protected function _params()
     {
-        $params = array('gallery' => array(
-                            'name' => _("Gallery"),
-                            'type' => 'enum',
-                            'default' => '__random',
-                            'values' => array('all' => 'All')),
-                        'limit' => array(
-                             'name' => _("Maximum number of photos"),
-                             'type' => 'int',
-                             'default' => 10),
+        $params = array(
+            'gallery' => array(
+                'name' => _("Gallery"),
+                'type' => 'enum',
+                'default' => '__random',
+                'values' => array('all' => 'All')
+            ),
+            'limit' => array(
+                'name' => _("Maximum number of photos"),
+                'type' => 'int',
+                'default' => 10
+            )
         );
 
         if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
@@ -58,8 +57,6 @@ class Horde_Block_ansel_recently_added extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _title()
     {
@@ -78,15 +75,13 @@ class Horde_Block_ansel_recently_added extends Horde_Block
                                               'view' => 'Gallery'),
                                         true);
             return sprintf(_("Recently Added Photos From %s"), $viewurl->link() . $name . '</a>');
-        } else {
-            $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
-            return _("Recently Added Photos");
         }
+
+        $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
+        return $this->getName();
     }
 
     /**
-     *
-     * @return string
      */
     protected function _content()
     {
@@ -176,7 +171,6 @@ HEADER;
     }
 
     /**
-     *
      * @return Ansel_Gallery
      */
     private function _getGallery()

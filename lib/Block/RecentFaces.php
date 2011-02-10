@@ -1,41 +1,39 @@
 <?php
-if (!empty($GLOBALS['conf']['faces']['driver'])) {
-    $block_name = _("Recent faces");
-}
-
 /**
- * This file provides a recent faces through the Horde_Blocks, by extending
- * the Horde_Blocks class.
+ * This file provides a recent faces display in a block.
  *
  * Copyright 2007-2011 The Horde Project (http://www.horde.org/)
  *
  * See the enclosed file COPYING for license information (GPL). If you
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
- * @author  Duck <Duck@obala.net>
- * @package Horde_Block
+ * @author Duck <Duck@obala.net>
  */
-class Horde_Block_ansel_recent_faces extends Horde_Block
+class Ansel_Block_RecentFaces extends Horde_Block
 {
     /**
-     * @var string
      */
-    protected $_app = 'ansel';
-
-    /**
-     * @return array
-     */
-    protected function _params()
+    public function getName()
     {
-        return array('limit' => array(
-                        'name' => _("Maximum number of faces"),
-                        'type' => 'int',
-                        'default' => 10));
+        return empty($GLOBALS['conf']['faces']['driver'])
+            ? parent::getName()
+            : $this->_title();
     }
 
     /**
-     *
-     * @return string
+     */
+    protected function _params()
+    {
+        return array(
+            'limit' => array(
+                'name' => _("Maximum number of faces"),
+                'type' => 'int',
+                'default' => 10
+            )
+        );
+    }
+
+    /**
      */
     protected function _title()
     {
@@ -43,8 +41,6 @@ class Horde_Block_ansel_recent_faces extends Horde_Block
     }
 
     /**
-     *
-     * @return string
      */
     protected function _content()
     {
@@ -60,4 +56,5 @@ class Horde_Block_ansel_recent_faces extends Horde_Block
 
         return $html;
     }
+
 }

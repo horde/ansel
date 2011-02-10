@@ -1,7 +1,4 @@
 <?php
-
-$block_name = _("Recently Geotagged Photos");
-
 /**
  * Display most recently geotagged images.
  *
@@ -11,44 +8,42 @@ $block_name = _("Recently Geotagged Photos");
  * did not receive this file, see http://www.fsf.org/copyleft/gpl.html.
  *
  * @author  Michael Rubinsky <mrubinsk@horde.org>
- * @package Horde_Block
  */
-class Horde_Block_ansel_recently_added_geodata extends Horde_Block
+class Ansel_Block_RecentlyAddedGeodata extends Horde_Block
 {
-    /**
-     * @var string
-     */
-    protected $_app = 'ansel';
-
-    /**
-     *
-     * @return array
-     */
-    protected function _params()
-    {
-        return array('limit' => array(
-                         'name' => _("Maximum number of photos"),
-                         'type' => 'int',
-                         'default' => 10),
-                     'height' => array(
-                         'name' => _("Height of map (width automatically adjusts to block)"),
-                         'type' => 'int',
-                         'default' => 250),
-        );
-    }
-
-    /**
-     *
-     * @return string
-     */
-    protected function _title()
+   /**
+    */
+    public function getName()
     {
         return _("Recently Geotagged Photos");
     }
 
     /**
-     *
-     * @return string
+     */
+    protected function _params()
+    {
+        return array(
+            'limit' => array(
+                'name' => _("Maximum number of photos"),
+                'type' => 'int',
+                'default' => 10
+            ),
+            'height' => array(
+                'name' => _("Height of map (width automatically adjusts to block)"),
+                'type' => 'int',
+                'default' => 250
+            ),
+        );
+    }
+
+    /**
+     */
+    protected function _title()
+    {
+        return $this->getName();
+    }
+
+    /**
      */
     protected function _content()
     {
@@ -106,4 +101,5 @@ EOT;
         Horde::addScriptFile('googlemap.js');
         return $html;
     }
+
 }
