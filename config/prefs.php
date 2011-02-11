@@ -1,6 +1,10 @@
 <?php
 /**
  * See horde/config/prefs.php for documentation on the structure of this file.
+ *
+ * IMPORTANT: Local overrides should be placed in prefs.local.php, or
+ * prefs-servername.php if the 'vhosts' setting has been enabled in Horde's
+ * configuration.
  */
 $prefGroups['display'] = array(
     'column' => _("General Preferences"),
@@ -239,3 +243,8 @@ $_prefs['exif_title'] = array(
     'type' => 'enum',
     'desc' => _("Should we automatically set the image title on upload if able? If so, choose the field to obtain the title from.")
 );
+
+/* Local overrides. */
+if (file_exists(dirname(__FILE__) . '/prefs.local.php')) {
+    include dirname(__FILE__) . '/prefs.local.php';
+}

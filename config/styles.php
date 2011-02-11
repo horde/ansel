@@ -6,6 +6,10 @@
  * used if requesting an explicit style to overide the gallery's existing style
  * when rendering via the API.
  *
+ * IMPORTANT: Local overrides should be placed in styles.local.php, or
+ * styles-servername.php if the 'vhosts' setting has been enabled in Horde's
+ * configuration.
+ *
  * Each entry *must* have:
  * <pre>
  * 'name'        =  The internal name of the style (this should match the
@@ -168,3 +172,8 @@ $styles['ansel_mobile'] = array(
     'width' => 75,
     'height' => 75,
 );
+
+/* Local overrides. */
+if (file_exists(dirname(__FILE__) . '/styles.local.php')) {
+    include dirname(__FILE__) . '/styles.local.php';
+}
