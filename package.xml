@@ -22,7 +22,7 @@
   <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-10-13</date>
+ <date>2017-10-16</date>
  <version>
   <release>4.0.0</release>
   <api>4.0.0</api>
@@ -584,7 +584,7 @@
    <file name="perms.php" role="horde" />
    <file name="preview.php" role="horde" />
    <file name="protect.php" role="horde" />
-   <file name="README" role="doc" />
+   <file name="README.rst" role="doc" />
    <file name="report.php" role="horde" />
    <file name="rss.php" role="horde" />
    <file name="smartmobile.php" role="horde" />
@@ -827,7 +827,7 @@
    <install as="ansel/perms.php" name="perms.php" />
    <install as="ansel/preview.php" name="preview.php" />
    <install as="ansel/protect.php" name="protect.php" />
-   <install as="README" name="README" />
+   <install as="README.rst" name="README.rst" />
    <install as="ansel/report.php" name="report.php" />
    <install as="ansel/rss.php" name="rss.php" />
    <install as="ansel/smartmobile.php" name="smartmobile.php" />
@@ -1446,7 +1446,7 @@
    </notes>
   </release>
   <release>
-   <date>2017-10-13</date>
+   <date>2017-10-16</date>
    <version>
     <release>4.0.0</release>
     <api>4.0.0</api>
