@@ -22,7 +22,7 @@
   <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-07-03</date>
+ <date>2017-10-13</date>
  <version>
   <release>4.0.0</release>
   <api>4.0.0</api>
@@ -64,14 +64,14 @@
     <file name="prefs.php" role="horde" />
     <file name="styles.php" role="horde" />
    </dir> <!-- /config -->
-   <dir name="docs">
+   <dir name="doc">
     <file name="CHANGES" role="doc" />
     <file name="CREDITS" role="doc" />
     <file name="INSTALL" role="doc" />
     <file name="lighttpd-ansel.conf" role="doc" />
     <file name="RELEASE_NOTES" role="doc" />
     <file name="UPGRADING" role="doc" />
-   </dir> <!-- /docs -->
+   </dir> <!-- /doc -->
    <dir name="faces">
     <dir name="search">
      <file name="all.php" role="horde" />
@@ -569,7 +569,7 @@
      <file name="lightbox.css" role="horde" />
      <file name="screen.css" role="horde" />
     </dir> <!-- /themes/default -->
-    </dir> <!-- /themes -->
+   </dir> <!-- /themes -->
    <file name=".htaccess" role="horde" />
    <file name="browse.php" role="horde" />
    <file name="browse_edit.php" role="horde" />
@@ -843,12 +843,12 @@
    <install as="ansel/config/hooks.php.dist" name="config/hooks.php.dist" />
    <install as="ansel/config/prefs.php" name="config/prefs.php" />
    <install as="ansel/config/styles.php" name="config/styles.php" />
-   <install as="CHANGES" name="docs/CHANGES" />
-   <install as="CREDITS" name="docs/CREDITS" />
-   <install as="INSTALL" name="docs/INSTALL" />
-   <install as="lighttpd-ansel.conf" name="docs/lighttpd-ansel.conf" />
-   <install as="RELEASE_NOTES" name="docs/RELEASE_NOTES" />
-   <install as="UPGRADING" name="docs/UPGRADING" />
+   <install as="CHANGES" name="doc/CHANGES" />
+   <install as="CREDITS" name="doc/CREDITS" />
+   <install as="INSTALL" name="doc/INSTALL" />
+   <install as="lighttpd-ansel.conf" name="doc/lighttpd-ansel.conf" />
+   <install as="RELEASE_NOTES" name="doc/RELEASE_NOTES" />
+   <install as="UPGRADING" name="doc/UPGRADING" />
    <install as="ansel/faces/claim.php" name="faces/claim.php" />
    <install as="ansel/faces/custom.php" name="faces/custom.php" />
    <install as="ansel/faces/face.php" name="faces/face.php" />
@@ -1161,7 +1161,7 @@
    <install as="ansel/themes/default/graphics/lightbox/nextlabel.gif" name="themes/default/graphics/lightbox/nextlabel.gif" />
    <install as="ansel/themes/default/graphics/lightbox/prevlabel.gif" name="themes/default/graphics/lightbox/prevlabel.gif" />
    <install as="ansel/themes/default/smartmobile/screen.css" name="themes/default/smartmobile/screen.css" />
-   </filelist>
+  </filelist>
  </phprelease>
  <changelog>
   <release>
@@ -1446,7 +1446,7 @@
    </notes>
   </release>
   <release>
-   <date>2017-07-03</date>
+   <date>2017-10-13</date>
    <version>
     <release>4.0.0</release>
     <api>4.0.0</api>
