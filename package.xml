@@ -66,11 +66,11 @@
    </dir> <!-- /config -->
    <dir name="doc">
     <file name="CHANGES" role="doc" />
-    <file name="CREDITS" role="doc" />
-    <file name="INSTALL" role="doc" />
+    <file name="CREDITS.rst" role="doc" />
+    <file name="INSTALL.rst" role="doc" />
     <file name="lighttpd-ansel.conf" role="doc" />
     <file name="RELEASE_NOTES" role="doc" />
-    <file name="UPGRADING" role="doc" />
+    <file name="UPGRADING.rst" role="doc" />
    </dir> <!-- /doc -->
    <dir name="faces">
     <dir name="search">
@@ -828,11 +828,11 @@
    <install as="ansel/config/styles.php" name="config/styles.php" />
    <install as="ansel/disclaimer.php" name="disclaimer.php" />
    <install as="CHANGES" name="doc/CHANGES" />
-   <install as="CREDITS" name="doc/CREDITS" />
-   <install as="INSTALL" name="doc/INSTALL" />
+   <install as="CREDITS.rst" name="doc/CREDITS.rst" />
+   <install as="INSTALL.rst" name="doc/INSTALL.rst" />
    <install as="lighttpd-ansel.conf" name="doc/lighttpd-ansel.conf" />
    <install as="RELEASE_NOTES" name="doc/RELEASE_NOTES" />
-   <install as="UPGRADING" name="doc/UPGRADING" />
+   <install as="UPGRADING.rst" name="doc/UPGRADING.rst" />
    <install as="ansel/edit_dates.php" name="edit_dates.php" />
    <install as="ansel/faces/claim.php" name="faces/claim.php" />
    <install as="ansel/faces/custom.php" name="faces/custom.php" />
