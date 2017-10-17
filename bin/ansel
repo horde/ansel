@@ -6,7 +6,7 @@
 * You will need to make sure that those libraries reside somewhere in
 * PHP's include path.
 *
-* See the enclosed file COPYING for license information (GPL). If you
+* See the enclosed file LICENSE for license information (GPL). If you
 * did not receive this file, see http://www.horde.org/licenses/gpl.
 *
 * @author Michael J. Rubinsky <mrubinsk@horde.org>

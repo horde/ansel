@@ -3,7 +3,7 @@
  * The Ansel_Style:: class is responsible for holding information about a
  * single Ansel style.
  *
- * See the enclosed file COPYING for license information (GPL). If you
+ * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
  *
  * @author  Michael J. Rubinsky <mrubinsk@horde.org>
