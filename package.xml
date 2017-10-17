@@ -22,7 +22,7 @@
   <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-10-16</date>
+ <date>2017-10-17</date>
  <version>
   <release>4.0.0</release>
   <api>4.0.0</api>
@@ -573,13 +573,13 @@
    <file name=".htaccess" role="horde" />
    <file name="browse.php" role="horde" />
    <file name="browse_edit.php" role="horde" />
-   <file name="COPYING" role="doc" />
    <file name="disclaimer.php" role="horde" />
    <file name="edit_dates.php" role="horde" />
    <file name="gallery.php" role="horde" />
    <file name="group.php" role="horde" />
    <file name="image.php" role="horde" />
    <file name="index.php" role="horde" />
+   <file name="LICENSE" role="doc" />
    <file name="map_edit.php" role="horde" />
    <file name="perms.php" role="horde" />
    <file name="preview.php" role="horde" />
@@ -814,41 +814,26 @@
  <phprelease>
   <filelist>
    <install as="ansel/.htaccess" name=".htaccess" />
-   <install as="ansel/browse.php" name="browse.php" />
-   <install as="ansel/browse_edit.php" name="browse_edit.php" />
-   <install as="COPYING" name="COPYING" />
-   <install as="ansel/disclaimer.php" name="disclaimer.php" />
-   <install as="ansel/edit_dates.php" name="edit_dates.php" />
-   <install as="ansel/gallery.php" name="gallery.php" />
-   <install as="ansel/group.php" name="group.php" />
-   <install as="ansel/image.php" name="image.php" />
-   <install as="ansel/index.php" name="index.php" />
-   <install as="ansel/map_edit.php" name="map_edit.php" />
-   <install as="ansel/perms.php" name="perms.php" />
-   <install as="ansel/preview.php" name="preview.php" />
-   <install as="ansel/protect.php" name="protect.php" />
-   <install as="README.rst" name="README.rst" />
-   <install as="ansel/report.php" name="report.php" />
-   <install as="ansel/rss.php" name="rss.php" />
-   <install as="ansel/smartmobile.php" name="smartmobile.php" />
-   <install as="ansel/view.php" name="view.php" />
-   <install as="ansel/xppublish.php" name="xppublish.php" />
    <install as="ansel" name="bin/ansel" />
    <install as="ansel-convert-sql-shares-to-sqlng" name="bin/ansel-convert-sql-shares-to-sqlng" />
    <install as="ansel-exif-to-tags" name="bin/ansel-exif-to-tags" />
    <install as="ansel-garbage-collection" name="bin/ansel-garbage-collection" />
    <install as="AnselPublish.scpt" name="bin/AnselPublish.scpt" />
+   <install as="ansel/browse.php" name="browse.php" />
+   <install as="ansel/browse_edit.php" name="browse_edit.php" />
    <install as="ansel/config/.htaccess" name="config/.htaccess" />
    <install as="ansel/config/conf.xml" name="config/conf.xml" />
    <install as="ansel/config/hooks.php.dist" name="config/hooks.php.dist" />
    <install as="ansel/config/prefs.php" name="config/prefs.php" />
    <install as="ansel/config/styles.php" name="config/styles.php" />
+   <install as="ansel/disclaimer.php" name="disclaimer.php" />
    <install as="CHANGES" name="doc/CHANGES" />
    <install as="CREDITS" name="doc/CREDITS" />
    <install as="INSTALL" name="doc/INSTALL" />
    <install as="lighttpd-ansel.conf" name="doc/lighttpd-ansel.conf" />
    <install as="RELEASE_NOTES" name="doc/RELEASE_NOTES" />
    <install as="UPGRADING" name="doc/UPGRADING" />
+   <install as="ansel/edit_dates.php" name="edit_dates.php" />
    <install as="ansel/faces/claim.php" name="faces/claim.php" />
    <install as="ansel/faces/custom.php" name="faces/custom.php" />
    <install as="ansel/faces/face.php" name="faces/face.php" />
@@ -868,9 +853,12 @@
    <install as="ansel/faces/search/named.php" name="faces/search/named.php" />
    <install as="ansel/faces/search/owner.php" name="faces/search/owner.php" />
    <install as="ansel/faces/search/tabs.php" name="faces/search/tabs.php" />
+   <install as="ansel/gallery.php" name="gallery.php" />
    <install as="ansel/gallery/captions.php" name="gallery/captions.php" />
    <install as="ansel/gallery/index.php" name="gallery/index.php" />
    <install as="ansel/gallery/sort.php" name="gallery/sort.php" />
+   <install as="ansel/group.php" name="group.php" />
+   <install as="ansel/image.php" name="image.php" />
    <install as="ansel/img/download.php" name="img/download.php" />
    <install as="ansel/img/ecard.php" name="img/ecard.php" />
    <install as="ansel/img/full.php" name="img/full.php" />
@@ -880,7 +868,9 @@
    <install as="ansel/img/thumb.php" name="img/thumb.php" />
    <install as="ansel/img/upload.php" name="img/upload.php" />
    <install as="ansel/img/upload_preview.php" name="img/upload_preview.php" />
+   <install as="ansel/index.php" name="index.php" />
    <install as="ansel/js/block.js" name="js/block.js" />
+   <install as="ansel/js/blocks/geotag.js" name="js/blocks/geotag.js" />
    <install as="ansel/js/carousel.js" name="js/carousel.js" />
    <install as="ansel/js/cropper.js" name="js/cropper.js" />
    <install as="ansel/js/editfaces.js" name="js/editfaces.js" />
@@ -894,7 +884,6 @@
    <install as="ansel/js/slugcheck.js" name="js/slugcheck.js" />
    <install as="ansel/js/smartmobile.js" name="js/smartmobile.js" />
    <install as="ansel/js/togglewidget.js" name="js/togglewidget.js" />
-   <install as="ansel/js/blocks/geotag.js" name="js/blocks/geotag.js" />
    <install as="ansel/js/views/common.js" name="js/views/common.js" />
    <install as="ansel/js/views/gallery.js" name="js/views/gallery.js" />
    <install as="ansel/js/views/image.js" name="js/views/image.js" />
@@ -903,23 +892,6 @@
    <install as="ansel/js/widgets/tagactions.js" name="js/widgets/tagactions.js" />
    <install as="ansel/lib/.htaccess" name="lib/.htaccess" />
    <install as="ansel/lib/ActionHandler.php" name="lib/ActionHandler.php" />
-   <install as="ansel/lib/Ansel.php" name="lib/Ansel.php" />
-   <install as="ansel/lib/Api.php" name="lib/Api.php" />
-   <install as="ansel/lib/Application.php" name="lib/Application.php" />
-   <install as="ansel/lib/Config.php" name="lib/Config.php" />
-   <install as="ansel/lib/Exception.php" name="lib/Exception.php" />
-   <install as="ansel/lib/Faces.php" name="lib/Faces.php" />
-   <install as="ansel/lib/Gallery.php" name="lib/Gallery.php" />
-   <install as="ansel/lib/Image.php" name="lib/Image.php" />
-   <install as="ansel/lib/ImageGenerator.php" name="lib/ImageGenerator.php" />
-   <install as="ansel/lib/Report.php" name="lib/Report.php" />
-   <install as="ansel/lib/Storage.php" name="lib/Storage.php" />
-   <install as="ansel/lib/Style.php" name="lib/Style.php" />
-   <install as="ansel/lib/TagBrowser.php" name="lib/TagBrowser.php" />
-   <install as="ansel/lib/Tagger.php" name="lib/Tagger.php" />
-   <install as="ansel/lib/Test.php" name="lib/Test.php" />
-   <install as="ansel/lib/Widget.php" name="lib/Widget.php" />
-   <install as="ansel/lib/XPPublisher.php" name="lib/XPPublisher.php" />
    <install as="ansel/lib/Ajax/Application.php" name="lib/Ajax/Application.php" />
    <install as="ansel/lib/Ajax/Application/Handler.php" name="lib/Ajax/Application/Handler.php" />
    <install as="ansel/lib/Ajax/Imple/EditCaption.php" name="lib/Ajax/Imple/EditCaption.php" />
@@ -927,6 +899,9 @@
    <install as="ansel/lib/Ajax/Imple/LocationAutoCompleter.php" name="lib/Ajax/Imple/LocationAutoCompleter.php" />
    <install as="ansel/lib/Ajax/Imple/ToggleGalleryActions.php" name="lib/Ajax/Imple/ToggleGalleryActions.php" />
    <install as="ansel/lib/Ajax/Imple/ToggleOtherGalleries.php" name="lib/Ajax/Imple/ToggleOtherGalleries.php" />
+   <install as="ansel/lib/Ansel.php" name="lib/Ansel.php" />
+   <install as="ansel/lib/Api.php" name="lib/Api.php" />
+   <install as="ansel/lib/Application.php" name="lib/Application.php" />
    <install as="ansel/lib/Block/Cloud.php" name="lib/Block/Cloud.php" />
    <install as="ansel/lib/Block/Gallery.php" name="lib/Block/Gallery.php" />
    <install as="ansel/lib/Block/MyGalleries.php" name="lib/Block/MyGalleries.php" />
@@ -935,6 +910,9 @@
    <install as="ansel/lib/Block/RecentFaces.php" name="lib/Block/RecentFaces.php" />
    <install as="ansel/lib/Block/RecentlyAdded.php" name="lib/Block/RecentlyAdded.php" />
    <install as="ansel/lib/Block/RecentlyAddedGeodata.php" name="lib/Block/RecentlyAddedGeodata.php" />
+   <install as="ansel/lib/Config.php" name="lib/Config.php" />
+   <install as="ansel/lib/Exception.php" name="lib/Exception.php" />
+   <install as="ansel/lib/Faces.php" name="lib/Faces.php" />
    <install as="ansel/lib/Faces/Base.php" name="lib/Faces/Base.php" />
    <install as="ansel/lib/Faces/Facedetect.php" name="lib/Faces/Facedetect.php" />
    <install as="ansel/lib/Faces/User.php" name="lib/Faces/User.php" />
@@ -946,10 +924,13 @@
    <install as="ansel/lib/Form/ImageDate.php" name="lib/Form/ImageDate.php" />
    <install as="ansel/lib/Form/Upload.php" name="lib/Form/Upload.php" />
    <install as="ansel/lib/Form/Watermark.php" name="lib/Form/Watermark.php" />
+   <install as="ansel/lib/Gallery.php" name="lib/Gallery.php" />
    <install as="ansel/lib/Gallery/Decorator/Date.php" name="lib/Gallery/Decorator/Date.php" />
    <install as="ansel/lib/GalleryMode/Base.php" name="lib/GalleryMode/Base.php" />
    <install as="ansel/lib/GalleryMode/Date.php" name="lib/GalleryMode/Date.php" />
    <install as="ansel/lib/GalleryMode/Normal.php" name="lib/GalleryMode/Normal.php" />
+   <install as="ansel/lib/Image.php" name="lib/Image.php" />
+   <install as="ansel/lib/ImageGenerator.php" name="lib/ImageGenerator.php" />
    <install as="ansel/lib/ImageGenerator/Mini.php" name="lib/ImageGenerator/Mini.php" />
    <install as="ansel/lib/ImageGenerator/PolaroidThumb.php" name="lib/ImageGenerator/PolaroidThumb.php" />
    <install as="ansel/lib/ImageGenerator/PolaroidThumbStack.php" name="lib/ImageGenerator/PolaroidThumbStack.php" />
@@ -964,27 +945,34 @@
    <install as="ansel/lib/Prefs/Special/GallerySelect.php" name="lib/Prefs/Special/GallerySelect.php" />
    <install as="ansel/lib/Prefs/Special/GalleryStyle.php" name="lib/Prefs/Special/GalleryStyle.php" />
    <install as="ansel/lib/Queue/ProcessThumbs.php" name="lib/Queue/ProcessThumbs.php" />
+   <install as="ansel/lib/Report.php" name="lib/Report.php" />
    <install as="ansel/lib/Report/letter.php" name="lib/Report/letter.php" />
    <install as="ansel/lib/Report/mail.php" name="lib/Report/mail.php" />
    <install as="ansel/lib/Report/tickets.php" name="lib/Report/tickets.php" />
+   <install as="ansel/lib/Storage.php" name="lib/Storage.php" />
+   <install as="ansel/lib/Style.php" name="lib/Style.php" />
+   <install as="ansel/lib/TagBrowser.php" name="lib/TagBrowser.php" />
+   <install as="ansel/lib/Tagger.php" name="lib/Tagger.php" />
+   <install as="ansel/lib/Test.php" name="lib/Test.php" />
    <install as="ansel/lib/Tile/DateGallery.php" name="lib/Tile/DateGallery.php" />
    <install as="ansel/lib/Tile/Gallery.php" name="lib/Tile/Gallery.php" />
    <install as="ansel/lib/Tile/Image.php" name="lib/Tile/Image.php" />
    <install as="ansel/lib/View/Ansel.php" name="lib/View/Ansel.php" />
    <install as="ansel/lib/View/Base.php" name="lib/View/Base.php" />
+   <install as="ansel/lib/View/EmbeddedRenderer/GalleryLink.php" name="lib/View/EmbeddedRenderer/GalleryLink.php" />
+   <install as="ansel/lib/View/EmbeddedRenderer/Mini.php" name="lib/View/EmbeddedRenderer/Mini.php" />
+   <install as="ansel/lib/View/EmbeddedRenderer/Slideshow.php" name="lib/View/EmbeddedRenderer/Slideshow.php" />
    <install as="ansel/lib/View/Gallery.php" name="lib/View/Gallery.php" />
    <install as="ansel/lib/View/GalleryProperties.php" name="lib/View/GalleryProperties.php" />
+   <install as="ansel/lib/View/GalleryRenderer/Base.php" name="lib/View/GalleryRenderer/Base.php" />
+   <install as="ansel/lib/View/GalleryRenderer/Gallery.php" name="lib/View/GalleryRenderer/Gallery.php" />
+   <install as="ansel/lib/View/GalleryRenderer/GalleryLightbox.php" name="lib/View/GalleryRenderer/GalleryLightbox.php" />
    <install as="ansel/lib/View/Image.php" name="lib/View/Image.php" />
    <install as="ansel/lib/View/List.php" name="lib/View/List.php" />
    <install as="ansel/lib/View/Results.php" name="lib/View/Results.php" />
    <install as="ansel/lib/View/Slideshow.php" name="lib/View/Slideshow.php" />
    <install as="ansel/lib/View/Upload.php" name="lib/View/Upload.php" />
-   <install as="ansel/lib/View/EmbeddedRenderer/GalleryLink.php" name="lib/View/EmbeddedRenderer/GalleryLink.php" />
-   <install as="ansel/lib/View/EmbeddedRenderer/Mini.php" name="lib/View/EmbeddedRenderer/Mini.php" />
-   <install as="ansel/lib/View/EmbeddedRenderer/Slideshow.php" name="lib/View/EmbeddedRenderer/Slideshow.php" />
-   <install as="ansel/lib/View/GalleryRenderer/Base.php" name="lib/View/GalleryRenderer/Base.php" />
-   <install as="ansel/lib/View/GalleryRenderer/Gallery.php" name="lib/View/GalleryRenderer/Gallery.php" />
-   <install as="ansel/lib/View/GalleryRenderer/GalleryLightbox.php" name="lib/View/GalleryRenderer/GalleryLightbox.php" />
+   <install as="ansel/lib/Widget.php" name="lib/Widget.php" />
    <install as="ansel/lib/Widget/Actions.php" name="lib/Widget/Actions.php" />
    <install as="ansel/lib/Widget/Base.php" name="lib/Widget/Base.php" />
    <install as="ansel/lib/Widget/GalleryFaces.php" name="lib/Widget/GalleryFaces.php" />
@@ -995,6 +983,8 @@
    <install as="ansel/lib/Widget/OwnerFaces.php" name="lib/Widget/OwnerFaces.php" />
    <install as="ansel/lib/Widget/SimilarPhotos.php" name="lib/Widget/SimilarPhotos.php" />
    <install as="ansel/lib/Widget/Tags.php" name="lib/Widget/Tags.php" />
+   <install as="ansel/lib/XPPublisher.php" name="lib/XPPublisher.php" />
+   <install as="LICENSE" name="LICENSE" />
    <install as="ansel/locale/.htaccess" name="locale/.htaccess" />
    <install as="ansel/locale/ansel.pot" name="locale/ansel.pot" />
    <install as="ansel/locale/da/LC_MESSAGES/ansel.mo" name="locale/da/LC_MESSAGES/ansel.mo" />
@@ -1031,6 +1021,7 @@
    <install as="ansel/locale/tr/LC_MESSAGES/ansel.po" name="locale/tr/LC_MESSAGES/ansel.po" />
    <install as="ansel/locale/zh_TW/LC_MESSAGES/ansel.mo" name="locale/zh_TW/LC_MESSAGES/ansel.mo" />
    <install as="ansel/locale/zh_TW/LC_MESSAGES/ansel.po" name="locale/zh_TW/LC_MESSAGES/ansel.po" />
+   <install as="ansel/map_edit.php" name="map_edit.php" />
    <install as="ansel/migration/1_ansel_base_tables.php" name="migration/1_ansel_base_tables.php" />
    <install as="ansel/migration/2_ansel_upgrade_autoincrement.php" name="migration/2_ansel_upgrade_autoincrement.php" />
    <install as="ansel/migration/3_ansel_upgrade_style.php" name="migration/3_ansel_upgrade_style.php" />
@@ -1045,8 +1036,14 @@
    <install as="ansel/migration/12_ansel_upgrade_fixautoincrement.php" name="migration/12_ansel_upgrade_fixautoincrement.php" />
    <install as="ansel/migration/13_ansel_upgrade_parents.php" name="migration/13_ansel_upgrade_parents.php" />
    <install as="ansel/migration/14_ansel_upgrade_fixshareusers.php" name="migration/14_ansel_upgrade_fixshareusers.php" />
+   <install as="ansel/perms.php" name="perms.php" />
+   <install as="ansel/preview.php" name="preview.php" />
+   <install as="ansel/protect.php" name="protect.php" />
+   <install as="README.rst" name="README.rst" />
+   <install as="ansel/report.php" name="report.php" />
+   <install as="ansel/rss.php" name="rss.php" />
+   <install as="ansel/smartmobile.php" name="smartmobile.php" />
    <install as="ansel/templates/.htaccess" name="templates/.htaccess" />
-   <install as="ansel/templates/map_edit.html.php" name="templates/map_edit.html.php" />
    <install as="ansel/templates/browse/new.inc" name="templates/browse/new.inc" />
    <install as="ansel/templates/captions/captions.inc" name="templates/captions/captions.inc" />
    <install as="ansel/templates/faces/custom.inc" name="templates/faces/custom.inc" />
@@ -1058,8 +1055,8 @@
    <install as="ansel/templates/faces/index.inc" name="templates/faces/index.inc" />
    <install as="ansel/templates/faces/search.inc" name="templates/faces/search.inc" />
    <install as="ansel/templates/gallery/delete_confirmation.inc" name="templates/gallery/delete_confirmation.inc" />
-   <install as="ansel/templates/gallery/properties.html.php" name="templates/gallery/properties.html.php" />
    <install as="ansel/templates/gallery/partial/_styles.html.php" name="templates/gallery/partial/_styles.html.php" />
+   <install as="ansel/templates/gallery/properties.html.php" name="templates/gallery/properties.html.php" />
    <install as="ansel/templates/group/footer.inc" name="templates/group/footer.inc" />
    <install as="ansel/templates/group/header.inc" name="templates/group/header.inc" />
    <install as="ansel/templates/group/owner.inc" name="templates/group/owner.inc" />
@@ -1074,6 +1071,7 @@
    <install as="ansel/templates/list/footer.inc" name="templates/list/footer.inc" />
    <install as="ansel/templates/list/header.inc" name="templates/list/header.inc" />
    <install as="ansel/templates/list/pager.inc" name="templates/list/pager.inc" />
+   <install as="ansel/templates/map_edit.html.php" name="templates/map_edit.html.php" />
    <install as="ansel/templates/rss/rss.inc" name="templates/rss/rss.inc" />
    <install as="ansel/templates/rss/rss2.inc" name="templates/rss/rss2.inc" />
    <install as="ansel/templates/smartmobile/galleries.html.php" name="templates/smartmobile/galleries.html.php" />
@@ -1085,12 +1083,12 @@
    <install as="ansel/templates/tile/gallery.html.php" name="templates/tile/gallery.html.php" />
    <install as="ansel/templates/tile/gallerymini.html.php" name="templates/tile/gallerymini.html.php" />
    <install as="ansel/templates/tile/image.html.php" name="templates/tile/image.html.php" />
+   <install as="ansel/templates/view/api/gallery.html.php" name="templates/view/api/gallery.html.php" />
    <install as="ansel/templates/view/gallery.html.php" name="templates/view/gallery.html.php" />
    <install as="ansel/templates/view/image.html.php" name="templates/view/image.html.php" />
    <install as="ansel/templates/view/list.html.php" name="templates/view/list.html.php" />
    <install as="ansel/templates/view/results.html.php" name="templates/view/results.html.php" />
    <install as="ansel/templates/view/slideshow.html.php" name="templates/view/slideshow.html.php" />
-   <install as="ansel/templates/view/api/gallery.html.php" name="templates/view/api/gallery.html.php" />
    <install as="ansel/templates/widgets/actions.html.php" name="templates/widgets/actions.html.php" />
    <install as="ansel/templates/widgets/begin.html.php" name="templates/widgets/begin.html.php" />
    <install as="ansel/templates/widgets/end.html.php" name="templates/widgets/end.html.php" />
@@ -1106,21 +1104,23 @@
    <install as="Ansel/AllTests.php" name="test/Ansel/AllTests.php" />
    <install as="Ansel/Autoload.php" name="test/Ansel/Autoload.php" />
    <install as="Ansel/bootstrap.php" name="test/Ansel/bootstrap.php" />
+   <install as="Ansel/fixtures/vfs/.horde/ansel/00/full/4200.jpg" name="test/Ansel/fixtures/vfs/.horde/ansel/00/full/4200.jpg" />
    <install as="Ansel/phpunit.xml" name="test/Ansel/phpunit.xml" />
    <install as="Ansel/TestCase.php" name="test/Ansel/TestCase.php" />
-   <install as="Ansel/fixtures/vfs/.horde/ansel/00/full/4200.jpg" name="test/Ansel/fixtures/vfs/.horde/ansel/00/full/4200.jpg" />
    <install as="Ansel/Unit/Base.php" name="test/Ansel/Unit/Base.php" />
    <install as="Ansel/Unit/ImageTest.php" name="test/Ansel/Unit/ImageTest.php" />
    <install as="ansel/themes/default/cropper.css" name="themes/default/cropper.css" />
    <install as="ansel/themes/default/embed.css" name="themes/default/embed.css" />
-   <install as="ansel/themes/default/lightbox.css" name="themes/default/lightbox.css" />
-   <install as="ansel/themes/default/screen.css" name="themes/default/screen.css" />
    <install as="ansel/themes/default/graphics/add.png" name="themes/default/graphics/add.png" />
    <install as="ansel/themes/default/graphics/allgalleries.png" name="themes/default/graphics/allgalleries.png" />
    <install as="ansel/themes/default/graphics/ansel.png" name="themes/default/graphics/ansel.png" />
    <install as="ansel/themes/default/graphics/arrow_switch.png" name="themes/default/graphics/arrow_switch.png" />
    <install as="ansel/themes/default/graphics/bookmark.png" name="themes/default/graphics/bookmark.png" />
    <install as="ansel/themes/default/graphics/browse.png" name="themes/default/graphics/browse.png" />
+   <install as="ansel/themes/default/graphics/carousel/left-disabled.gif" name="themes/default/graphics/carousel/left-disabled.gif" />
+   <install as="ansel/themes/default/graphics/carousel/left.gif" name="themes/default/graphics/carousel/left.gif" />
+   <install as="ansel/themes/default/graphics/carousel/right-disabled.gif" name="themes/default/graphics/carousel/right-disabled.gif" />
+   <install as="ansel/themes/default/graphics/carousel/right.gif" name="themes/default/graphics/carousel/right.gif" />
    <install as="ansel/themes/default/graphics/down.png" name="themes/default/graphics/down.png" />
    <install as="ansel/themes/default/graphics/embed.png" name="themes/default/graphics/embed.png" />
    <install as="ansel/themes/default/graphics/faces.png" name="themes/default/graphics/faces.png" />
@@ -1128,6 +1128,12 @@
    <install as="ansel/themes/default/graphics/galleries.png" name="themes/default/graphics/galleries.png" />
    <install as="ansel/themes/default/graphics/gallery-locked-mini.png" name="themes/default/graphics/gallery-locked-mini.png" />
    <install as="ansel/themes/default/graphics/gallery-locked.png" name="themes/default/graphics/gallery-locked.png" />
+   <install as="ansel/themes/default/graphics/lightbox/bullet.gif" name="themes/default/graphics/lightbox/bullet.gif" />
+   <install as="ansel/themes/default/graphics/lightbox/close.gif" name="themes/default/graphics/lightbox/close.gif" />
+   <install as="ansel/themes/default/graphics/lightbox/closelabel.gif" name="themes/default/graphics/lightbox/closelabel.gif" />
+   <install as="ansel/themes/default/graphics/lightbox/loading.gif" name="themes/default/graphics/lightbox/loading.gif" />
+   <install as="ansel/themes/default/graphics/lightbox/nextlabel.gif" name="themes/default/graphics/lightbox/nextlabel.gif" />
+   <install as="ansel/themes/default/graphics/lightbox/prevlabel.gif" name="themes/default/graphics/lightbox/prevlabel.gif" />
    <install as="ansel/themes/default/graphics/marqueeHoriz.gif" name="themes/default/graphics/marqueeHoriz.gif" />
    <install as="ansel/themes/default/graphics/marqueeVert.gif" name="themes/default/graphics/marqueeVert.gif" />
    <install as="ansel/themes/default/graphics/mini-error.png" name="themes/default/graphics/mini-error.png" />
@@ -1150,17 +1156,11 @@
    <install as="ansel/themes/default/graphics/text.png" name="themes/default/graphics/text.png" />
    <install as="ansel/themes/default/graphics/thumb-error.png" name="themes/default/graphics/thumb-error.png" />
    <install as="ansel/themes/default/graphics/up.png" name="themes/default/graphics/up.png" />
-   <install as="ansel/themes/default/graphics/carousel/left-disabled.gif" name="themes/default/graphics/carousel/left-disabled.gif" />
-   <install as="ansel/themes/default/graphics/carousel/left.gif" name="themes/default/graphics/carousel/left.gif" />
-   <install as="ansel/themes/default/graphics/carousel/right-disabled.gif" name="themes/default/graphics/carousel/right-disabled.gif" />
-   <install as="ansel/themes/default/graphics/carousel/right.gif" name="themes/default/graphics/carousel/right.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/bullet.gif" name="themes/default/graphics/lightbox/bullet.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/close.gif" name="themes/default/graphics/lightbox/close.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/closelabel.gif" name="themes/default/graphics/lightbox/closelabel.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/loading.gif" name="themes/default/graphics/lightbox/loading.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/nextlabel.gif" name="themes/default/graphics/lightbox/nextlabel.gif" />
-   <install as="ansel/themes/default/graphics/lightbox/prevlabel.gif" name="themes/default/graphics/lightbox/prevlabel.gif" />
+   <install as="ansel/themes/default/lightbox.css" name="themes/default/lightbox.css" />
+   <install as="ansel/themes/default/screen.css" name="themes/default/screen.css" />
    <install as="ansel/themes/default/smartmobile/screen.css" name="themes/default/smartmobile/screen.css" />
+   <install as="ansel/view.php" name="view.php" />
+   <install as="ansel/xppublish.php" name="xppublish.php" />
   </filelist>
  </phprelease>
  <changelog>
@@ -1446,7 +1446,7 @@
    </notes>
   </release>
   <release>
-   <date>2017-10-16</date>
+   <date>2017-10-17</date>
    <version>
     <release>4.0.0</release>
     <api>4.0.0</api>
