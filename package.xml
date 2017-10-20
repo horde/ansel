@@ -22,7 +22,7 @@
   <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
- <date>2017-09-19</date>
+ <date>2017-10-20</date>
  <version>
   <release>3.0.9</release>
   <api>3.0.0</api>
@@ -33,7 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* 
+* [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer &lt;michael@bigmichi1.de&gt;, Bug #14715).
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -1443,10 +1443,10 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-09-19</date>
+   <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* 
+* [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer &lt;michael@bigmichi1.de&gt;, Bug #14715).
    </notes>
   </release>
  </changelog>
