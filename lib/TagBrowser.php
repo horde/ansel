@@ -77,7 +77,7 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
      */
     public function getSlice($page = 0, $perpage = null)
     {
-        global $injector, $conf;
+        global $injector, $conf, $registry;
 
         // Refresh the search
         $this->runSearch();
@@ -108,12 +108,12 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
             } catch (Horde_Exception_NotFound $e) {
                 throw new Ansel_Exception($e);
             }
-            if (($conf['comments']['allow'] == 'all' || ($conf['comments']['allow'] == 'authenticated' && $GLOBALS['registry']->getAuth())) &&
+            if (($conf['comments']['allow'] == 'all' || ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth())) &&
                 $registry->hasMethod('forums/numMessagesBatch')) {
 
                 $ids = array_keys($images);
                 try {
-                    $ccounts = $GLOBALS['registry']->forums->numMessagesBatch($ids, 'ansel');
+                    $ccounts = $registry->forums->numMessagesBatch($ids, 'ansel');
                     foreach ($images as $image) {
                         $image->commentCount = (!empty($ccounts[$image->id]) ? $ccounts[$image->id] : 0);
                     }
