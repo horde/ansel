@@ -652,7 +652,10 @@ class Ansel_Faces_Base
                 array('face_signature' => new Horde_Db_Value_Binary(
                      puzzle_compress_cvec($signature))
                 ),
-                array('face_id = ?', $face_id)
+                array(
+                    'face_id = ?', 
+                    array($face_id)
+                )
             );
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($result);
