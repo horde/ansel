@@ -12,6 +12,14 @@ v4.0.0-git
 
 
 ------
+v3.0.9
+------
+
+[jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer
+      <michael@bigmichi1.de>, Bug #14715).
+
+
+------
 v3.0.8
 ------
 

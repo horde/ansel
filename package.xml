@@ -1463,5 +1463,18 @@
 * [mjr] Fix fatal divide by zero error due to incorrectly named variable.
    </notes>
   </release>
+  <release>
+   <version>
+    <release>3.0.9</release>
+    <api>3.0.0</api></version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api></stability>
+   <date>2017-10-20</date>
+   <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
+   <notes>
+* [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer &lt;michael@bigmichi1.de&gt;, Bug #14715).
+   </notes>
+  </release>
  </changelog>
 </package>
