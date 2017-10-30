@@ -98,6 +98,7 @@ v3.0.0RC1
 v3.0.0beta1
 -----------
 
+First beta release for Horde 5.
 [mjr] Various fixes for SQLite to work with Ansel.
 
 
@@ -107,7 +108,7 @@ v2.0.2
 
 [mjr] Fix auto rotation of images based on orientation exif data (Bug #11441).
 [mjr] Honor locked default_download pref (Bug #11325).
-[mjr] Fix getting gallery data via the API (maxime@chavagne.net, Bug# 11229).
+[mjr] Fix getting gallery data via the API (maxime@chavagne.net, Bug #11229).
 [mjr] Fix carousel when viewing upload screen in an iFrame (Bug #10889).
 [mjr] Fix returning to gallery view after uploading images when viewing Ansel
       in an iFrame (Bug #11209).
@@ -128,9 +129,9 @@ v2.0.1
       on the gallery (Bug #10762).
 
 
-----
-v2.0
-----
+------
+v2.0.0
+------
 
 [mjr] Add pref to allow explicitly turning off the new ajax uploader.
 [mjr] Fix invalid image type errors when uploading in older versions of
@@ -139,9 +140,9 @@ v2.0
       #10671).
 
 
---------
-v2.0-RC2
---------
+---------
+v2.0.0RC2
+---------
 
 [jan] Fix page output of popup for updating dates of multiple images (Bug
       #10676).
@@ -155,9 +156,9 @@ v2.0-RC2
 [mjr] Fix issue with style migration when upgrading from Ansel 1.x.
 
 
---------
-v2.0-RC1
---------
+---------
+v2.0.0RC1
+---------
 
 [mjr] Fix migrations to not rely on Ansel being available.
 [mjr] Fix hook calls (Bug #10659).
@@ -170,10 +171,11 @@ v2.0-RC1
 [jan] Fix link to report faces (Bug #10636).
 
 
------------
-v2.0-ALPHA1
------------
+------------
+v2.0.0alpha1
+------------
 
+First alpha release for Horde 4.
 [mjr] Support for sending twitter notifications after uploading images.
 [mjr] Refactor Geotagging features to use HordeMap.
 [jan] Add Latvian translation (Jānis Eisaks <jancs@dv.lv>).
@@ -195,7 +197,8 @@ v2.0-ALPHA1
 v1.1.2
 ------
 
-[mjr] Fix issue where subgalleries would become invisible in certain conditions.
+[mjr] Fix issue where subgalleries would become invisible in certain
+      conditions.
 [mjr] Fix parsing gps data in certain locales (Bug #9180).
 [mjr] Fix a bug that caused certain thumbnail types to be generated as jpeg
       images instead of the requested png type.
@@ -209,8 +212,8 @@ v1.1.2
 v1.1.1
 ------
 
-[mjr] Fix default value for image_faces value in the database schema
-      (Bug #8925).
+[mjr] Fix default value for image_faces value in the database schema (Bug
+      #8925).
 [mjr] Fix sending ecards when SMTP auth is set, but no global username/password
       exists in the configuration (horde@albasoft@com, Bug #8924).
 [mjr] Fix escaping location query for PostgreSQL (Bug #8919).
@@ -227,8 +230,8 @@ v1.1
 [mjr] Add autocompletion for tags.
 [mjr] Fix issue with uploading images to galleries in "Browse by Date" mode
       causing the mode to be reset to "Normal".
-[mjr] Return to the previously viewed page number when manually selecting
-      face ranges (Bug #8402).
+[mjr] Return to the previously viewed page number when manually selecting face
+      ranges (Bug #8402).
 [mjr] Significantly reduce the number of javascript errors due to IE issues.
 [mjr] Allow the addition of geolocation data on images that do not contain any
       and allow the relocating of images that do have the data.
@@ -237,8 +240,8 @@ v1.1
       location data is available.
 [mjr] Add configuration switch to disallow querying the preference backend for
       other user's identities and preferences (Bug #8269).
-[mjr] Remove broken implementation of the 'numlimit' configuration option
-      (Bug #8139).
+[mjr] Remove broken implementation of the 'numlimit' configuration option (Bug
+      #8139).
 [jan] Fix icon URLs if cookies are turned off.
 [jan] Fix ansel_shares table definition for PostgreSQL.
 [mjr] Fix issue that caused screen image creation to fail when using gd
@@ -256,9 +259,9 @@ v1.0
 [mjr] Add a widget to the gallery view for showing faces that the gallery owner
       has tagged.
 [mjr] Allow embedding screen size images in external sites as well.
-[mjr] Add configuration parameter to require a minimum number of
-      images to be present in a gallery before it's displayed in a
-      gallery list. (Duck <duck@obala.net>, Request# 7949)
+[mjr] Add configuration parameter to require a minimum number of images to be
+      present in a gallery before it's displayed in a gallery list. (Duck
+      <duck@obala.net>, Request# 7949)
 [mjr] Add a Link widget to the Image View.
 [mjr] Correct some undefined variable warnings. (Duck <duck@obala.net>)
 [mjr] Fix default parameters for the ansel tag cloud.
@@ -302,8 +305,8 @@ v1.0-RC1
 [jan] Add Lithuanian translation (Vilius Sumskas <vilius@lnk.lt>).
 [cjh] Use new Horde_Menu CSS styled menu.
 [cjh] Remove view/ directory as it wasn't being maintained.
-[cjh] Add automatic rotation of images according to Exif information
-      (Brian Templeton <kaetzchen@gmail.com>).
+[cjh] Add automatic rotation of images according to Exif information (Brian
+      Templeton <kaetzchen@gmail.com>).
 [cjh] Add API methods (Duck <duck@obala.net>, Roel Gloudemans
       <roel@gloudemans.info>).
 [cjh] Images can now have categories using the Horde-wide category system
@@ -320,23 +323,23 @@ v1.0-RC1
 [jan] Add Traditional Chinese translation (David Chang <david@tmv.gov.tw>).
 [cjh] Command line interface to Ansel (Vijay Mahrra
       <vijay.mahrra@es.easynet.net>).
-[cjh] Store EXIF data for uploaded images into the backend on upload.
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Allow re-ordering images in a gallery.
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Add placeholder tokens in watermark strings
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Allow custom watermark text
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Link for showing exif data in a popup window
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Preference for whether or not to show exif data in the image
-      view ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
-[cjh] Support for PHP's native exif_read_data() function
-      ("Heath S. Hendrickson" <heath@outerspaceconsultants.com>).
+[cjh] Store EXIF data for uploaded images into the backend on upload. ("Heath
+      S. Hendrickson" <heath@outerspaceconsultants.com>).
+[cjh] Allow re-ordering images in a gallery. ("Heath S. Hendrickson"
+      <heath@outerspaceconsultants.com>).
+[cjh] Add placeholder tokens in watermark strings ("Heath S. Hendrickson"
+      <heath@outerspaceconsultants.com>).
+[cjh] Allow custom watermark text ("Heath S. Hendrickson"
+      <heath@outerspaceconsultants.com>).
+[cjh] Link for showing exif data in a popup window ("Heath S. Hendrickson"
+      <heath@outerspaceconsultants.com>).
+[cjh] Preference for whether or not to show exif data in the image view ("Heath
+      S. Hendrickson" <heath@outerspaceconsultants.com>).
+[cjh] Support for PHP's native exif_read_data() function ("Heath S.
+      Hendrickson" <heath@outerspaceconsultants.com>).
 [cjh] Add batch-setting of captions.
-[cjh] Add previous and next buttons for navigation within galleries
-      (Brian Keifer <brian@valinor.net>).
+[cjh] Add previous and next buttons for navigation within galleries (Brian
+      Keifer <brian@valinor.net>).
 [cjh] Define minimum, maximum, and default sizes for thumbnail and screen
       images, and allow setting those values in the min-max range on a
       per-gallery basis (Ben Chavet <ben@chavet.net>).
