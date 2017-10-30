@@ -15,12 +15,23 @@
     [jan] Keep original file names when PUTing images via WebDAV.
     [jan] Return ETags with browse() API method.
     [mjr] Fix fatal divide by zero error due to incorrectly named variable.
+3.0.9:
+  api: 3.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2017-10-20
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer <michael@bigmichi1.de>, Bug #14715).
 3.0.8:
   api: 3.0.0
   state:
     release: stable
     api: stable
-  date: 2017-08-01
+  date: 2017-09-19
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
