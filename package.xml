@@ -2,12 +2,12 @@
 <package packagerversion="1.9.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
  <name>ansel</name>
  <channel>pear.horde.org</channel>
- <summary>Photo management application</summary>
- <description>Ansel is a full featured photo management application.</description>
+ <summary>Photo gallery application</summary>
+ <description>Ansel is a full featured photo gallery application.</description>
  <lead>
-  <name>Chuck Hagenbuch</name>
-  <user>chuck</user>
-  <email>chuck@horde.org</email>
+  <name>Michael J Rubinsky</name>
+  <user>mrubinsk</user>
+  <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
  <lead>
@@ -16,13 +16,13 @@
   <email>jan@horde.org</email>
   <active>yes</active>
  </lead>
-<lead>
-  <name>Michael J Rubinsky</name>
-  <user>mrubinsk</user>
-  <email>mrubinsk@horde.org</email>
-  <active>yes</active>
+ <lead>
+  <name>Chuck Hagenbuch</name>
+  <user>chuck</user>
+  <email>chuck@horde.org</email>
+  <active>no</active>
  </lead>
- <date>2017-10-20</date>
+ <date>2017-11-14</date>
  <version>
   <release>3.0.9</release>
   <api>3.0.0</api>
@@ -1443,7 +1443,7 @@
    <stability>
     <release>stable</release>
     <api>stable</api></stability>
-   <date>2017-10-20</date>
+   <date>2017-11-14</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer &lt;michael@bigmichi1.de&gt;, Bug #14715).
