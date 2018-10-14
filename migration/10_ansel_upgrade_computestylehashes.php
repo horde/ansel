@@ -47,7 +47,7 @@ class AnselUpgradeComputestylehashes extends Horde_Db_Migration_Base
                 continue;
             }
             try {
-                $this->_ensureHash($style->getHash());
+                $this->_ensureHash($style->getHash(''));
             } catch (Exception $e) {
                 $this->announce('ERROR: ' . $e->getMessage());
             }
