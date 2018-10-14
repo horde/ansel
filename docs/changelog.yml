@@ -25,6 +25,8 @@
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
+    [mjr] Fix fatal error in database migration (Bug #14865).
+    [mjr] Fix fatal error in database migration (Bug #14865).
     [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer <michael@bigmichi1.de>, Bug #14715).
 3.0.8:
   api: 3.0.0
@@ -283,7 +285,7 @@
     [mjr] Properly url-encode and escape html when processing tags.
     [mjr] Protect against divide-by-zero errors (Bug #8761).
     [jan] Fix invalid class name in block for recently geotagged images.
-1.1:
+1.1.0:
   notes: |
     [mjr] Fix a bug that caused a SQL error on some RDBMS (Bug #8610).
     [mjr] Add autocompletion for tags.
@@ -299,7 +301,7 @@
     [jan] Fix ansel_shares table definition for PostgreSQL.
     [mjr] Fix issue that caused screen image creation to fail when using gd Horde_Image driver.
     [mjr] Fix issue with screen images being generated as PNGs if not using VFS Direct serving.
-1.0:
+1.0.0:
   notes: |
     [mjr] Force screen images to be jpegs to reduce image size.
     [mjr] Add a new api method for obtaining the available gallery styles.
@@ -309,7 +311,7 @@
     [mjr] Add a Link widget to the Image View.
     [mjr] Correct some undefined variable warnings. (Duck <duck@obala.net>)
     [mjr] Fix default parameters for the ansel tag cloud.
-1.0-RC1:
+1.0.0RC1:
   notes: |
     [jan] Add Turkish translation (Akif Dinc <akif@dinc.org>).
     [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
