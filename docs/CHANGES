@@ -1,7 +1,9 @@
-----------
-v3.0.9-git
-----------
+------
+v3.0.9
+------
 
+[mjr] Fix fatal error in database migration (Bug #14865).
+[mjr] Fix fatal error in database migration (Bug #14865).
 [jan] Fix error when clicking on a tag in the tag cloud (Michael Cramer
       <michael@bigmichi1.de>, Bug #14715).
 
@@ -222,9 +224,9 @@ v1.1.1
 [jan] Fix invalid class name in block for recently geotagged images.
 
 
-----
-v1.1
-----
+------
+v1.1.0
+------
 
 [mjr] Fix a bug that caused a SQL error on some RDBMS (Bug #8610).
 [mjr] Add autocompletion for tags.
@@ -250,9 +252,9 @@ v1.1
       Direct serving.
 
 
-----
-v1.0
-----
+------
+v1.0.0
+------
 
 [mjr] Force screen images to be jpegs to reduce image size.
 [mjr] Add a new api method for obtaining the available gallery styles.
@@ -267,9 +269,9 @@ v1.0
 [mjr] Fix default parameters for the ansel tag cloud.
 
 
---------
-v1.0-RC1
---------
+---------
+v1.0.0RC1
+---------
 
 [jan] Add Turkish translation (Akif Dinc <akif@dinc.org>).
 [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
