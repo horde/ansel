@@ -401,7 +401,7 @@ class Ansel_Gallery implements Serializable
         $ids = @unserialize($this->get('default_prettythumb'));
         if (is_array($ids)) {
             try {
-                foreach ($ids as $imageId) {
+                foreach ($ids as $style => $imageId) {
                     $this->removeImage($imageId, true);
                 }
             } catch (Horde_Exception_NotFound $e) {
