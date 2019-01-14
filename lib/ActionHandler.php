@@ -130,6 +130,8 @@ class Ansel_ActionHandler
                     } catch (Ansel_Exception $e) {
                         $notification->push(
                             sprintf(_("There was a problem deleting photos: %s"), $e->getMessage()), 'horde.error');
+                    } catch (Horde_Exception_NotFound $e) {
+                        Horde::log($e->getMessage(), 'ERR');
                     }
                 }
             }
@@ -425,7 +427,11 @@ class Ansel_ActionHandler
                     $ids = unserialize($gallery->get('default_prettythumb'));
                     if (is_array($ids)) {
                         foreach ($ids as $imageId) {
-                            $gallery->removeImage($imageId);
+                            try {
+                                $gallery->removeImage($imageId);
+                            } catch (Horde_Exception_NotFound $e) {
+                                Horde::log($e->getMessage(), 'ERR');
+                            }
                         }
                     }
                     $gallery->set('default_prettythumb', '');
