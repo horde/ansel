@@ -404,7 +404,13 @@ class Ansel_ActionHandler
                         $ids = unserialize($gallery->get('default_prettythumb'));
                         if (is_array($ids)) {
                             foreach ($ids as $imageId) {
-                                $gallery->removeImage($imageId, true);
+                                try {
+                                    $gallery->removeImage($imageId, true);
+                                } catch (Horde_Exception_NotFound $e) {
+                                    // Don't die if we can't find the image we
+                                    // want to delete anyway, just log it.
+                                    Horde::log($e->getMessage(), 'ERR');
+                                }
                             }
                         }
                         $gallery->set('default_prettythumb', '');
