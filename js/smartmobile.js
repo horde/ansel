@@ -303,7 +303,7 @@ var AnselMobile = {
         $('body').bind('swiperight', AnselMobile.handleSwipe);
 
         var list = $('<ul>').addClass('anselgallerylist').attr({'data-role': 'listview'});
-        $('#anselgallerylist').append(AnselMobile.buildGalleryList(list, Ansel.conf.galleries, 'anselgallerylist'));
+        $('#anselgallerylist').append(AnselMobile.buildGalleryList(list, Ansel.conf.galleries, 'anselgallerylist')).trigger("create");
 
         // We need to recenter the thumbnail grid, and (eventually) try to
         // resize the main image if it's  being shown.
