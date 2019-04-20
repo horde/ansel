@@ -794,14 +794,18 @@ class Ansel_Gallery implements Serializable
                     ->ensureHash($styleHash);
 
                 return $newImg->id;
-            } catch (Ansel_Exception $e) {
+            } catch (Horde_Exception_NotFound $e) {
                 // Might not support the requested style...try ansel_default
                 // but protect against infinite recursion.
                 Horde::log($e->getMessage(), 'ERR');
                 if ($style->keyimage_type != 'plain') {
                     return $this->getKeyImage(Ansel::getStyleDefinition('ansel_default'));
                 }
+            } catch (Ansel_Exception $e) {
+                Horde::log($e->getMessage(), 'ERR');
+                return false;
             }
+
         } else {
             // We are just using an image thumbnail.
             return $this->_getDefaultImageId();
