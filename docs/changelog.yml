@@ -9,6 +9,7 @@
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
+    Fix fatal error when attempting to delete an image that doesn't exist.
     [mjr] Add captcha check when sending ecard.
     [jan] Show users' full names in share dialogs.
     [mjr] Remove maps configuration, replaced by global maps configuration (Bug #14168).
