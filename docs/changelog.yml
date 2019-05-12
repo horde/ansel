@@ -22,12 +22,13 @@
   state:
     release: stable
     api: stable
-  date: 2018-10-23
+  date: 2019-05-12
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-    
+  notes: |
+    [mjr] Fix removing image stacks when resetting default image.
+    [mjr] Fix fatal error when attempting to delete an image that doesn't exist.
 3.0.9:
   api: 3.0.0
   state:

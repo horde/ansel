@@ -22,7 +22,7 @@
   <email>chuck@horde.org</email>
   <active>no</active>
  </lead>
- <date>2018-10-23</date>
+ <date>2019-05-12</date>
  <version>
   <release>3.0.10</release>
   <api>3.0.0</api>
@@ -33,7 +33,8 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* 
+* [mjr] Fix removing image stacks when resetting default image.
+* [mjr] Fix fatal error when attempting to delete an image that doesn&apos;t exist.
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -1650,10 +1651,11 @@
     <release>stable</release>
     <api>stable</api>
    </stability>
-   <date>2018-10-23</date>
+   <date>2019-05-12</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
-* 
+* [mjr] Fix removing image stacks when resetting default image.
+* [mjr] Fix fatal error when attempting to delete an image that doesn&apos;t exist.
    </notes>
   </release>
   <release>
@@ -1668,6 +1670,8 @@
    <date>2017-10-20</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
+* Fix removing image stacks when resetting default image.
+* Fix fatal error when attempting to delete an image that doesn&apos;t exist.
 * [mjr] Add captcha check when sending ecard.
 * [jan] Show users&apos; full names in share dialogs.
 * [mjr] Remove maps configuration, replaced by global maps configuration (Bug #14168).
