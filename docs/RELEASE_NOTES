@@ -5,7 +5,7 @@ $notes['security'] = false;
 /* Mailing list release notes. */
 $notes['changes'] = <<<ML
 The Horde Team is pleased to announce the final release of the Ansel Photo
-Management and Web Gallery application version H5 (3.0.9).
+Management and Web Gallery application version H5 (3.0.10).
 
 Ansel is a full featured photo management application. With it, you can
 organize your photos in any number of galleries and subgalleries, share
@@ -16,9 +16,9 @@ http://www.horde.org/apps/ansel.
 For detailed installation and configuration instructions, please see
 http://www.horde.org/apps/ansel/docs/INSTALL
 
-Major changes compared to the Ansel version H5 (3.0.8) are:
-    * Fix fatal error in database migration.
-    * Fix error when clicking on a tag in the tag cloud.
+Major changes compared to the Ansel version H5 (3.0.9) are:
+    * Fix removing image stacks when resetting default image.
+    * Fix fatal error when attempting to delete an image that doesn't exist.
 ML;
 
 $notes['name'] = 'Ansel';
