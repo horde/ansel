@@ -5,9 +5,9 @@
  <summary>Photo gallery application</summary>
  <description>Ansel is a full featured photo gallery application.</description>
  <lead>
-  <name>Chuck Hagenbuch</name>
-  <user>chuck</user>
-  <email>chuck@horde.org</email>
+  <name>Michael J Rubinsky</name>
+  <user>mrubinsk</user>
+  <email>mrubinsk@horde.org</email>
   <active>yes</active>
  </lead>
  <lead>
@@ -17,15 +17,15 @@
   <active>yes</active>
  </lead>
  <lead>
-  <name>Michael J Rubinsky</name>
-  <user>mrubinsk</user>
-  <email>mrubinsk@horde.org</email>
-  <active>yes</active>
+  <name>Chuck Hagenbuch</name>
+  <user>chuck</user>
+  <email>chuck@horde.org</email>
+  <active>no</active>
  </lead>
- <date>2017-11-11</date>
+ <date>2021-02-23</date>
  <version>
-  <release>4.0.0</release>
-  <api>4.0.0</api>
+  <release>4.0.0alpha1</release>
+  <api>4.0.0alpha1</api>
  </version>
  <stability>
   <release>beta</release>
@@ -1174,7 +1174,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri=""></license>
+   <license uri="" />
    <notes>
 * [jan] Add Turkish translation (Akif Dinc &lt;akif@dinc.org&gt;).
 * [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
@@ -1247,7 +1247,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri=""></license>
+   <license uri="" />
    <notes>
 * [mjr] Force screen images to be jpegs to reduce image size.
 * [mjr] Add a new api method for obtaining the available gallery styles.
@@ -1269,7 +1269,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri=""></license>
+   <license uri="" />
    <notes>
 * [mjr] Fix a bug that caused a SQL error on some RDBMS (Bug #8610).
 * [mjr] Add autocompletion for tags.
@@ -1297,7 +1297,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri=""></license>
+   <license uri="" />
    <notes>
 * [mjr] Fix default value for image_faces value in the database schema (Bug #8925).
 * [mjr] Fix sending ecards when SMTP auth is set, but no global username/password exists in the configuration (horde@albasoft@com, Bug #8924).
@@ -1317,7 +1317,7 @@
     <api/>
    </stability>
    <date/>
-   <license uri=""></license>
+   <license uri="" />
    <notes>
 * [mjr] Fix issue where subgalleries would become invisible in certain conditions.
 * [mjr] Fix parsing gps data in certain locales (Bug #9180).
@@ -1655,14 +1655,14 @@
   </release>
   <release>
    <version>
-    <release>4.0.0</release>
-    <api>4.0.0</api>
+    <release>4.0.0alpha1</release>
+    <api>4.0.0alpha1</api>
    </version>
    <stability>
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2017-10-20</date>
+   <date>2021-02-23</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * Fix removing image stacks when resetting default image.

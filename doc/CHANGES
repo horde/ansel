@@ -1,6 +1,6 @@
-------
-v4.0.0
-------
+------------
+v4.0.0alpha1
+------------
 
 Fix removing image stacks when resetting default image.
 Fix fatal error when attempting to delete an image that doesn't exist.

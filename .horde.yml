@@ -26,8 +26,8 @@ authors:
     active: false
     role: lead
 version:
-  release: 4.0.0
-  api: 4.0.0
+  release: 4.0.0alpha1
+  api: 4.0.0alpha1
 state:
   release: beta
   api: beta
