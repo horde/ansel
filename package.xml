@@ -24,7 +24,7 @@
  </lead>
  <date>2021-02-23</date>
  <version>
-  <release>4.0.0alpha1</release>
+  <release>4.0.0alpha2</release>
   <api>4.0.0alpha1</api>
  </version>
  <stability>
@@ -33,14 +33,7 @@
  </stability>
  <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
  <notes>
-* Fix removing image stacks when resetting default image.
-* Fix fatal error when attempting to delete an image that doesn&apos;t exist.
-* [mjr] Add captcha check when sending ecard.
-* [jan] Show users&apos; full names in share dialogs.
-* [mjr] Remove maps configuration, replaced by global maps configuration (Bug #14168).
-* [jan] Keep original file names when PUTing images via WebDAV.
-* [jan] Return ETags with browse() API method.
-* [mjr] Fix fatal divide by zero error due to incorrectly named variable.
+* 
  </notes>
  <contents>
   <dir baseinstalldir="/" name="/">
@@ -982,6 +975,30 @@
   </filelist>
  </phprelease>
  <changelog>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   <release>
    <version>
     <release>1.0.0RC1</release>
@@ -1480,7 +1497,7 @@
     <release>beta</release>
     <api>beta</api>
    </stability>
-   <date>2017-10-20</date>
+   <date>2021-02-23</date>
    <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
    <notes>
 * Fix removing image stacks when resetting default image.
@@ -1491,6 +1508,21 @@
 * [jan] Keep original file names when PUTing images via WebDAV.
 * [jan] Return ETags with browse() API method.
 * [mjr] Fix fatal divide by zero error due to incorrectly named variable.
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>4.0.0alpha2</release>
+    <api>4.0.0alpha1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2021-02-23</date>
+   <license uri="http://www.horde.org/licenses/gpl">GPL-2.0</license>
+   <notes>
+* 
    </notes>
   </release>
  </changelog>
