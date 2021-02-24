@@ -22,7 +22,7 @@
         }
     ],
     "version": "4.0.0alpha2",
-    "time": "2021-02-23",
+    "time": "2021-02-24",
     "repositories": [
         {
             "type": "composer",
@@ -70,9 +70,6 @@
     "autoload": {
         "psr-0": {
             "Ansel": "lib/"
-        },
-        "psr-4": {
-            "Horde\\Ansel\\": "src/"
         }
     },
     "bin": [
