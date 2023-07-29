@@ -28,7 +28,7 @@
  * @link       http://www.horde.org/apps/ansel
  */
 class Ansel_TestCase
-extends PHPUnit_Framework_TestCase
+extends Horde_Test_Case
 {
     static protected function createBasicAnselSetup(Horde_Test_Setup $setup)
     {

@@ -31,7 +31,7 @@ class Ansel_Unit_Base extends Ansel_TestCase
 {
     static $setup;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$setup = new Horde_Test_Setup();
         self::createBasicAnselSetup(self::$setup);
