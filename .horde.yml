@@ -74,3 +74,8 @@ dependencies:
       imagick: '*'
       libpuzzle: '*'
       php-facedetect: '*'
+autoload:
+  classmap:
+    - lib/
+  psr-4:
+    Horde\Ansel\: /src
