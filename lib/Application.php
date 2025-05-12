@@ -39,7 +39,7 @@ class Ansel_Application extends Horde_Registry_Application
 
     /**
      */
-    public $version = 'H6 (4.0.0alpha4)';
+    public $version = '4.0.0-alpha4';
 
     /**
      * Global variables defined:

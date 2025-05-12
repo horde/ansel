@@ -1,5 +1,16 @@
 ---
-4.0.0alpha4:
+4.0.0-alpha4:
+  api: 4.0.0-alpha1
+  state:
+    release: true
+    api: true
+  date: 2025-05-12
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    fix: Make ansel use a classmap for lib as it's not strictly PSR-0
+4.0.0-alpha3:
   api: 4.0.0alpha1
   state:
     release: alpha
@@ -8,19 +19,10 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-    
-4.0.0alpha3:
-  api: 4.0.0alpha1
-  state:
-    release: alpha
-    api: alpha
-  date: 2021-03-13
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |+
-4.0.0alpha2:
+  notes: |-
+    Original version string was 4.0.0alpha3
+    |+
+4.0.0-alpha2:
   api: 4.0.0alpha1
   state:
     release: alpha
@@ -29,8 +31,10 @@
   license:
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
-  notes: |+
-4.0.0alpha1:
+  notes: |-
+    Original version string was 4.0.0alpha2
+    |+
+4.0.0-alpha1:
   api: 4.0.0alpha1
   state:
     release: beta
@@ -40,6 +44,7 @@
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
+    Original version string was 4.0.0alpha1
     Fix removing image stacks when resetting default image.
     Fix fatal error when attempting to delete an image that doesn't exist.
     [mjr] Add captcha check when sending ecard.
@@ -161,6 +166,32 @@
     [mjr] Fix cancel button behavior on reporting page (Bug #12667).
     [mjr] Prevent protected images from leaking into gallery thumbnails (Bug #12668).
     [mjr] Fix adding custom watermark (Bug #12634).
+3.0.0-beta1:
+  api: 3.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2013-06-18
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    Original version string was 3.0.0beta1
+    First beta release for Horde 5.
+    [mjr] Various fixes for SQLite to work with Ansel.
+3.0.0-RC1:
+  api: 3.0.0
+  state:
+    release: beta
+    api: beta
+  date: 2013-07-17
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    Original version string was 3.0.0RC1
+    [mjr] Fix performing image actions in Lightbox galleries.
+    [mjr] Fix display of missing widgets.
 3.0.0:
   api: 3.0.0
   state:
@@ -172,30 +203,6 @@
     uri: http://www.horde.org/licenses/gpl
   notes: |
     [mjr] Fixed fatal error when using face widgets.
-3.0.0RC1:
-  api: 3.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2013-07-17
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix performing image actions in Lightbox galleries.
-    [mjr] Fix display of missing widgets.
-3.0.0beta1:
-  api: 3.0.0
-  state:
-    release: beta
-    api: beta
-  date: 2013-06-18
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    First beta release for Horde 5.
-    [mjr] Various fixes for SQLite to work with Ansel.
 2.0.2:
   api: 2.0.0
   state:
@@ -227,56 +234,7 @@
     [mjr] Fix issue with carousel display on legacy uploader.
     [mjr] Fix issue where gallery still retained image count after it was empties of all images when using gallery cache.
     [mjr] Fix issue with map not showing when user does not have Horde_Perms::EDIT on the gallery (Bug #10762).
-2.0.0:
-  api: 2.0.0
-  state:
-    release: stable
-    api: stable
-  date: 2011-11-02
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Add pref to allow explicitly turning off the new ajax uploader.
-    [mjr] Fix invalid image type errors when uploading in older versions of mozilla.
-    [mjr] Fix issue with deleting galleries in date mode with key images (Bug #10671).
-2.0.0RC2:
-  api: 2.0.0RC2
-  state:
-    release: beta
-    api: beta
-  date: 2011-10-27
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [jan] Fix page output of popup for updating dates of multiple images (Bug #10676).
-    [jan] Fix initialization of editor for creating ecards (Bug #10675).
-    [mjr] Fix issue causing uploads to fail in certain cases on IE.
-    [mjr] Display localized date strings when grouping galleries by date (Bug #10669).
-    [mjr] Improve gallery property editing when jpg image format is configured.
-    [jan] Add Slovak translation (Martin Matuška <martin@matuska.org>).
-    [mjr] Allow filtering listTagInfo results by user.
-    [mjr] Fix issue with style migration when upgrading from Ansel 1.x.
-2.0.0RC1:
-  api: 2.0.0RC1
-  state:
-    release: beta
-    api: beta
-  date: 2011-10-19
-  license:
-    identifier: GPL-2.0
-    uri: http://www.horde.org/licenses/gpl
-  notes: |
-    [mjr] Fix migrations to not rely on Ansel being available.
-    [mjr] Fix hook calls (Bug #10659).
-    [mjr] Add script to convert from sql to sqlng shares after migrations have already run.
-    [mjr] Add migration to ensure style hashes are computed for migrated galleries.
-    [mjr] Fix uploading large files (Bug #10641).
-    [mjr] Fix thumbnail generation on bulk caption setting page (Bug #10642).
-    [mjr] Fix GROUP BY fields when searching for similar faces (Bug #10635).
-    [jan] Fix link to report faces (Bug #10636).
-2.0.0alpha1:
+2.0.0-alpha1:
   api: 2.0.0
   state:
     release: alpha
@@ -286,6 +244,7 @@
     identifier: GPL-2.0
     uri: http://www.horde.org/licenses/gpl
   notes: |
+    Original version string was 2.0.0alpha1
     First alpha release for Horde 4.
     [mjr] Support for sending twitter notifications after uploading images.
     [mjr] Refactor Geotagging features to use HordeMap.
@@ -301,6 +260,57 @@
     [mjr] Support for multipage images (Request #6022).
     [mjr] Remove support for no longer available openCV extension.
     [mjr] Exif code removed and placed in Horde_Image_Exif.
+2.0.0-RC2:
+  api: 2.0.0RC2
+  state:
+    release: beta
+    api: beta
+  date: 2011-10-27
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    Original version string was 2.0.0RC2
+    [jan] Fix page output of popup for updating dates of multiple images (Bug #10676).
+    [jan] Fix initialization of editor for creating ecards (Bug #10675).
+    [mjr] Fix issue causing uploads to fail in certain cases on IE.
+    [mjr] Display localized date strings when grouping galleries by date (Bug #10669).
+    [mjr] Improve gallery property editing when jpg image format is configured.
+    [jan] Add Slovak translation (Martin Matuška <martin@matuska.org>).
+    [mjr] Allow filtering listTagInfo results by user.
+    [mjr] Fix issue with style migration when upgrading from Ansel 1.x.
+2.0.0-RC1:
+  api: 2.0.0RC1
+  state:
+    release: beta
+    api: beta
+  date: 2011-10-19
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    Original version string was 2.0.0RC1
+    [mjr] Fix migrations to not rely on Ansel being available.
+    [mjr] Fix hook calls (Bug #10659).
+    [mjr] Add script to convert from sql to sqlng shares after migrations have already run.
+    [mjr] Add migration to ensure style hashes are computed for migrated galleries.
+    [mjr] Fix uploading large files (Bug #10641).
+    [mjr] Fix thumbnail generation on bulk caption setting page (Bug #10642).
+    [mjr] Fix GROUP BY fields when searching for similar faces (Bug #10635).
+    [jan] Fix link to report faces (Bug #10636).
+2.0.0:
+  api: 2.0.0
+  state:
+    release: stable
+    api: stable
+  date: 2011-11-02
+  license:
+    identifier: GPL-2.0
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    [mjr] Add pref to allow explicitly turning off the new ajax uploader.
+    [mjr] Fix invalid image type errors when uploading in older versions of mozilla.
+    [mjr] Fix issue with deleting galleries in date mode with key images (Bug #10671).
 1.1.2:
   notes: |
     [mjr] Fix issue where subgalleries would become invisible in certain conditions.
@@ -334,18 +344,9 @@
     [jan] Fix ansel_shares table definition for PostgreSQL.
     [mjr] Fix issue that caused screen image creation to fail when using gd Horde_Image driver.
     [mjr] Fix issue with screen images being generated as PNGs if not using VFS Direct serving.
-1.0.0:
+1.0.0-RC1:
   notes: |
-    [mjr] Force screen images to be jpegs to reduce image size.
-    [mjr] Add a new api method for obtaining the available gallery styles.
-    [mjr] Add a widget to the gallery view for showing faces that the gallery owner has tagged.
-    [mjr] Allow embedding screen size images in external sites as well.
-    [mjr] Add configuration parameter to require a minimum number of images to be present in a gallery before it's displayed in a gallery list. (Duck <duck@obala.net>, Request# 7949)
-    [mjr] Add a Link widget to the Image View.
-    [mjr] Correct some undefined variable warnings. (Duck <duck@obala.net>)
-    [mjr] Fix default parameters for the ansel tag cloud.
-1.0.0RC1:
-  notes: |
+    Original version string was 1.0.0RC1
     [jan] Add Turkish translation (Akif Dinc <akif@dinc.org>).
     [jan] Change group field in shares table to work with LDAP groups (Bug #6883).
     [jan] Add WebDAV interface.
@@ -405,3 +406,13 @@
     [cjh] Show tooltips containing filename and image descriptions.
     [jan] Add German translation.
     [cjh] Initial Ansel code.
+1.0.0:
+  notes: |
+    [mjr] Force screen images to be jpegs to reduce image size.
+    [mjr] Add a new api method for obtaining the available gallery styles.
+    [mjr] Add a widget to the gallery view for showing faces that the gallery owner has tagged.
+    [mjr] Allow embedding screen size images in external sites as well.
+    [mjr] Add configuration parameter to require a minimum number of images to be present in a gallery before it's displayed in a gallery list. (Duck <duck@obala.net>, Request# 7949)
+    [mjr] Add a Link widget to the Image View.
+    [mjr] Correct some undefined variable warnings. (Duck <duck@obala.net>)
+    [mjr] Fix default parameters for the ansel tag cloud.
