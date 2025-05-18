@@ -12,7 +12,7 @@ class Ansel_Form_Image extends Horde_Form
 {
     protected $_useFormToken = false;
 
-    public function __construct(&$vars, $title)
+    public function __construct($vars, $title)
     {
         global $gallery;
 

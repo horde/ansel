@@ -9,7 +9,7 @@ class Ansel_Form_Ecard extends Horde_Form {
 
     protected $_useFormToken = true;
 
-    public function __construct(&$vars, $title)
+    public function __construct($vars, $title)
     {
         global $conf, $registry, $injector;
 
