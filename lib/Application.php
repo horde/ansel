@@ -40,7 +40,7 @@ class Ansel_Application extends Horde_Registry_Application
 
     /**
      */
-    public $version = '4.0.0-alpha4';
+    public $version = '4.0.0-alpha5';
 
     /**
      * Global variables defined:

@@ -1,4 +1,16 @@
 ---
+4.0.0-alpha5:
+  api: 4.0.0-alpha1
+  state:
+    release: alpha
+    api: alpha
+  date: 2025-06-04
+  license:
+    identifier: GPL-2.0-only
+    uri: http://www.horde.org/licenses/gpl
+  notes: |
+    style: Apply php-cs-fixer php 8.3 ruleset
+    fix: Remove reference from signatures.
 4.0.0-alpha4:
   api: 4.0.0-alpha1
   state:
