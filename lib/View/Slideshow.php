@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_View_Slideshow:: class wraps display of the gallery slideshow.
  *
@@ -8,7 +9,6 @@
  */
 class Ansel_View_Slideshow extends Ansel_View_Image
 {
-
     protected function _includeViewSpecificScripts()
     {
         $GLOBALS['page_output']->addScriptFile('slideshow.js');

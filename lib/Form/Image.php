@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
  *
@@ -29,21 +30,44 @@ class Ansel_Form_Image extends Horde_Form
             $filesize = $filesize * 1048576;
         }
         $filesize = $this->_get_size($filesize);
-        $this->addVariable(_("Make this the default photo for this gallery?"),
-                           'image_default', 'boolean', false);
-        $this->addVariable(_("Caption"), 'image_desc', 'longtext', false, false,
-                           null, array('4', '40'));
+        $this->addVariable(
+            _("Make this the default photo for this gallery?"),
+            'image_default',
+            'boolean',
+            false
+        );
+        $this->addVariable(
+            _("Caption"),
+            'image_desc',
+            'longtext',
+            false,
+            false,
+            null,
+            array('4', '40')
+        );
 
-        $this->addVariable(_("Original Date"), 'image_originalDate',
-                           'monthdayyear', true, false, null,
-                           array('start_year' => 1900));
+        $this->addVariable(
+            _("Original Date"),
+            'image_originalDate',
+            'monthdayyear',
+            true,
+            false,
+            null,
+            array('start_year' => 1900)
+        );
 
         $this->addVariable(_("Tags"), 'image_tags', 'text', false);
 
         $this->addHidden('', 'image0', 'text', false);
         $upload = $this->addVariable(
-        _("Replace photo with this file"), 'file0', 'file', false, false,
-        _("Maximum photo size:") . ' '  . $filesize, array(false));
+            _("Replace photo with this file"),
+            'file0',
+            'file',
+            false,
+            false,
+            _("Maximum photo size:") . ' '  . $filesize,
+            array(false)
+        );
         $upload->setHelp('upload');
     }
 

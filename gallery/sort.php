@@ -36,46 +36,48 @@ $date = Ansel::getDateParameter();
 $gallery->setDate($date);
 
 switch (Horde_Util::getFormData('action')) {
-case 'Sort':
-    parse_str(Horde_Util::getPost('order'), $order);
-    $order = $order['order'];
-    foreach ($order as $pos => $id) {
-        $gallery->setImageOrder($id, $pos);
-    }
-    $notification->push(_("Gallery sorted."), 'horde.success');
-    $style = $gallery->getStyle();
-    Ansel::getUrlFor(
-        'view',
-         array_merge(
-               array('view' => 'Gallery',
-                     'gallery' => $galleryId,
-                     'slug' => $gallery->get('slug')
+    case 'Sort':
+        parse_str(Horde_Util::getPost('order'), $order);
+        $order = $order['order'];
+        foreach ($order as $pos => $id) {
+            $gallery->setImageOrder($id, $pos);
+        }
+        $notification->push(_("Gallery sorted."), 'horde.success');
+        $style = $gallery->getStyle();
+        Ansel::getUrlFor(
+            'view',
+            array_merge(
+                array('view' => 'Gallery',
+                         'gallery' => $galleryId,
+                         'slug' => $gallery->get('slug')
+                    ),
+                $date
+            ),
+            true
+        )->redirect();
+        exit;
+    case 'Reset':
+        // Reset the sort order by date.
+        $images = $injector->getInstance('Ansel_Storage')
+              ->listImages(array('gallery_id' => $galleryId, 'sort' => 'image_original_date'));
+        $pos = 0;
+        foreach ($images as $id) {
+            $gallery->setImageOrder($id, $pos++);
+        }
+        $notification->push(_("Gallery sort reset."), 'horde.success');
+        $style = $gallery->getStyle();
+        Ansel::getUrlFor(
+            'view',
+            array_merge(
+                array('view' => 'Gallery',
+                      'gallery' => $galleryId,
+                      'slug' => $gallery->get('slug')
                 ),
                 $date
-        ),
-        true)->redirect();
-    exit;
-case 'Reset':
-    // Reset the sort order by date.
-    $images = $injector->getInstance('Ansel_Storage')
-          ->listImages(array('gallery_id' => $galleryId, 'sort' => 'image_original_date'));
-    $pos = 0;
-    foreach ($images as $id) {
-        $gallery->setImageOrder($id, $pos++);
-    }
-    $notification->push(_("Gallery sort reset."), 'horde.success');
-    $style = $gallery->getStyle();
-    Ansel::getUrlFor(
-        'view',
-        array_merge(
-            array('view' => 'Gallery',
-                  'gallery' => $galleryId,
-                  'slug' => $gallery->get('slug')
             ),
-            $date
-        ),
-        true)->redirect();
-    exit;
+            true
+        )->redirect();
+        exit;
 }
 
 $page_output->addInlineScript(array(

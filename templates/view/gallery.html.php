@@ -34,7 +34,9 @@
             <?php echo $this->contentTag('a', _("None"), array('title' => _("Select None"), 'id' => 'anselgallery_select_none')) ?>
           </td>
           <td class="rightAlign">
-            <?php if ($this->option_delete || $this->option_move || $this->option_copy) echo _("Actions: ") ?>
+            <?php if ($this->option_delete || $this->option_move || $this->option_copy) {
+                echo _("Actions: ");
+            } ?>
             <?php if ($GLOBALS['conf']['gallery']['downloadzip']): ?>
               <?php echo $this->contentTag('a', _("Download selected photos"), array('class' => 'widget', 'id' => 'anselgallery_download')) ?> |
             <?php endif; ?>
@@ -68,17 +70,17 @@
         <tr>
        <?php
        $count = 0;
-       foreach ($this->children as $child) {
-           echo '<td width="' . $this->cellwidth . '%" class="ansel-tile">'
-               . $child->getTile($this->gallery, $this->style, false, $this->view->getParams()) . '</td>';
-           if (!(++$count % $this->tilesperrow)) {
+        foreach ($this->children as $child) {
+            echo '<td width="' . $this->cellwidth . '%" class="ansel-tile">'
+                . $child->getTile($this->gallery, $this->style, false, $this->view->getParams()) . '</td>';
+            if (!(++$count % $this->tilesperrow)) {
                 echo '</tr><tr>';
-           }
-       }
-       while ($count % $this->tilesperrow) {
-          echo '<td width="' . $this->cellwidth . '%" valign="top">&nbsp;</td>';
-          $count++;
-       }?>
+            }
+        }
+        while ($count % $this->tilesperrow) {
+            echo '<td width="' . $this->cellwidth . '%" valign="top">&nbsp;</td>';
+            $count++;
+        }?>
        </tr>
        <tr><td colspan="<?php echo $this->tilesperrow ?>"><?php echo $this->pager->render() ?></td></tr>
       </tbody></table>

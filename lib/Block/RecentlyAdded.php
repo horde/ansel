@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display most recently added images.
  *
@@ -47,7 +48,8 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
                 ->getInstance('Ansel_Storage')
                 ->countGalleries(
                     $GLOBALS['registry']->getAuth(),
-                    array('perm' => Horde_Perms::READ)) < $GLOBALS['conf']['gallery']['listlimit'])) {
+                    array('perm' => Horde_Perms::READ)
+                ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
             foreach ($GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(array('perm' => Horde_Perms::READ)) as $gal) {
                 if (!$gal->hasPasswd() && $gal->isOldEnough()) {
@@ -70,7 +72,8 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
                 return Ansel::getUrlFor(
                     'view',
                     array('view' => 'List'),
-                    true)
+                    true
+                )
                 ->link() . _("Gallery") . '</a>';
             }
 
@@ -82,7 +85,8 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
                     'view' => 'Gallery'),
-                true);
+                true
+            );
             return sprintf(_("Recently Added Photos From %s"), $viewurl->link() . $name . '</a>');
         }
         $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
@@ -110,7 +114,8 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
                 ->getInstance('Ansel_Storage')
                 ->getRecentImages(
                     $galleries,
-                    min($this->_params['limit'], 100));
+                    min($this->_params['limit'], 100)
+                );
         } catch (Ansel_Exception $e) {
             return $e->getMessage();
         }
@@ -143,7 +148,8 @@ HEADER;
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
                     'view' => 'Gallery'),
-                true);
+                true
+            );
             $galleryLink = $galleryLink->link()
                 . htmlspecialchars($gallery->get('name'))
                 . '</a>';
@@ -161,14 +167,16 @@ HEADER;
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
                     'image' => $image->id,
-                    'gallery_view' => $style->gallery_view));
+                    'gallery_view' => $style->gallery_view)
+            );
 
             $html .= '<tr><td>' . strftime('%x', $image->uploaded)
                 . '</td><td class="nowrap">'
                 . $url->link(
                     array(
                         'onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
-                        'onmouseover' => 'Ansel.previewImage(event, ' . $image->id . ');'))
+                        'onmouseover' => 'Ansel.previewImage(event, ' . $image->id . ');')
+                )
                 . htmlspecialchars(strlen($caption) ? $caption : $image->filename)
                 . '</a></td><td class="nowrap">' . $galleryLink . '</td></tr>';
         }

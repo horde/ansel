@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display most recently geotagged images.
  *
@@ -76,7 +77,8 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
                     'gallery' => $gallery->id,
                     'image' => $id,
                     'gallery_view' => $style->gallery_view),
-                true);
+                true
+            );
             $images[$key]['icon'] = strval(Ansel::getImageUrl($images[$key]['image_id'], 'mini', true));
             $images[$key]['link'] = strval($url);
             $images[$key]['markerOnly'] = false;

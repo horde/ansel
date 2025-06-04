@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
  *
@@ -52,11 +53,12 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
         $view->background = $this->_style->background;
         $view->toggle_url = Horde::selfUrl(true, true)
             ->add('actionID', 'show_othergalleries')
-            ->link(array(
+            ->link(
+                array(
                 'id' => 'othergalleries-toggle',
                 'class' => ($GLOBALS['prefs']->getValue('show_othergalleries') ? 'hide' : 'show')
             )
-        );
+            );
         $this->_getOtherGalleries($view);
 
         return $view->render('othergalleries');
@@ -97,13 +99,15 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
             $img = (string)Ansel::getImageUrl(
                 $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')),
                 'mini',
-                true);
+                true
+            );
             $link = Ansel::getUrlFor(
                 'view',
                 array('gallery' => $gallery->id,
                       'slug' => $gallery->get('slug'),
                       'view' => 'Gallery'),
-                true);
+                true
+            );
 
             $tree->addNode(array(
                 'id' => $gallery->id,
@@ -123,7 +127,8 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
             ->getInstance('Horde_Core_Factory_Imple')
             ->create(
                 'Ansel_Ajax_Imple_ToggleOtherGalleries',
-                array('id' => 'othergalleries-toggle'));
+                array('id' => 'othergalleries-toggle')
+            );
 
     }
 

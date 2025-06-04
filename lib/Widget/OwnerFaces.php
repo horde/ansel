@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Widget_OwnerFaces:: class to display a widget containing mini
  * thumbnails of faces that have been tagged by the gallery owner.

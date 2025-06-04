@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Set the name of a single image via Ajax
  *
@@ -18,7 +19,7 @@ $face_id = (int)Horde_Util::getFormData('face');
 $name = Horde_Util::getFormData('name');
 
 $image = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImage($image_id);
-$gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')>getGallery($image->gallery);
+$gallery = $GLOBALS['injector']->getInstance('Ansel_Storage') > getGallery($image->gallery);
 if (!$gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
     throw new Ansel_Exception('Access denied editing the photo.');
 }

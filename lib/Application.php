@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel application API.
  *
@@ -58,9 +59,11 @@ class Ansel_Application extends Horde_Registry_Application
         $GLOBALS['injector']
           ->getInstance('Horde_Autoloader')
           ->addClassPathMapper(
-            new Horde_Autoloader_ClassPathMapper_Prefix(
-              '/^Content_/',
-              $GLOBALS['registry']->get('fileroot', 'content') . '/lib/'));
+              new Horde_Autoloader_ClassPathMapper_Prefix(
+                  '/^Content_/',
+                  $GLOBALS['registry']->get('fileroot', 'content') . '/lib/'
+              )
+          );
         if (!class_exists('Content_Tagger')) {
             throw new Ansel_Exception('The Content_Tagger class could not be found. Make sure the registry entry for the Content system is present.');
         }
@@ -103,7 +106,10 @@ class Ansel_Application extends Horde_Registry_Application
         $menu->add(
             Horde::url('browse.php'),
             _("_Browse"),
-            'ansel-browse', null, null, null,
+            'ansel-browse',
+            null,
+            null,
+            null,
             (($GLOBALS['prefs']->getValue('defaultview') == 'browse' && basename($_SERVER['PHP_SELF']) == 'index.php') ||
              (basename($_SERVER['PHP_SELF']) == 'browse.php')) ? 'current' : '__noselection'
         );
@@ -119,7 +125,11 @@ class Ansel_Application extends Horde_Registry_Application
 
             $menu->add(
                 $url,
-                _("_My Galleries"), 'ansel-mygalleries', null, null, null,
+                _("_My Galleries"),
+                'ansel-mygalleries',
+                null,
+                null,
+                null,
                 (Horde_Util::getFormData('owner', false) == $GLOBALS['registry']->getAuth())
                     ? 'current'
                     : '__noselection'
@@ -128,8 +138,12 @@ class Ansel_Application extends Horde_Registry_Application
 
         $menu->add(
             Ansel::getUrlFor('view', array('view' => 'List')),
-            _("_All Galleries"), 'ansel-allgalleries', null, null, null,
-           (($GLOBALS['prefs']->getValue('defaultview') == 'galleries' && basename($_SERVER['PHP_SELF']) == 'index.php') ||
+            _("_All Galleries"),
+            'ansel-allgalleries',
+            null,
+            null,
+            null,
+            (($GLOBALS['prefs']->getValue('defaultview') == 'galleries' && basename($_SERVER['PHP_SELF']) == 'index.php') ||
             (basename($_SERVER['PHP_SELF']) == 'group.php' && Horde_Util::getFormData('owner') !== $GLOBALS['registry']->getAuth())
                    ? 'current'
                    : '__noselection')

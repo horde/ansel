@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the shadowsharpthumb view (sharp corners, shadowed)
  *
@@ -21,9 +22,11 @@ class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
      */
     protected function _create()
     {
-        $this->_image->resize(min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
-                              min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
-                              true);
+        $this->_image->resize(
+            min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
+            min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
+            true
+        );
 
         /* Don't bother with these effects for a custom gallery key image
            (which will have a negative gallery_id). */
@@ -35,14 +38,18 @@ class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
                 $styleDef = $this->_style;
             }
             try {
-                $this->_image->addEffect('PolaroidImage',
-                                         array('background' => $styleDef->background,
-                                               'padding' => 5));
+                $this->_image->addEffect(
+                    'PolaroidImage',
+                    array('background' => $styleDef->background,
+                                               'padding' => 5)
+                );
                 if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
-                    $this->_image->addEffect('Unsharpmask',
-                                             array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                    $this->_image->addEffect(
+                        'Unsharpmask',
+                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
                                                    'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount']));
+                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                    );
                 }
                 $this->_image->applyEffects();
             } catch (Horde_Image_Exception $e) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to encapsulate a single gallery. Implemented as an extension of
  * the Horde_Share_Object class.
@@ -18,7 +19,7 @@ class Ansel_Gallery implements Serializable
     /**
      * Serializable version constant
      */
-    const VERSION = 3;
+    public const VERSION = 3;
 
     /**
      * The share object for this gallery.
@@ -46,7 +47,8 @@ class Ansel_Gallery implements Serializable
         $this->_share = $share;
 
         $this->_setModeHelper(
-            $share->get('view_mode') ? $share->get('view_mode') : 'Normal');
+            $share->get('view_mode') ? $share->get('view_mode') : 'Normal'
+        );
     }
 
     /**
@@ -59,10 +61,10 @@ class Ansel_Gallery implements Serializable
     public function __get($property)
     {
         switch ($property) {
-        case 'id':
-            return $this->_share->getId();
-        default:
-            return null;
+            case 'id':
+                return $this->_share->getId();
+            default:
+                return null;
         }
     }
 
@@ -180,23 +182,26 @@ class Ansel_Gallery implements Serializable
         }
 
         switch ($this->_share->get('download')) {
-        case 'all':
-            return true;
+            case 'all':
+                return true;
 
-        case 'authenticated':
-            return $GLOBALS['registry']->isAuthenticated();
+            case 'authenticated':
+                return $GLOBALS['registry']->isAuthenticated();
 
-        case 'edit':
-            return $this->_share->hasPermission(
-                $GLOBALS['registry']->getAuth(), Horde_Perms::EDIT);
+            case 'edit':
+                return $this->_share->hasPermission(
+                    $GLOBALS['registry']->getAuth(),
+                    Horde_Perms::EDIT
+                );
 
-        case 'hook':
-            try {
-                return Horde::callHook('can_download', array($this->id));
-            } catch (Horde_Exception_HookNotSet $e) {}
+            case 'hook':
+                try {
+                    return Horde::callHook('can_download', array($this->id));
+                } catch (Horde_Exception_HookNotSet $e) {
+                }
 
-        default:
-            return false;
+            default:
+                return false;
         }
     }
 
@@ -211,16 +216,22 @@ class Ansel_Gallery implements Serializable
         $slug = $this->get('slug');
         if ($slug && preg_match('/[^a-zA-Z0-9_@]/', $slug)) {
             throw new InvalidArgumentException(
-                sprintf(_("Could not save gallery, the slug, \"%s\", contains invalid characters."),
-                        $slug));
+                sprintf(
+                    _("Could not save gallery, the slug, \"%s\", contains invalid characters."),
+                    $slug
+                )
+            );
         }
 
         // Check for slug uniqueness
         if (!empty($this->_oldSlug) && $slug != $this->_oldSlug) {
             if ($GLOBALS['injector']->getInstance('Ansel_Storage')->galleryExists(null, $slug)) {
                 throw InvalidArgumentException(
-                    sprintf(_("Could not save gallery, the slug, \"%s\", already exists."),
-                            $slug));
+                    sprintf(
+                        _("Could not save gallery, the slug, \"%s\", already exists."),
+                        $slug
+                    )
+                );
             }
         }
 
@@ -249,9 +260,9 @@ class Ansel_Gallery implements Serializable
     {
         /* Updating self */
         if ($add) {
-            $this->set('images',  $this->get('images') + $images);
+            $this->set('images', $this->get('images') + $images);
         } else {
-            $this->set('images',  $this->_share->get('images') - $images);
+            $this->set('images', $this->_share->get('images') - $images);
         }
         $this->save();
 
@@ -482,7 +493,8 @@ class Ansel_Gallery implements Serializable
     {
         if (!$gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied(
-                _("Access denied copying photos to this gallery."));
+                _("Access denied copying photos to this gallery.")
+            );
         }
 
         $imgCnt = 0;
@@ -514,7 +526,7 @@ class Ansel_Gallery implements Serializable
                 ->getImageAttributes($imageId);
 
             if (is_array($exif) && count($exif) > 0) {
-                foreach ($exif as $name => $value){
+                foreach ($exif as $name => $value) {
                     $GLOBALS['injector']
                         ->getInstance('Ansel_Storage')
                         ->saveImageAttribute($newId, $name, $value);
@@ -579,11 +591,12 @@ class Ansel_Gallery implements Serializable
      *
      * @return Ansel_Tile_Gallery
      */
-    public function getTile(Ansel_Gallery $parent = null,
-                            Ansel_Style $style = null,
-                            $mini = false,
-                            array $params = array())
-    {
+    public function getTile(
+        Ansel_Gallery $parent = null,
+        Ansel_Style $style = null,
+        $mini = false,
+        array $params = array()
+    ) {
         if (!is_null($parent) && is_null($style)) {
             $style = $parent->getStyle();
         }
@@ -624,11 +637,12 @@ class Ansel_Gallery implements Serializable
      * @return A mixed array of Ansel_Gallery and Ansel_Image objects that are
      *         children of this gallery.
      */
-    public function getGalleryChildren($perm = Horde_Perms::SHOW,
-                                       $from = 0,
-                                       $to = 0,
-                                       $noauto = true)
-    {
+    public function getGalleryChildren(
+        $perm = Horde_Perms::SHOW,
+        $from = 0,
+        $to = 0,
+        $noauto = true
+    ) {
         return $this->_modeHelper->getGalleryChildren($perm, $from, $to, $noauto);
     }
 
@@ -641,12 +655,16 @@ class Ansel_Gallery implements Serializable
      *
      * @return integer The count of this gallery's children.
      */
-    public function countGalleryChildren($perm = Horde_Perms::SHOW,
-                                         $galleries_only = false,
-                                         $noauto = true)
-    {
+    public function countGalleryChildren(
+        $perm = Horde_Perms::SHOW,
+        $galleries_only = false,
+        $noauto = true
+    ) {
         return $this->_modeHelper->countGalleryChildren(
-            $perm, $galleries_only, $noauto);
+            $perm,
+            $galleries_only,
+            $noauto
+        );
     }
 
     public function countChildren($user, $perm = Horde_Perms::SHOW, $allLevels = true)
@@ -784,7 +802,8 @@ class Ansel_Gallery implements Serializable
                 $newImg = new Ansel_Image($iparams);
                 $newImg->save();
                 $prettyData = serialize(
-                    array_merge($thumbs, array($styleHash => $newImg->id)));
+                    array_merge($thumbs, array($styleHash => $newImg->id))
+                );
                 $this->set('default_prettythumb', $prettyData, true);
 
                 // Make sure the hash is saved since it might be different then
@@ -885,7 +904,8 @@ class Ansel_Gallery implements Serializable
                         $this->id,
                         $tags,
                         $this->get('owner'),
-                        'gallery');
+                        'gallery'
+                    );
             } else {
                 $GLOBALS['injector']
                     ->getInstance('Ansel_Tagger')
@@ -893,7 +913,8 @@ class Ansel_Gallery implements Serializable
                         $this->id,
                         $tags,
                         $this->get('owner'),
-                        'gallery');
+                        'gallery'
+                    );
             }
         } else {
             throw new Horde_Exception_PermissionDenied(_("Access denied adding tags to this gallery."));
@@ -913,7 +934,8 @@ class Ansel_Gallery implements Serializable
                 ->untag(
                     (string)$this->id,
                     $tag,
-                    'gallery');
+                    'gallery'
+                );
         }
     }
 
@@ -932,7 +954,8 @@ class Ansel_Gallery implements Serializable
         if (!$this->get('style')) {
             // No style configured, use user's prefered default
             $style = Ansel::getStyleDefinition(
-                $GLOBALS['prefs']->getValue('default_gallerystyle'));
+                $GLOBALS['prefs']->getValue('default_gallerystyle')
+            );
         } else {
             // Explicitly defined style
             $style = $this->get('style');
@@ -1012,7 +1035,8 @@ class Ansel_Gallery implements Serializable
             $GLOBALS['registry']->isAuthenticated()) {
             try {
                 $result = Horde::callHook('user_age', array(), 'ansel');
-            } catch (Horde_Exception_HookNotSet $e) {}
+            } catch (Horde_Exception_HookNotSet $e) {
+            }
             if (is_int($result)) {
                 $session->set('ansel', 'user_age', $result);
                 $user_age = $result;
@@ -1095,10 +1119,10 @@ class Ansel_Gallery implements Serializable
         }
         Horde::log('Ansel_Gallery parent successfully set', 'DEBUG');
 
-       /* Gallery parent changed, safe to change the parent's attributes */
-       if ($reset_has_subgalleries) {
-           $old->set('has_subgalleries', 0, true);
-       }
+        /* Gallery parent changed, safe to change the parent's attributes */
+        if ($reset_has_subgalleries) {
+            $old->set('has_subgalleries', 0, true);
+        }
     }
 
     /**
@@ -1240,7 +1264,7 @@ class Ansel_Gallery implements Serializable
             $json->pn = null;
         } else {
             $p = array_pop($parents);
-            $json->p =$p->id;
+            $json->p = $p->id;
             $json->pn = $p->get('name');
         }
 
@@ -1252,7 +1276,8 @@ class Ansel_Gallery implements Serializable
                 $sgs = $this->getChildren(
                     $GLOBALS['registry']->getAuth(),
                     Horde_Perms::READ,
-                    false);//GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(array('parent' => $this->id, 'all_levels' => false));
+                    false
+                );//GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(array('parent' => $this->id, 'all_levels' => false));
                 foreach ($sgs as $g) {
                     $json->sg[] = $g->toJson();
                 }

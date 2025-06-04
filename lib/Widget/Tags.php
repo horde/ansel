@@ -1,13 +1,14 @@
 <?php
- /**
-  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
-  *
-  * See the enclosed file LICENSE for license information (GPL). If you
-  * did not receive this file, see http://www.horde.org/licenses/gpl.
-  *
-  * @author Michael J Rubinsky <mrubinsk@horde.org>
-  * @package Ansel
-  */
+
+/**
+ * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (GPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/gpl.
+ *
+ * @author Michael J Rubinsky <mrubinsk@horde.org>
+ * @package Ansel
+ */
 /**
  * Ansel_Widget_Tags:: class to display a tags widget in the image and gallery
  * views.
@@ -106,7 +107,8 @@ class Ansel_Widget_Tags extends Ansel_Widget_Base
         $tagger = $GLOBALS['injector']->getInstance('Ansel_Tagger');
         $hasEdit = $this->_view->gallery->hasPermission(
             $GLOBALS['registry']->getAuth(),
-            Horde_Perms::EDIT);
+            Horde_Perms::EDIT
+        );
         $owner = $this->_view->gallery->get('owner');
         $tags = $tagger->getTags((int)$this->_view->resource->id, $this->_resourceType);
 

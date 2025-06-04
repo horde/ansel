@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file provides a recent faces display in a block.
  *

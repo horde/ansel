@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_View_EmbeddedRenderer_Slideshow
  *

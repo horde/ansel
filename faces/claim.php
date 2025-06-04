@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Identify a person in a photo
  *
@@ -40,7 +41,8 @@ if ($form->validate()) {
         $face_link = Horde::url('faces/custom.php', true)->add(
             array('name' => $vars->get('person'),
                   'face' => $face_id,
-                  'image' => $face['image_id']))->setRaw(true);
+                  'image' => $face['image_id'])
+        )->setRaw(true);
 
         $title = _("I know who is on one of your photos");
         $body = _("Gallery Name") . ': ' . $gallery->get('name') . "\n"

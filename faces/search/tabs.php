@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process an single photo (to be called by ajax)
  *

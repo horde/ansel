@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process an single image (to be called via Ajax)
  *
@@ -32,7 +33,7 @@ if (($reload || empty($results))) {
             null,
             ($GLOBALS['prefs']->getValue('watermark_auto') ?
                 $GLOBALS['prefs']->getValue('watermark_text', '') : '')
-            );
+        );
         $results = $faces->getFromPicture($image_id, true);
     } catch (Ansel_Exception $e) {
         Horde::log($e, 'ERR');

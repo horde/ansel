@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_Tagger:: class wraps Ansel's interaction with the Content/Tagger
  * system.

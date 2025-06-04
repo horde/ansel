@@ -1,4 +1,5 @@
 <?php
+
 /**
  * A decorator around an Ansel_Gallery to allow multiple date groupings
  * to access the same Ansel_Gallery instance.
@@ -64,24 +65,24 @@ class Ansel_Gallery_Decorator_Date
     public function __call($method, $args)
     {
         switch ($method) {
-        case 'getGalleryChildren':
-        case 'countGalleryChildren':
-        case 'listImages':
-        case 'getImages':
-        case 'hasSubGalleries':
-        case 'getDate':
-        case 'setDate':
-            return call_user_func_array(array($this->_modeHelper, $method), $args);
-        default:
-            return call_user_func_array(array($this->_gallery, $method), $args);
+            case 'getGalleryChildren':
+            case 'countGalleryChildren':
+            case 'listImages':
+            case 'getImages':
+            case 'hasSubGalleries':
+            case 'getDate':
+            case 'setDate':
+                return call_user_func_array(array($this->_modeHelper, $method), $args);
+            default:
+                return call_user_func_array(array($this->_gallery, $method), $args);
         }
     }
 
     public function __get($property)
     {
         switch ($property) {
-        case 'id':
-            return $this->_gallery->id;
+            case 'id':
+                return $this->_gallery->id;
         }
     }
 

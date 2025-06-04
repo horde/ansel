@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade to Ansel 2 style schema
  *

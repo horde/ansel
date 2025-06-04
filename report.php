@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Report offensive content
  *
@@ -27,24 +28,25 @@ try {
 if (($image_id = Horde_Util::getFormData('image')) !== null) {
     $title = _("Do you really want to report this photo?");
     $return_url = Ansel::getUrlFor(
-      'view',
-       array('view' => 'Image',
+        'view',
+        array('view' => 'Image',
              'image' => $image_id,
              'gallery' => $gallery_id),
-      true
+        true
     );
 } else {
     $return_url = Ansel::getUrlFor(
-      'view',
-       array('gallery' => $gallery_id,
+        'view',
+        array('gallery' => $gallery_id,
              'view' => 'Gallery'),
-       true
+        true
     );
 }
 
 $vars = Horde_Variables::getDefaultVariables();
 $form = new Horde_Form($vars, $title);
-$form->setButtons(array(
+$form->setButtons(
+    array(
     array('class' => 'horde-default', 'value' => _("Report")),
     array('class' => 'horde-cancel', 'value' => _("Cancel")))
 );

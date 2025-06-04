@@ -1,13 +1,14 @@
 <?php
- /**
-  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
-  *
-  * See the enclosed file LICENSE for license information (GPL). If you
-  * did not receive this file, see http://www.horde.org/licenses/gpl.
-  *
-  * @author Michael J Rubinsky <mrubinsk@horde.org>
-  * @package Ansel
-  */
+
+/**
+ * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (GPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/gpl.
+ *
+ * @author Michael J Rubinsky <mrubinsk@horde.org>
+ * @package Ansel
+ */
 /**
  * Ansel_Widget_Actions:: class to wrap the display of gallery actions
  *
@@ -40,11 +41,12 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         $view->background = $this->_style->background;
         $view->toggle_url = Horde::selfUrl(true, true)
             ->add('actionID', 'show_actions')
-            ->link(array(
+            ->link(
+                array(
                 'id' => 'gallery-actions-toggle',
                 'class' => ($GLOBALS['prefs']->getValue('show_actions') ? 'hide' : 'show')
             )
-        );
+            );
 
         $id = $this->_view->gallery->id;
         $galleryurl = Horde::url('gallery.php')->add('gallery', $id);
@@ -59,7 +61,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
                 $view->slideshow_url = str_replace(
                     array('%i', '%g'),
                     array(array_pop($this->_view->gallery->listImages(0, 1)), $id),
-                    urldecode($this->_params['slideshow_link']));
+                    urldecode($this->_params['slideshow_link'])
+                );
             } else {
                 // Get any date info the gallery has
                 $date = $this->_view->gallery->getDate();
@@ -69,7 +72,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
                         array('gallery' => $id,
                               'image' => array_pop($imgs),
                               'view' => 'Slideshow'),
-                        $date));
+                        $date
+                    ));
             }
         }
 
@@ -77,7 +81,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         if ($this->_view->gallery->hasFeature('upload') &&
             $this->_view->gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
 
-            $view->uploadurl_link = Horde::url('img/upload.php')->add(array(
+            $view->uploadurl_link = Horde::url('img/upload.php')->add(
+                array(
                 'gallery' => $id,
                 'page' => !empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)
             )->link(array('class' => 'widget'));
@@ -90,8 +95,10 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         }
         $this->_getGalleryActions($view);
         $injector->getInstance('Horde_Core_Factory_Imple')
-            ->create('Ansel_Ajax_Imple_ToggleGalleryActions',
-                     array('id' => 'gallery-actions-toggle'));
+            ->create(
+                'Ansel_Ajax_Imple_ToggleGalleryActions',
+                array('id' => 'gallery-actions-toggle')
+            );
 
         return $view->render('actions');
     }
@@ -130,7 +137,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
 
             try {
                 $view->bookmark_url = new Horde_Url($registry->bookmarks->getAddUrl($api_params));
-            } catch (Horde_Exception $e) {}
+            } catch (Horde_Exception $e) {
+            }
         }
 
         // Download as ZIP link
@@ -160,7 +168,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
                 $view->regenerate_all = $galleryurl->copy()->add(array('actionID' => 'deleteCache'))->link(array('class' => 'widget'));
                 if ($conf['faces']['driver'] && $conf['faces']['driver'] !== 'user' && $this->_view->gallery->hasFeature('faces')) {
                     $view->faces_url = Horde::url('faces/gallery.php')->add(
-                        array_merge($date, array('gallery' => $id, 'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0))))
+                        array_merge($date, array('gallery' => $id, 'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)))
+                    )
                             ->link(array('class' => 'widget'));
                 }
             }
@@ -172,8 +181,8 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         if ($registry->getAuth() &&
             $this->_view->gallery->get('owner') == $registry->getAuth()) {
 
-             $url = new Horde_Url('#');
-             $view->perms_link = $url->link(array('class' => 'popup widget', 'onclick' => Horde::popupJs(Horde::url('perms.php'), array('params' => array('cid' => $this->_view->gallery->id), 'urlencode' => true)) . 'return false;'));
+            $url = new Horde_Url('#');
+            $view->perms_link = $url->link(array('class' => 'popup widget', 'onclick' => Horde::popupJs(Horde::url('perms.php'), array('params' => array('cid' => $this->_view->gallery->id), 'urlencode' => true)) . 'return false;'));
 
         } elseif (!empty($conf['report_content']['driver']) &&
                   (($conf['report_content']['allow'] == 'authenticated' && $registry->isAuthenticated()) ||

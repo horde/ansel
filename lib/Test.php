@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This class provides the Ansel configuration for the test script.
  *

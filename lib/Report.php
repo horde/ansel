@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Reporting abstraction class
  *
@@ -15,14 +16,14 @@
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
-class Ansel_Report {
-
-    var $_title = '';
+class Ansel_Report
+{
+    public $_title = '';
 
     /**
      * Create instance
      */
-    function factory($driver = null, $params = array())
+    public function factory($driver = null, $params = array())
     {
         if ($driver === null) {
             $driver = $GLOBALS['conf']['report_content']['driver'];
@@ -45,7 +46,7 @@ class Ansel_Report {
     /**
      * Get reporting user email
      */
-    function getUserEmail()
+    public function getUserEmail()
     {
         return $this->_getUserEmail();
     }
@@ -53,7 +54,7 @@ class Ansel_Report {
     /**
      * Get user email
      */
-    function _getUserEmail($user = null)
+    public function _getUserEmail($user = null)
     {
         return $GLOBALS['injector']->getInstance('Horde_Core_Factory_Identity')->create($user)->getValue('from_addr');
     }
@@ -61,7 +62,7 @@ class Ansel_Report {
     /**
      * Get scope admins
      */
-    function getAdmins()
+    public function getAdmins()
     {
         $name = $GLOBALS['registry']->getApp() . ':admin';
 
@@ -77,7 +78,7 @@ class Ansel_Report {
     /**
      * Set title
      */
-    function setTitle($title)
+    public function setTitle($title)
     {
         $this->_title = $title;
     }
@@ -85,7 +86,7 @@ class Ansel_Report {
     /**
      * Get report message title
      */
-    function getTitle()
+    public function getTitle()
     {
         if (empty($this->_title)) {
             return sprintf(_("Content abuse report in %s"), $GLOBALS['registry']->get('name'));
@@ -97,7 +98,7 @@ class Ansel_Report {
     /**
      * Get report message content
      */
-    function getMessage($message)
+    public function getMessage($message)
     {
         $message .=  "\n\n" . _("Report by user") . ': ' . $GLOBALS['registry']->getAuth()
                  . ' (' . $_SERVER['REMOTE_ADDR'] . ')';
@@ -110,7 +111,7 @@ class Ansel_Report {
      *
      * @param string $message to pass
      */
-    function report($message, $users = array())
+    public function report($message, $users = array())
     {
         return PEAR::raiseError(_("Unsupported"));
     }

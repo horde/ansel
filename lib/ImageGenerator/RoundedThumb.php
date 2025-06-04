@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the prettythumb view (rounded, shadowed thumbnails).
  *
@@ -21,9 +22,11 @@ class Ansel_ImageGenerator_RoundedThumb extends Ansel_ImageGenerator
      */
     protected function _create()
     {
-        $this->_image->resize(min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
-                              min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
-                              true);
+        $this->_image->resize(
+            min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
+            min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
+            true
+        );
 
         /* Don't bother with these effects for a stack image
          * (which will have a negative gallery_id). */
@@ -45,10 +48,12 @@ class Ansel_ImageGenerator_RoundedThumb extends Ansel_ImageGenerator
                                                              'distance' => 5,
                                                              'fade' => 3));
                 if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
-                    $this->_image->addEffect('Unsharpmask',
-                                             array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                    $this->_image->addEffect(
+                        'Unsharpmask',
+                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
                                                    'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount']));
+                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                    );
                 }
 
                 $this->_image->applyEffects();

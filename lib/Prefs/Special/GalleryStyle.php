@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Special prefs handling for the 'default_gallerystyle_select' preference.
  *

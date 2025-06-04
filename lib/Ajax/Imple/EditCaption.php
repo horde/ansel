@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Imple for performing AJAX setting of image captions.
  *
@@ -40,7 +41,8 @@ class Ansel_Ajax_Imple_EditCaption extends Horde_Core_Ajax_Imple_InPlaceEditor
             $image->caption,
             'text2html',
             array('parselevel' => Horde_Text_Filter_Text2html::MICRO
-        ));
+        )
+        );
     }
 
 }

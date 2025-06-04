@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
  *
@@ -85,9 +86,10 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             ->setRaw(true);
         $geotagUrl->url .= 'imageSaveGeotag';
 
-        $permsEdit = (integer)$this->_view->gallery->hasPermission(
+        $permsEdit = (int)$this->_view->gallery->hasPermission(
             $GLOBALS['registry']->getAuth(),
-            Horde_Perms::EDIT);
+            Horde_Perms::EDIT
+        );
         $view->haveEdit = $permsEdit;
 
         // URL for updating selected layer
@@ -104,15 +106,17 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             $geodata[$id]['icon'] = (string)Ansel::getImageUrl(
                 $geodata[$id]['image_id'],
                 'mini',
-                true);
+                true
+            );
             $geodata[$id]['markerOnly'] = ($viewType == 'Image');
             $geodata[$id]['link'] = (string)Ansel::getUrlFor(
                 'view',
-                 array(
+                array(
                      'view' => 'Image',
                      'gallery' => $this->_view->gallery->id,
                      'image' => $geodata[$id]['image_id']),
-                true);
+                true
+            );
         }
 
         // Image view?
@@ -127,14 +131,16 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
                     $others[$id]['icon'] = (string)Ansel::getImageUrl(
                         $others[$id]['image_id'],
                         'mini',
-                        true);
+                        true
+                    );
                     $others[$id]['link'] = (string)Ansel::getUrlFor(
-                            'view',
-                            array(
+                        'view',
+                        array(
                                 'view' => 'Image',
                                 'gallery' => $this->_view->gallery->id,
                                 'image' => $others[$id]['image_id']),
-                            true);
+                        true
+                    );
                 } else {
                     unset($others[$id]);
                 }
@@ -146,13 +152,16 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             // Image view, but no geotags, provide ability to add it.
             $addurl = Horde::url('map_edit.php')->add(
                 'image',
-                $this->_params['images'][0]);
+                $this->_params['images'][0]
+            );
 
             $view->addLink = $addurl->link(
                 array('onclick' => Horde::popupJs(
                     Horde::url('map_edit.php'),
-                    array('params' => array('image' => $this->_params['images'][0]), 'urlencode' => true, 'width' => '750', 'height' => '600'))
-                . 'return false;'));
+                    array('params' => array('image' => $this->_params['images'][0]), 'urlencode' => true, 'width' => '750', 'height' => '600')
+                )
+                . 'return false;')
+            );
 
             $view->imgs = $ansel_storage
                 ->getRecentImagesGeodata($GLOBALS['registry']
@@ -169,7 +178,8 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
                             Ansel::point2Deg($data['image_longitude'])
                         );
                     }
-                    $data['add_link'] = $addurl->link(array(
+                    $data['add_link'] = $addurl->link(
+                        array(
                         'title' => $data['title'],
                         'onclick' => "Ansel.widgets.geotag.setLocation(" . $id . ",'" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "'); return false"
                         )

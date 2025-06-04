@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Imple autocompleter for textual location data.
  *

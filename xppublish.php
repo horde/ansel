@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
  *
@@ -19,7 +20,8 @@ if (empty($cmd)) {
         $registry->get('name'),
         Horde_String::convertCharset(sprintf(_("Publish your photos to %s on %s."), $registry->get('name'), $conf['server']['name']), 'UTF-8', $registry->getLanguageCharset()),
         Horde::url('xppublish.php', true, -1)->add('cmd', 'publish'),
-        Horde::url(Horde_Themes::img('favicon.ico'), true, -1));
+        Horde::url(Horde_Themes::img('favicon.ico'), true, -1)
+    );
     exit;
 }
 
@@ -40,8 +42,10 @@ if ($cmd == 'login') {
     $password = Horde_Util::getFormData('password');
     if ($username && $password) {
         $auth = $injector->getInstance('Horde_Core_Factory_Auth')->create();
-        if ($auth->authenticate($username,
-                                array('password' => $password))) {
+        if ($auth->authenticate(
+            $username,
+            array('password' => $password)
+        )) {
             $cmd = 'list';
             $PUBLISH_BUTTONS = 'true,true,false';
             $PUBLISH_ONBACK = 'history.go(-1);';
@@ -118,7 +122,8 @@ if ($cmd == 'new') {
         /* Creating a new gallery. */
         try {
             $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->createGallery(
-                    array('name' => $gallery_name, 'desc' => $gallery_desc));
+                array('name' => $gallery_name, 'desc' => $gallery_desc)
+            );
             $galleryId = $gallery->id;
             $msg = sprintf(_("The gallery \"%s\" was created successfully."), $gallery_name);
             Horde::log($msg, 'DEBUG');

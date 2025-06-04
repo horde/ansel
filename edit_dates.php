@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
  *
@@ -60,12 +61,12 @@ if ($actionID == 'edit_dates') {
             $image->save();
             ++$count;
         } catch (Ansel_Exception $e) {
-           $notification->push(sprintf(_("There was an error editing the dates: %s"), $e->getMessage()), 'horde.error');
+            $notification->push(sprintf(_("There was an error editing the dates: %s"), $e->getMessage()), 'horde.error');
             echo Horde::wrapInlineScript(array(
                 'window.opener.location.href = window.opener.location.href;',
                 'window.close();'
             ));
-           exit;
+            exit;
         }
     }
 

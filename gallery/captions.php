@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
  *
@@ -23,7 +24,8 @@ try {
 } catch (Ansel_Exception $e) {
     $notification->push(
         sprintf(_("Error accessing %s: %s"), $galleryId, $e->getMessage()),
-        'horde.error');
+        'horde.error'
+    );
     Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
     exit;
 }
@@ -31,7 +33,8 @@ try {
 if (!$gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
     $notification->push(
         _("Access denied setting captions for this gallery."),
-        'horde.error');
+        'horde.error'
+    );
     Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
     exit;
 }
@@ -43,27 +46,29 @@ $gallery->setDate($date);
 // Run through the action handlers.
 $do = Horde_Util::getFormData('do');
 switch ($do) {
-case 'save':
-    // Save a batch of captions.
-    $images = $gallery->getImages();
-    foreach ($images as $image) {
-        if (($caption = Horde_Util::getFormData('img' . $image->id)) !== null) {
-            $image->caption = $caption;
-            $image->save();
+    case 'save':
+        // Save a batch of captions.
+        $images = $gallery->getImages();
+        foreach ($images as $image) {
+            if (($caption = Horde_Util::getFormData('img' . $image->id)) !== null) {
+                $image->caption = $caption;
+                $image->save();
+            }
         }
-    }
 
-    $notification->push(_("Captions Saved."), 'horde.success');
-    Ansel::getUrlFor(
-        'view',
-        array_merge(
-            array(
-                'gallery' => $galleryId,
-                'slug' => $gallery->get('slug'),
-                'view' => 'Gallery'),
-            $date),
-        true)->redirect();
-    exit;
+        $notification->push(_("Captions Saved."), 'horde.success');
+        Ansel::getUrlFor(
+            'view',
+            array_merge(
+                array(
+                    'gallery' => $galleryId,
+                    'slug' => $gallery->get('slug'),
+                    'view' => 'Gallery'),
+                $date
+            ),
+            true
+        )->redirect();
+        exit;
 }
 
 $page_output->header(array(

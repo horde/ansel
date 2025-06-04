@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Report by letter api class
  *
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
-class Ansel_Report_letter extends Ansel_Report {
-
+class Ansel_Report_letter extends Ansel_Report
+{
     /**
      * Report
      */
-    function report($message, $users = array())
+    public function report($message, $users = array())
     {
         if (!empty($users)) {
             // We are sending a report to to the gallery owner
@@ -28,8 +29,11 @@ class Ansel_Report_letter extends Ansel_Report {
         $message = $this->getMessage($message);
 
         return $GLOBALS['registry']->callByPackage(
-            'letter', 'sendMessage', array($admins,
+            'letter',
+            'sendMessage',
+            array($admins,
                                            array('title' => $title,
-                                                 'content' => $message)));
+                                                 'content' => $message))
+        );
     }
 }

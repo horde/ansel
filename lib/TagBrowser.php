@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author  Michael J Rubinsky <mrubinsk@horde.org>
  * @category Horde
@@ -37,9 +38,10 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
         $count = 0;
         foreach ($this->_tags as $tagname => $tagid) {
             $remove_url = Horde::url('view.php', true)->add(
-                    array('view' => 'Results',
+                array('view' => 'Results',
                           'tag' => $tagname,
-                          'actionID' => 'remove'));
+                          'actionID' => 'remove')
+            );
             if (!empty($this->_owner)) {
                 $remove_url->add('owner', $this->_owner);
             }
@@ -117,7 +119,8 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
                     foreach ($images as $image) {
                         $image->commentCount = (!empty($ccounts[$image->id]) ? $ccounts[$image->id] : 0);
                     }
-                } catch (Horde_Exception $e) {}
+                } catch (Horde_Exception $e) {
+                }
             }
         } else {
             $images = array();

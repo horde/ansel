@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display most recent image comments for galleries.
  *
@@ -47,7 +48,8 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
         if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
             ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
-                array('perm' => Horde_Perms::READ)) < $GLOBALS['conf']['gallery']['listlimit'])) {
+                array('perm' => Horde_Perms::READ)
+            ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
             foreach ($storage->listGalleries(array('perm' => Horde_Perms::READ)) as $gal) {
                 $params['gallery']['values'][$gal->id] = $gal->get('name');
@@ -71,11 +73,13 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             if (isset($this->_params['gallery'])) {
                 $name = htmlspecialchars($gallery->get('name'));
             }
-            $viewurl = Ansel::getUrlFor('view',
-                                        array('gallery' => $gallery->id,
+            $viewurl = Ansel::getUrlFor(
+                'view',
+                array('gallery' => $gallery->id,
                                               'view' => 'Gallery',
                                               'slug' => $gallery->get('slug')),
-                                        true);
+                true
+            );
         } else {
             $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
             $name = _("All Galleries");
@@ -124,11 +128,13 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
         foreach ($results as $comment) {
             try {
                 $image = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImage($comment['image_id']);
-                $url = Ansel::getUrlFor('view',
-                                        array('view' => 'Image',
+                $url = Ansel::getUrlFor(
+                    'view',
+                    array('view' => 'Image',
                                               'gallery' => abs($image->gallery),
                                               'image' => $comment['image_id']),
-                                        true);
+                    true
+                );
                 $caption = substr($image->caption, 0, 30);
                 if (strlen($image->caption) > 30) {
                     $caption .= '...';
@@ -142,7 +148,8 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
                     . '</a></td><td class="nowrap">'
                     . $comment['message_subject'] . '</td><td class="nowrap">'
                     . $comment['message_author'] . '</td></tr>';
-            } catch (Ansel_Exception $e) {}
+            } catch (Ansel_Exception $e) {
+            }
         }
         $html .= '</tbody></table>';
 
@@ -166,7 +173,7 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             $this->_params['gallery'] != '__random') {
             $this->_gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($this->_params['gallery']);
         } else {
-            $this->_gallery =$GLOBALS['injector']->getInstance('Ansel_Storage')->getRandomGallery();
+            $this->_gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRandomGallery();
         }
 
         if (empty($this->_gallery)) {
@@ -189,9 +196,9 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
      * @param string $index      The index that contains the numerical value
      *                           to sort by.
      */
-    private function _asortbyindex ($sortarray, $index)
+    private function _asortbyindex($sortarray, $index)
     {
-        $lastindex = count ($sortarray) - 1;
+        $lastindex = count($sortarray) - 1;
         for ($subindex = 0; $subindex < $lastindex; $subindex++) {
             $lastiteration = $lastindex - $subindex;
             for ($iteration = 0; $iteration < $lastiteration; $iteration++) {

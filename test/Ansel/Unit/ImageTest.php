@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the Ansel_Image class.
  *

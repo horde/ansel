@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the thumb view (plain, resized thumbnails).
  *
@@ -19,15 +20,19 @@ class Ansel_ImageGenerator_Thumb extends Ansel_ImageGenerator
      */
     protected function _create()
     {
-        $this->_image->resize(min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
-                              min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
-                              true);
+        $this->_image->resize(
+            min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
+            min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
+            true
+        );
         if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
             try {
-                $this->_image->addEffect('Unsharpmask',
-                                         array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                $this->_image->addEffect(
+                    'Unsharpmask',
+                    array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
                                                'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                               'amount' => $GLOBALS['conf']['thumbnail']['amount']));
+                                               'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                );
                 $this->_image->applyEffects();
             } catch (Horde_Image_Exception $e) {
                 throw new Ansel_Exception($e);

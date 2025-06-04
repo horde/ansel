@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Basic Ansel test case.
  *
@@ -27,8 +28,7 @@
  * @license    http://www.horde.org/licenses/gpl GPL-2.0
  * @link       http://www.horde.org/apps/ansel
  */
-class Ansel_TestCase
-extends PHPUnit_Framework_TestCase
+class Ansel_TestCase extends PHPUnit_Framework_TestCase
 {
     protected static function createBasicAnselSetup(Horde_Test_Setup $setup)
     {
@@ -57,12 +57,12 @@ extends PHPUnit_Framework_TestCase
         );
 
         // TODO: need separate test bundles
-       $GLOBALS['conf']['image']['driver'] = 'Gd';
-       $GLOBALS['conf']['image']['type'] = 'jpg';
-       $GLOBALS['conf']['exif']['driver'] = 'Bundled';
-   }
+        $GLOBALS['conf']['image']['driver'] = 'Gd';
+        $GLOBALS['conf']['image']['type'] = 'jpg';
+        $GLOBALS['conf']['exif']['driver'] = 'Bundled';
+    }
 
-   protected static function createTestVFS(Horde_Test_Setup $setup)
+    protected static function createTestVFS(Horde_Test_Setup $setup)
     {
         $setup->getInjector()->setInstance(
             'Ansel_Vfs',

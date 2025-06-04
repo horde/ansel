@@ -1,4 +1,5 @@
 <?php
+
 /**
  * XPPublisher Wizard
  * Builds a "Publish this file/folder to the web" handler for Windows XP+.

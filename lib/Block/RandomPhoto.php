@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display a random photo in a block.
  *

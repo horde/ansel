@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Tile_DateGallery:: class wraps display of thumbnail tile for the
  * DateGallery psuedo gallery.
@@ -26,10 +27,13 @@ class Ansel_Tile_DateGallery
      * @return string  The HTML for the tile.
      */
     public function getTile(
-        Ansel_Gallery_Decorator_Date $dgallery, Ansel_Style $style = null, $mini = false, array $params = array())
-    {
-         $view = $GLOBALS['injector']->createInstance('Horde_View');
-         $view->addTemplatePath(ANSEL_TEMPLATES . '/tile');
+        Ansel_Gallery_Decorator_Date $dgallery,
+        Ansel_Style $style = null,
+        $mini = false,
+        array $params = array()
+    ) {
+        $view = $GLOBALS['injector']->createInstance('Horde_View');
+        $view->addTemplatePath(ANSEL_TEMPLATES . '/tile');
 
         // User's preferred date format
         $date_format = $GLOBALS['prefs']->getValue('date_format');
@@ -77,7 +81,8 @@ class Ansel_Tile_DateGallery
                 $dgallery->getKeyImage(),
                 $thumbstyle,
                 true,
-                $style);
+                $style
+            );
         } else {
             $view->gallery_image = Horde_Themes::img('thumb-error.png');
         }
@@ -96,9 +101,12 @@ class Ansel_Tile_DateGallery
             $view->view_link = Ansel::getUrlFor('view', array_merge($params, $next_date));
         } else {
             $view->view_link = new Horde_Url(
-                str_replace(array('%g', '%s'),
-                array($dgallery->id, $dgallery->get('slug')),
-                urldecode($params['gallery_view_url'])));
+                str_replace(
+                    array('%g', '%s'),
+                    array($dgallery->id, $dgallery->get('slug')),
+                    urldecode($params['gallery_view_url'])
+                )
+            );
             $view->view_link->add($next_date);
         }
         $view->gallery_count = $dgallery->countImages(true);

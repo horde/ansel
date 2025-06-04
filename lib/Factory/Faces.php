@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Factory for Ansel_Faces
  *
@@ -9,7 +10,7 @@
  */
 class Ansel_Factory_Faces extends Horde_Core_Factory_Injector
 {
-    public function create (Horde_Injector $injector)
+    public function create(Horde_Injector $injector)
     {
         $driver = $GLOBALS['conf']['faces']['driver'];
         $params = $GLOBALS['conf']['faces'];

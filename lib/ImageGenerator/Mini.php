@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the mini view.
  *
@@ -25,15 +26,19 @@ class Ansel_ImageGenerator_Mini extends Ansel_ImageGenerator
                                                                             'style' => $this->_params['style']));
             return $generator->create();
         } else {
-            $this->_image->resize(min(50, $this->_dimensions['width']),
-                                  min(50, $this->_dimensions['height']),
-                                  true);
+            $this->_image->resize(
+                min(50, $this->_dimensions['width']),
+                min(50, $this->_dimensions['height']),
+                true
+            );
             if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
                 try {
-                    $this->_image->addEffect('Unsharpmask',
-                                             array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                    $this->_image->addEffect(
+                        'Unsharpmask',
+                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
                                                    'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount']));
+                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                    );
                     $this->_image->applyEffects();
                 } catch (Horde_Image_Exception $e) {
                     throw new Ansel_Exception($e);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Defines the AJAX actions used in Ansel.
  *
@@ -46,40 +47,41 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         $gallery = $injector->getInstance('Ansel_Storage')->getGallery($this->vars->g);
 
         switch ($this->vars->s) {
-        case 'twitter':
-            $url = Ansel::getUrlFor(
-                'view',
-                array('view' => 'Gallery', 'gallery' => $gallery->id),
-                true);
+            case 'twitter':
+                $url = Ansel::getUrlFor(
+                    'view',
+                    array('view' => 'Gallery', 'gallery' => $gallery->id),
+                    true
+                );
 
-            if (!empty($conf['urlshortener'])) {
+                if (!empty($conf['urlshortener'])) {
+                    try {
+                        $url = $injector
+                            ->getInstance('Horde_Service_UrlShortener')
+                            ->shorten($url->setRaw(true));
+                    } catch (Horde_Service_UrlShortener_Exception $e) {
+                        Horde::log($e, 'ERR');
+                        header('HTTP/1.1 500');
+                    }
+                }
+                $text = sprintf(_("New images uploaded to %s. %s"), $gallery->get('name'), $url);
+
+                $token = unserialize($prefs->getValue('twitter'));
+                if (empty($token['key']) && empty($token['secret'])) {
+                    $pref_link = $registry->getServiceLink('prefs', 'horde')->add('group', 'twitter')->link();
+                    throw new Ansel_Exception(sprintf(_("You have not properly connected your Twitter account with Horde. You should check your Twitter settings in your %s."), $pref_link . _("preferences") . '</a>'));
+                }
+
+                $twitter = $injector->getInstance('Horde_Service_Twitter');
+                $auth_token = new Horde_Oauth_Token($token['key'], $token['secret']);
+                $twitter->auth->setToken($auth_token);
+
                 try {
-                    $url = $injector
-                        ->getInstance('Horde_Service_UrlShortener')
-                        ->shorten($url->setRaw(true));
-                } catch (Horde_Service_UrlShortener_Exception $e) {
+                    return $twitter->statuses->update($text);
+                } catch (Horde_Service_Twitter_Exception $e) {
                     Horde::log($e, 'ERR');
                     header('HTTP/1.1 500');
                 }
-            }
-            $text = sprintf(_("New images uploaded to %s. %s"), $gallery->get('name'), $url);
-
-            $token = unserialize($prefs->getValue('twitter'));
-            if (empty($token['key']) && empty($token['secret'])) {
-                $pref_link = $registry->getServiceLink('prefs', 'horde')->add('group', 'twitter')->link();
-                throw new Ansel_Exception(sprintf(_("You have not properly connected your Twitter account with Horde. You should check your Twitter settings in your %s."), $pref_link . _("preferences") . '</a>'));
-            }
-
-            $twitter = $injector->getInstance('Horde_Service_Twitter');
-            $auth_token = new Horde_Oauth_Token($token['key'], $token['secret']);
-            $twitter->auth->setToken($auth_token);
-
-            try {
-                return $twitter->statuses->update($text);
-            } catch (Horde_Service_Twitter_Exception $e) {
-                Horde::log($e, 'ERR');
-                header('HTTP/1.1 500');
-            }
         }
     }
 
@@ -119,7 +121,7 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         $lng = $this->vars->lng;
         $img = $this->vars->img;
 
-        $result = new stdClass;
+        $result = new stdClass();
         $result->response = 0;
 
         if (empty($img) ||
@@ -144,46 +146,46 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         }
 
         switch ($type) {
-        case 'geotag':
-            $image->geotag($lat, $lng, !empty($location) ? $location : '');
-            $result->response = 1;
-            break;
+            case 'geotag':
+                $image->geotag($lat, $lng, !empty($location) ? $location : '');
+                $result->response = 1;
+                break;
 
-        case 'location':
-            $image->location = !empty($location) ? urldecode($location) : '';
-            $image->save();
-            $result->response = 1;
-            $result->message = htmlentities($image->location);
-            break;
+            case 'location':
+                $image->location = !empty($location) ? urldecode($location) : '';
+                $image->save();
+                $result->response = 1;
+                $result->message = htmlentities($image->location);
+                break;
 
-        case 'untag':
-            $image->geotag('', '', '');
-            // Now get the "add geotag" stuff
-            $addurl = Horde::url('map_edit.php')->add('image', $img);
-            $addLink = $addurl->link(array(
-                'onclick' => Horde::popupJs(Horde::url('map_edit.php'), array('params' => array('image' => $img), 'urlencode' => true, 'width' => '750', 'height' => '600')) . 'return false;'
-            ));
-            $imgs = $ansel_storage->getRecentImagesGeodata($registry->getAuth());
-            if (count($imgs) > 0) {
-                $imgsrc = '<div class="ansel_location_sameas">';
-                foreach ($imgs as $id => $data) {
-                    $title = empty($data['image_location'])
-                        ? Ansel::point2Deg($data['image_latitude'], true) . ' ' . Ansel::point2Deg($data['image_longitude'])
-                        : $data['image_location'];
-                    $imgsrc .= $addurl->link(array(
-                        'title' => $title,
-                        'onclick' => "Ansel.widgets.geotag.setLocation('" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "');return false"
-                    )) . '<img src="' . Ansel::getImageUrl($id, 'mini', true) . '" alt="[image]" /></a>';
+            case 'untag':
+                $image->geotag('', '', '');
+                // Now get the "add geotag" stuff
+                $addurl = Horde::url('map_edit.php')->add('image', $img);
+                $addLink = $addurl->link(array(
+                    'onclick' => Horde::popupJs(Horde::url('map_edit.php'), array('params' => array('image' => $img), 'urlencode' => true, 'width' => '750', 'height' => '600')) . 'return false;'
+                ));
+                $imgs = $ansel_storage->getRecentImagesGeodata($registry->getAuth());
+                if (count($imgs) > 0) {
+                    $imgsrc = '<div class="ansel_location_sameas">';
+                    foreach ($imgs as $id => $data) {
+                        $title = empty($data['image_location'])
+                            ? Ansel::point2Deg($data['image_latitude'], true) . ' ' . Ansel::point2Deg($data['image_longitude'])
+                            : $data['image_location'];
+                        $imgsrc .= $addurl->link(array(
+                            'title' => $title,
+                            'onclick' => "Ansel.widgets.geotag.setLocation('" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "');return false"
+                        )) . '<img src="' . Ansel::getImageUrl($id, 'mini', true) . '" alt="[image]" /></a>';
+                    }
+
+                    $imgsrc .= '</div>';
+                    $result->message = sprintf(_("No location data present. Place using %smap%s or click on image to place at the same location."), $addLink, '</a>') . $imgsrc;
+                } else {
+                    $result->message = sprintf(_("No location data present. You may add some %s."), $addLink . _("here") . '</a>');
                 }
 
-                $imgsrc .= '</div>';
-                $result->message = sprintf(_("No location data present. Place using %smap%s or click on image to place at the same location."), $addLink, '</a>') . $imgsrc;
-            } else {
-                $result->message = sprintf(_("No location data present. You may add some %s."), $addLink . _("here") . '</a>');
-            }
-
-            $result->response = 1;
-            break;
+                $result->response = 1;
+                break;
         }
 
         return new Horde_Core_Ajax_Response_Prototypejs($result);
@@ -373,7 +375,8 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         try {
             $view = new $class($params);
             return new Horde_Core_Ajax_Response_Raw($view->html(), 'text/javascript');
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
     }
 
 }

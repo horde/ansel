@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Show all named faces.
  *
@@ -25,7 +26,8 @@ try {
 
 $vars = Horde_Variables::getDefaultVariables();
 $pager = new Horde_Core_Ui_Pager(
-    'page', $vars,
+    'page',
+    $vars,
     array(
         'num' => $count,
         'url' => 'faces/search/named.php',

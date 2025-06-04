@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Image uploader. Provides 3 different options - single images,
  * multiple images, and zip file.
@@ -35,8 +36,14 @@ class Ansel_Form_Upload extends Horde_Form
         $this->addHidden('', 'image0', 'text', false);
         if (!strlen($vars->get('image0'))) {
             $upload = $this->addVariable(
-                _("File to upload"), 'file0', 'file', false, false,
-                _("Maximum photo size:") . ' '  . $filesize, array(false));
+                _("File to upload"),
+                'file0',
+                'file',
+                false,
+                false,
+                _("Maximum photo size:") . ' '  . $filesize,
+                array(false)
+            );
             $upload->setHelp('upload');
         }
         $this->addVariable(_("Make this the default photo for this gallery?"), 'image0_default', 'boolean', false);
@@ -46,8 +53,11 @@ class Ansel_Form_Upload extends Horde_Form
         $this->setSection('multi_file', _("Multiple Photos"));
 
         if (!strlen($vars->get('image0'))) {
-            $msg = sprintf(_("Maximum photo size: %s; with a total of: %s"),
-                           $filesize, $postsize);
+            $msg = sprintf(
+                _("Maximum photo size: %s; with a total of: %s"),
+                $filesize,
+                $postsize
+            );
             $this->addVariable($msg, 'description', 'description', false);
         }
 
@@ -66,8 +76,11 @@ class Ansel_Form_Upload extends Horde_Form
             $upload = $this->addVariable(
                 _("File to upload"),
                 'file' . ($conf['image']['num_uploads'] + 1),
-                'file', false, false,
-                _("Maximum file size:") . ' ' . $filesize);
+                'file',
+                false,
+                false,
+                _("Maximum file size:") . ' ' . $filesize
+            );
             $upload->setHelp('upload');
         }
     }

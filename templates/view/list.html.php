@@ -39,7 +39,7 @@
 <table width="100%" style="background-color:<?php echo $this->style->background ?>;"><tr>
 <?php
 $count = 0;
-foreach ($this->galleryList as $galleryId => $gallery): ?>
+    foreach ($this->galleryList as $galleryId => $gallery): ?>
   <td width="<?php echo $this->cellwidth ?>%" class="ansel-tile"><?php echo $gallery->getTile(null, $this->style, false, $this->params) ?></td>
     <?php if (!(++$count % $this->tilesperrow)): ?>
       <?php if ($count < $this->numGalleries): ?>

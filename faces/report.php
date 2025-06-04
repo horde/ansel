@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process an single image (to be called by ajax)
  *
@@ -42,9 +43,10 @@ if ($form->validate()) {
         $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($face['gallery_id']);
 
         $face_link = Horde::url('faces/face.php', true)->add(
-                array('name' => $vars->get('person'),
+            array('name' => $vars->get('person'),
                       'face' => $face_id,
-                      'image' => $face['image_id']))->setRaw(true);
+                      'image' => $face['image_id'])
+        )->setRaw(true);
 
         $body = _("Gallery Name") . ': ' . $gallery->get('name') . "\n"
                 . _("Gallery Description") . ': ' . $gallery->get('desc') . "\n\n"

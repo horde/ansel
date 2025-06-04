@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
  *
@@ -111,9 +112,10 @@ class Ansel_View_Image extends Ansel_View_Ansel
         // Check user age
         if (!$this->gallery->isOldEnough()) {
             if (!empty($params['api'])) {
-               throw new Ansel_Exception('Locked galleries are not viewable via the api.');
+                throw new Ansel_Exception('Locked galleries are not viewable via the api.');
             }
-            $date = Ansel::getDateParameter(array(
+            $date = Ansel::getDateParameter(
+                array(
                 'year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
                 'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
                 'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
@@ -127,8 +129,10 @@ class Ansel_View_Image extends Ansel_View_Ansel
                           'page' => empty($params['page']) ? 0 : $params['page'],
                           'view' => 'Image',
                           'image' => $this->resource->id),
-                    $date),
-                true);
+                    $date
+                ),
+                true
+            );
 
             $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($url));
             Horde::url('disclaimer.php')->add($params)->setRaw(true)->redirect();
@@ -140,7 +144,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
             if (!empty($params['api'])) {
                 throw new Ansel_Exception(_("Locked galleries are not viewable via the api."));
             }
-            $date = Ansel::getDateParameter(array(
+            $date = Ansel::getDateParameter(
+                array(
                 'year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
                 'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
                 'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
@@ -154,8 +159,10 @@ class Ansel_View_Image extends Ansel_View_Ansel
                           'page' => empty($params['page']) ? 0 : $params['page'],
                           'view' => 'Image',
                           'image' => $this->resource->id),
-                    $date),
-                true);
+                    $date
+                ),
+                true
+            );
 
             $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($url));
             Horde::url('protect.php')->add($params)->setRaw(true)->redirect();
@@ -231,10 +238,12 @@ class Ansel_View_Image extends Ansel_View_Ansel
         if (empty($this->_params['api'])) {
             // Build the various urls
             $imageActionUrl = Horde::url('image.php')->add(
-                array_merge(array('gallery' => $this->gallery->id,
+                array_merge(
+                    array('gallery' => $this->gallery->id,
                                   'image' => $this->resource->id,
                                   'page' => $this->_page),
-                            $this->_date)
+                    $this->_date
+                )
             );
 
             if ($this->gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
@@ -258,9 +267,11 @@ class Ansel_View_Image extends Ansel_View_Ansel
 
             if (!empty($conf['ecard']['enable'])) {
                 $this->_urls['ecard'] = Horde::url('img/ecard.php')->add(
-                    array_merge(array('gallery' => $this->gallery->id,
+                    array_merge(
+                        array('gallery' => $this->gallery->id,
                                       'image' => $this->resource->id),
-                                $this->_date)
+                        $this->_date
+                    )
                 );
             }
 
@@ -274,7 +285,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
 
                 $this->_urls['report'] = Horde::url('report.php')->add(
                     array('gallery' =>  $this->gallery->id,
-                          'image' => $this->resource->id));
+                          'image' => $this->resource->id)
+                );
             }
         }
 
@@ -283,7 +295,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $this->_urls['gallery'] = new Horde_Url(str_replace(
                 array('%g', '%s'),
                 array($this->gallery->id, $this->_slug),
-                urldecode($this->_params['gallery_view_url'])));
+                urldecode($this->_params['gallery_view_url'])
+            ));
             $this->_urls['gallery']->add($this->_date);
         } else {
             $this->_urls['gallery'] = Ansel::getUrlFor(
@@ -294,13 +307,19 @@ class Ansel_View_Image extends Ansel_View_Ansel
                         'slug' => $this->_slug,
                         'page' => $this->_page,
                         'view' => 'Gallery'),
-                    $this->_date),
-                true);
+                    $this->_date
+                ),
+                true
+            );
         }
 
         // Get the image src url
         $this->_urls['imgsrc'] = Ansel::getImageUrl(
-            $this->resource->id, 'screen', true, $this->_style);
+            $this->resource->id,
+            'screen',
+            true,
+            $this->_style
+        );
 
         // A self url. Can't use Horde::selfUrl() since that would ignore
         // pretty urls.
@@ -313,7 +332,9 @@ class Ansel_View_Image extends Ansel_View_Ansel
                     'image' => $this->resource->id,
                     'view' => 'Image',
                     'page' => $this->_page),
-                $this->_date));
+                $this->_date
+            )
+        );
     }
 
     /**
@@ -381,7 +402,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $view->prev_url = str_replace(
                 array('%i', '%g', '%s'),
                 array($prev, $this->gallery->id, $this->_slug),
-                urldecode($this->_params['image_view_url']));
+                urldecode($this->_params['image_view_url'])
+            );
         } else {
             $view->prev_url = Ansel::getUrlFor('view', array_merge(
                 array('gallery' => $this->gallery->id,
@@ -389,7 +411,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
                       'image' => $prev,
                       'view' => 'Image',
                       'page' => $page_prev),
-                $this->_date));
+                $this->_date
+            ));
         }
         $prevImgSrc = Ansel::getImageUrl($prev, 'screen', true, $this->_style);
 
@@ -398,7 +421,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $view->next_url = str_replace(
                 array('%i', '%g', '%s'),
                 array($prev, $this->gallery->id, $this->_slug),
-                urldecode($this->_params['image_view_url']));
+                urldecode($this->_params['image_view_url'])
+            );
         } else {
             $view->next_url = Ansel::getUrlFor(
                 'view',
@@ -409,7 +433,9 @@ class Ansel_View_Image extends Ansel_View_Ansel
                         'image' => $next,
                         'view' => 'Image',
                         'page' => $page_next),
-                    $this->_date));
+                    $this->_date
+                )
+            );
         }
         $nextImgSrc = Ansel::getImageUrl($next, 'screen', true, $this->_style);
 
@@ -418,13 +444,17 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $this->_urls['slideshow'] = str_replace(
                 array('%i', '%g'),
                 array($this->resource->id, $this->gallery->id),
-                urldecode($this->_params['slideshow_link']));
+                urldecode($this->_params['slideshow_link'])
+            );
         } else {
             $this->_urls['slideshow'] = Horde::url('view.php')->add(
-                array_merge(array('gallery' => $this->gallery->id,
+                array_merge(
+                    array('gallery' => $this->gallery->id,
                                   'image' => $this->resource->id,
                                   'view' => 'Slideshow'),
-                            $this->_date));
+                    $this->_date
+                )
+            );
         }
 
         // These items don't work when viewing through the api
@@ -459,7 +489,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
                 $html = Horde::endBuffer();
             }
         } else {
-          $html = '';
+            $html = '';
         }
 
         $js = array();
@@ -512,7 +542,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
                 $this->_params['comment_url'] = str_replace(
                     array('%i', '%g', '%s'),
                     array($imageId, $galleryId, $gallerySlug),
-                    urldecode($this->_params['comment_url']));
+                    urldecode($this->_params['comment_url'])
+                );
             }
             $url = empty($this->_params['comment_url']) ? null : $this->_params['comment_url'];
             try {
@@ -528,8 +559,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
 
     protected function _includeViewSpecificScripts()
     {
-      $GLOBALS['page_output']->addScriptFile('views/common.js');
-      $GLOBALS['page_output']->addScriptFile('views/image.js');
+        $GLOBALS['page_output']->addScriptFile('views/common.js');
+        $GLOBALS['page_output']->addScriptFile('views/image.js');
     }
 
     public function viewType()

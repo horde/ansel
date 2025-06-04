@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
  *
@@ -24,9 +25,15 @@ class Ansel_Form_ImageDate extends Horde_Form
         $this->addHidden('', 'image', 'text', false);
         $this->addHidden('', 'page', 'text', false);
         $this->addVariable(_("Editing dates for the following photos"), 'image_list', 'html', false, true);
-        $this->addVariable(_("Original Date"), 'image_originalDate',
-                           'monthdayyear', true, false, null,
-                           array('start_year' => 1900));
+        $this->addVariable(
+            _("Original Date"),
+            'image_originalDate',
+            'monthdayyear',
+            true,
+            false,
+            null,
+            array('start_year' => 1900)
+        );
     }
 
 }

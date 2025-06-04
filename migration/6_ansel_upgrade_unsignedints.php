@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Create Ansel base tables (as of Ansel 1.1.1).
  *

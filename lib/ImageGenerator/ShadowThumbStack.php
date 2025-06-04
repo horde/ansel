@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the gallery image stacks.
  *
@@ -29,11 +30,14 @@ class Ansel_ImageGenerator_ShadowThumbStack extends Ansel_ImageGenerator
                       'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
                       'padding' => 0,
                       'background' => $style->background,
-                      'type' => 'plain'));
+                      'type' => 'plain')
+            );
 
             $baseImg->applyEffects();
-            $baseImg->resize($GLOBALS['conf']['thumbnail']['width'],
-                             $GLOBALS['conf']['thumbnail']['height']);
+            $baseImg->resize(
+                $GLOBALS['conf']['thumbnail']['width'],
+                $GLOBALS['conf']['thumbnail']['height']
+            );
         } catch (Horde_Image_Exception $e) {
             throw new Ansel_Exception($e);
         }

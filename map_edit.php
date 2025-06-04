@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
  *
@@ -23,7 +24,8 @@ $image_id = Horde_Util::getFormData('image');
 // Sanity checks, perms etc...
 if (empty($image_id)) {
     throw new Ansel_Exception(
-        _("An error has occured retrieving the image. Details have been logged."));
+        _("An error has occured retrieving the image. Details have been logged.")
+    );
 }
 
 $image = $injector
@@ -35,7 +37,8 @@ $gallery = $injector->
 
 if (!$gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
     throw new Horde_Exception_PermissionDenied(
-        _("Not Authorized. Details have been logged for the server administrator."));
+        _("Not Authorized. Details have been logged for the server administrator.")
+    );
 }
 
 $view = $injector->getInstance('Horde_View');
@@ -95,7 +98,8 @@ $page_output->addInlineScript(
         'ajaxuri': '{$gtUrl}' });
     $('saveButton').observe('click', mapEdit.save.bind(mapEdit));
     $('locationAction').observe('click', function(e) { mapEdit.geocode($('locationInput').value); e.stop(); });",
-    true);
+    true
+);
 
 $page_output->topbar = $page_output->sidebar = false;
 $page_output->header(array(

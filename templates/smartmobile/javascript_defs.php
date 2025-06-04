@@ -1,4 +1,5 @@
 <?php
+
 global $prefs, $registry;
 
 $ansel_webroot = $registry->get('webroot');

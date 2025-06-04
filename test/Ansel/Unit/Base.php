@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Test the Ansel_Image class.
  *
@@ -29,7 +30,7 @@
  */
 class Ansel_Unit_Base extends Ansel_TestCase
 {
-    static $setup;
+    public static $setup;
 
     public static function setUpBeforeClass()
     {

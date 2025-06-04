@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Factory for getting list of all available pre-defined styles.
  *
@@ -9,7 +10,7 @@
  */
 class Ansel_Factory_Styles extends Horde_Core_Factory_Injector
 {
-    public function create (Horde_Injector $injector)
+    public function create(Horde_Injector $injector)
     {
         /* Brings in the $styles array in this scope only */
         $styles = Horde::loadConfiguration('styles.php', 'styles', 'ansel');

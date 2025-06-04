@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_GalleryMode_Date:: Class for encapsulating gallery methods that
  * depend on the current display mode of the gallery being Date.
@@ -45,14 +46,14 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
     {
         /* First, some special cases */
         switch ($feature) {
-        case 'sort_images':
-        case 'image_captions':
-        case 'faces':
-            /* Only allowed when we are on a specific day */
-            return !empty($this->_date['day']);
+            case 'sort_images':
+            case 'image_captions':
+            case 'faces':
+                /* Only allowed when we are on a specific day */
+                return !empty($this->_date['day']);
 
-        default:
-            return parent::hasFeature($feature);
+            default:
+                return parent::hasFeature($feature);
         }
     }
 
@@ -90,7 +91,8 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
                     array(
                         'year' => $year,
                         'month' => $month,
-                        'day' => 1));
+                        'day' => 1)
+                );
                 $text = $date->strftime('%B');
                 $navdata = array(
                     'view' => 'Gallery',
@@ -159,8 +161,11 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
      *               Ansel_Image objects.
      */
     public function getGalleryChildren(
-        $perm = Horde_Perms::SHOW, $from = 0, $to = 0, $noauto = false)
-    {
+        $perm = Horde_Perms::SHOW,
+        $from = 0,
+        $to = 0,
+        $noauto = false
+    ) {
         // Cache the results
         static $children = array();
 
@@ -182,7 +187,8 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
         if (count($this->_subGalleries)) {
             $params['gallery_id'] = array_merge(
                 $this->_subGalleries,
-                array($this->_gallery->id));
+                array($this->_gallery->id)
+            );
         } else {
             $params['gallery_id'] = $this->_gallery->id;
         }
@@ -239,7 +245,7 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
                     'value' => (int)$start->timestamp()
                 )
             );
-            $images= $ansel_storage->listImages($params);
+            $images = $ansel_storage->listImages($params);
             $dates = array();
             foreach ($images as $key => $image) {
                 $dates[date('n', $image['image_original_date'])][] = $key;
@@ -285,7 +291,7 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
                     'value' => (int)$start->timestamp()
                 )
             );
-            $images= $ansel_storage->listImages($params);
+            $images = $ansel_storage->listImages($params);
             $dates = array();
             foreach ($images as $key => $image) {
                 $dates[date('d', $image['image_original_date'])][] = $key;
@@ -339,7 +345,8 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
             $images = $ansel_storage->listImages($params);
             if ($images) {
                 $results = $ansel_storage->getImages(
-                    array('ids' => $images, 'preserve' => true));
+                    array('ids' => $images, 'preserve' => true)
+                );
             } else {
                 $results = array();
             }
@@ -362,19 +369,19 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
         foreach ($sorted_dates as $key => $images) {
             /* Get the new date parameter */
             switch ($display_unit) {
-            case 'year':
-                $date = array('year' => $key);
-                break;
-            case 'month':
-                $date = array(
-                    'year' => $this->_date['year'],
-                    'month' => (int)$key);
-                break;
-            case 'day':
-                $date = array(
-                    'year' => (int)$this->_date['year'],
-                    'month' => (int)$this->_date['month'],
-                    'day' => (int)$key);
+                case 'year':
+                    $date = array('year' => $key);
+                    break;
+                case 'month':
+                    $date = array(
+                        'year' => $this->_date['year'],
+                        'month' => (int)$key);
+                    break;
+                case 'day':
+                    $date = array(
+                        'year' => (int)$this->_date['year'],
+                        'month' => (int)$this->_date['month'],
+                        'day' => (int)$key);
             }
 
             $obj = new Ansel_Gallery_Decorator_Date($this->_gallery, $images);
@@ -405,9 +412,11 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
      *                 etc..) that need to be displayed, or a count of all the
      *                 images in the current date grouping (for a specific day).
      */
-    public function countGalleryChildren($perm = Horde_Perms::SHOW,
-                                         $galleries_only = false, $noauto = true)
-    {
+    public function countGalleryChildren(
+        $perm = Horde_Perms::SHOW,
+        $galleries_only = false,
+        $noauto = true
+    ) {
         $results = $this->getGalleryChildren($perm, 0, 0, $noauto);
         return count($results);
     }
@@ -542,7 +551,7 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
         /* Change gallery info. */
         if ($this->_gallery->get('default') == $image->id) {
             $this->_gallery->set('default', null);
-            $this->_gallery->set('default_type' , 'auto');
+            $this->_gallery->set('default_type', 'auto');
         }
 
         /* Delete cached files from VFS. */
@@ -550,9 +559,12 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
 
         /* Delete original image from VFS. */
         try {
-            $GLOBALS['injector']->getInstance('Horde_Core_Factory_Vfs')->create('images')->deleteFile($image->getVFSPath('full'),
-                                              $image->getVFSName('full'));
-        } catch (Horde_Vfs_Exception $e) {}
+            $GLOBALS['injector']->getInstance('Horde_Core_Factory_Vfs')->create('images')->deleteFile(
+                $image->getVFSPath('full'),
+                $image->getVFSName('full')
+            );
+        } catch (Horde_Vfs_Exception $e) {
+        }
 
         /* Delete from storage */
         $GLOBALS['injector']->getInstance('Ansel_Storage')->removeImage($image->id);

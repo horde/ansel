@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to describe a single Ansel image.
  *
@@ -163,7 +164,7 @@ class Ansel_Image implements Iterator
         if ($image) {
             $this->filename = $image['image_filename'];
 
-            if  (!empty($image['gallery_id'])) {
+            if (!empty($image['gallery_id'])) {
                 $this->gallery = $image['gallery_id'];
             }
             if (!empty($image['image_caption'])) {
@@ -245,9 +246,9 @@ class Ansel_Image implements Iterator
      */
     public function getVFSPathFromHash($hash)
     {
-         return '.horde/ansel/'
-                . substr(str_pad($this->id, 2, 0, STR_PAD_LEFT), -2)
-                . '/' . $hash;
+        return '.horde/ansel/'
+               . substr(str_pad($this->id, 2, 0, STR_PAD_LEFT), -2)
+               . '/' . $hash;
     }
 
     /**
@@ -438,16 +439,19 @@ class Ansel_Image implements Iterator
 
         try {
             $iview = Ansel_ImageGenerator::factory(
-                $viewType, array('image' => $this, 'style' => $style));
+                $viewType,
+                array('image' => $this, 'style' => $style)
+            );
         } catch (Ansel_Exception $e) {
             // It could be we don't support the requested effect, try
             // ansel_default before giving up.
             if ($view == 'thumb' && $viewType != 'Thumb') {
                 $iview = Ansel_ImageGenerator::factory(
                     'Thumb',
-                     array(
+                    array(
                          'image' => $this,
-                         'style' => Ansel::getStyleDefinition('ansel_default')));
+                         'style' => Ansel::getStyleDefinition('ansel_default'))
+                );
             } else {
                 // If it wasn't a thumb, then something else must be wrong
                 throw $e;
@@ -511,7 +515,8 @@ class Ansel_Image implements Iterator
                     $this->getVFSPath('full'),
                     $this->getVFSName('full'),
                     $this->_data['full'],
-                    true);
+                    true
+                );
         } catch (Horde_Vfs_Exception $e) {
             throw new Ansel_Exception($e);
         }
@@ -542,7 +547,8 @@ class Ansel_Image implements Iterator
                     $this->getVFSPath($view),
                     $this->getVFSName($view),
                     $data,
-                    true);
+                    true
+                );
         } catch (Horde_Vfs_Exception $e) {
             throw new Ansel_Exception($e);
         }
@@ -690,7 +696,8 @@ class Ansel_Image implements Iterator
                 ->create('images')
                 ->readFile(
                     $this->getVFSPath('full'),
-                    $this->getVFSName('full'));
+                    $this->getVFSName('full')
+                );
         } catch (Horde_Vfs_Exception $e) {
             throw new Ansel_Exception($e);
         }
@@ -700,7 +707,8 @@ class Ansel_Image implements Iterator
         $params['logger'] = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
         $exif = Horde_Image_Exif::factory(
             $GLOBALS['conf']['exif']['driver'],
-            $params);
+            $params
+        );
 
         try {
             $exif_fields = $exif->getData($imageFile);
@@ -766,36 +774,36 @@ class Ansel_Image implements Iterator
     {
         if (!empty($orientation) && $orientation != 1) {
             switch ($orientation) {
-            case 2:
-                $this->mirror();
-                break;
+                case 2:
+                    $this->mirror();
+                    break;
 
-            case 3:
-                $this->rotate('full', 180);
-                break;
+                case 3:
+                    $this->rotate('full', 180);
+                    break;
 
-            case 4:
-                $this->mirror();
-                $this->rotate('full', 180);
-                break;
+                case 4:
+                    $this->mirror();
+                    $this->rotate('full', 180);
+                    break;
 
-            case 5:
-                $this->flip();
-                $this->rotate('full', 90);
-                break;
+                case 5:
+                    $this->flip();
+                    $this->rotate('full', 90);
+                    break;
 
-            case 6:
-                $this->rotate('full', 90);
-                break;
+                case 6:
+                    $this->rotate('full', 90);
+                    break;
 
-            case 7:
-                $this->mirror();
-                $this->rotate('full', 90);
-                break;
+                case 7:
+                    $this->mirror();
+                    $this->rotate('full', 90);
+                    break;
 
-            case 8:
-                $this->rotate('full', 270);
-                break;
+                case 8:
+                    $this->rotate('full', 270);
+                    break;
             }
 
             if ($this->_dirty) {
@@ -832,8 +840,10 @@ class Ansel_Image implements Iterator
                     ->create('images')
                     ->deleteFile(
                         $this->getVFSPath('screen'),
-                        $this->getVFSName('screen'));
-            } catch (Horde_Vfs_Exception $e   ) {}
+                        $this->getVFSName('screen')
+                    );
+            } catch (Horde_Vfs_Exception $e) {
+            }
         }
 
         // Delete cached mini image.
@@ -844,8 +854,10 @@ class Ansel_Image implements Iterator
                     ->create('images')
                     ->deleteFile(
                         $this->getVFSPath('mini'),
-                        $this->getVFSName('mini'));
-            } catch (Horde_Vfs_Exception $e) {}
+                        $this->getVFSName('mini')
+                    );
+            } catch (Horde_Vfs_Exception $e) {
+            }
         }
         if ($view == 'all' || $view == 'thumb') {
             $hashes = $GLOBALS['injector']
@@ -857,8 +869,10 @@ class Ansel_Image implements Iterator
                         ->create('images')
                         ->deleteFile(
                             $this->getVFSPathFromHash($hash),
-                            $this->getVFSName('thumb'));
-                } catch (Horde_Vfs_Exception $e) {}
+                            $this->getVFSName('thumb')
+                        );
+                } catch (Horde_Vfs_Exception $e) {
+                }
             }
         }
     }
@@ -918,7 +932,8 @@ class Ansel_Image implements Iterator
                 ->getGallery(abs($this->gallery));
             if (!$gallery->canDownload()) {
                 throw Horde_Exception_PermissionDenied(
-                    _("Access denied downloading photos from this gallery."));
+                    _("Access denied downloading photos from this gallery.")
+                );
             }
 
             try {
@@ -926,7 +941,8 @@ class Ansel_Image implements Iterator
                     ->getInstance('Horde_Core_Factory_Vfs')
                     ->create('images')->read(
                         $this->getVFSPath('full'),
-                        $this->getVFSName('full'));
+                        $this->getVFSName('full')
+                    );
             } catch (Horde_Vfs_Exception $e) {
                 throw new Ansel_Exception($e);
             }
@@ -953,7 +969,8 @@ class Ansel_Image implements Iterator
         return $this->_image->toFile(
             $this->_dirty ?
                 false :
-                $this->_data[$view]);
+                $this->_data[$view]
+        );
     }
 
     /**
@@ -1057,9 +1074,13 @@ class Ansel_Image implements Iterator
      *
      * @throws Ansel_Exception
      */
-    public function watermark($view = 'full', $watermark = null, $halign = null,
-            $valign = null, $font = null)
-    {
+    public function watermark(
+        $view = 'full',
+        $watermark = null,
+        $halign = null,
+        $valign = null,
+        $font = null
+    ) {
         if (empty($watermark)) {
             $watermark = $GLOBALS['prefs']->getValue('watermark_text');
         }
@@ -1190,7 +1211,8 @@ class Ansel_Image implements Iterator
                 ->getTags($this->id, 'image');
         } else {
             throw new Horde_Exception_PermissionDenied(
-                _("Access denied viewing this photo."));
+                _("Access denied viewing this photo.")
+            );
         }
     }
 
@@ -1217,7 +1239,8 @@ class Ansel_Image implements Iterator
                         (string)$this->id,
                         $tags,
                         $gallery->get('owner'),
-                        'image');
+                        'image'
+                    );
             } else {
                 $GLOBALS['injector']
                     ->getInstance('Ansel_Tagger')
@@ -1225,7 +1248,8 @@ class Ansel_Image implements Iterator
                         (string)$this->id,
                         $tags,
                         $gallery->get('owner'),
-                        'image');
+                        'image'
+                    );
             }
         } else {
             throw new Horde_Exception_PermissionDenied(_("Access denied adding tags to this photo."));
@@ -1247,7 +1271,8 @@ class Ansel_Image implements Iterator
                 ->getInstance('Ansel_Tagger')
                 ->untag(
                     (string)$this->id,
-                    $tag);
+                    $tag
+                );
         }
     }
 
@@ -1262,11 +1287,12 @@ class Ansel_Image implements Iterator
      *
      * @return string  HTML for this image's view tile.
      */
-    public function getTile(Ansel_Gallery $parent = null,
-                            Ansel_Style $style = null,
-                            $mini = false,
-                            array $params = array())
-    {
+    public function getTile(
+        Ansel_Gallery $parent = null,
+        Ansel_Style $style = null,
+        $mini = false,
+        array $params = array()
+    ) {
         if (!is_null($parent) && is_null($style)) {
             $style = $parent->getStyle();
         }

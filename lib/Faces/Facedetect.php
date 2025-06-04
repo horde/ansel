@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Face_detect implementation
  *
@@ -71,7 +72,8 @@ class Ansel_Faces_Facedetect extends Ansel_Faces_Base
             $rect['x'],
             $rect['y'],
             $rect['x'] + $rect['w'],
-            $rect['y'] + $rect['h']);
+            $rect['y'] + $rect['h']
+        );
     }
 
 }

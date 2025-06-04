@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Fetch face image for display
  *
@@ -31,7 +32,8 @@ if ($conf['vfs']['src'] == 'sendfile') {
     try {
         $filename = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Vfs')->create('images')->readFile(
             Ansel_Faces::getVFSPath($face['image_id']) . 'faces',
-            $face_id . Ansel_Faces::getExtension());
+            $face_id . Ansel_Faces::getExtension()
+        );
     } catch (Horde_Vfs_Exception $e) {
         Horde::log($e, 'ERR');
         exit;

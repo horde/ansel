@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2005-2017 Horde LLC (http://www.horde.org/)
  *
@@ -27,44 +28,49 @@ $gbpage = Horde_Util::getFormData('gbpage', 0);
 $groups_perpage = $prefs->getValue('groupsperpage');
 
 switch ($groupby) {
-case 'owner':
-    try {
-        if ($num_groups = $GLOBALS['injector']->getInstance('Ansel_Storage')->shares->countOwners(Horde_Perms::SHOW, null, false)) {
-            $groups = $GLOBALS['injector']->getInstance('Ansel_Storage')->shares->listOwners(
-                Horde_Perms::SHOW,
-                null,
-                false,
-                $gbpage * $groups_perpage,
-                $groups_perpage);
-        } else {
+    case 'owner':
+        try {
+            if ($num_groups = $GLOBALS['injector']->getInstance('Ansel_Storage')->shares->countOwners(Horde_Perms::SHOW, null, false)) {
+                $groups = $GLOBALS['injector']->getInstance('Ansel_Storage')->shares->listOwners(
+                    Horde_Perms::SHOW,
+                    null,
+                    false,
+                    $gbpage * $groups_perpage,
+                    $groups_perpage
+                );
+            } else {
+                $groups = array();
+            }
+        } catch (Horde_Share_Exception $e) {
+            $notification->push($e->getMessage());
+            $num_groups = 0;
             $groups = array();
         }
-    } catch (Horde_Share_Exception $e) {
-        $notification->push($e->getMessage());
-        $num_groups = 0;
-        $groups = array();
-    }
-    break;
+        break;
 
-default:
-    Ansel::getUrlFor('view',
-                     array(
-                         'view' => 'List',
-                         'groupby' => $groupby
-                     ),
-                     true)->redirect();
-    exit;
+    default:
+        Ansel::getUrlFor(
+            'view',
+            array(
+                             'view' => 'List',
+                             'groupby' => $groupby
+                         ),
+            true
+        )->redirect();
+        exit;
 }
 
 // Set up pager.
 $vars = Horde_Variables::getDefaultVariables();
-$group_pager = new Horde_Core_Ui_Pager('gbpage',
-                                  $vars,
-                                  array(
+$group_pager = new Horde_Core_Ui_Pager(
+    'gbpage',
+    $vars,
+    array(
                                       'num' => $num_groups,
                                       'url' => 'group.php',
                                       'perpage' => $groups_perpage
-                                  ));
+                                  )
+);
 
 $min = $gbpage * $groups_perpage;
 $max = $min + $groups_perpage;

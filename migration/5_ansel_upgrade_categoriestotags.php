@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Move tags from ansel to content storage.
  *
@@ -39,7 +40,8 @@ class AnselUpgradeCategoriesToTags extends Horde_Db_Migration_Base
                 $this->_tagger->tag(
                     $row['share_owner'],
                     array('object' => (string)$row['share_id'], 'type' => $this->_type_ids['gallery']),
-                    $row['attribute_category']);
+                    $row['attribute_category']
+                );
             }
             $this->announce('Gallery categories successfully migrated.');
             $this->removeColumn('ansel_shares', 'attribute_category');

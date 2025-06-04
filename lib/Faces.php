@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Face recognition class
  *
@@ -45,7 +46,8 @@ class Ansel_Faces
                         ->create('images')
                         ->deleteFile($path, $id . $ext);
                 }
-            } catch (Horde_Vfs_Exception $e) {}
+            } catch (Horde_Vfs_Exception $e) {
+            }
             try {
                 $GLOBALS['ansel_db']->delete('DELETE FROM ansel_faces WHERE '
                     . 'image_id = ' . $image->id);
@@ -65,7 +67,8 @@ class Ansel_Faces
                     ->getInstance('Horde_Core_Factory_Vfs')
                     ->create('images')
                     ->deleteFile($path, (int)$face . $ext);
-            } catch (Horde_Vfs_Exception $e) {}
+            } catch (Horde_Vfs_Exception $e) {
+            }
             try {
                 $GLOBALS['ansel_db']->delete('DELETE FROM ansel_faces WHERE'
                     . ' face_id = ' . (int)$face);
@@ -118,7 +121,8 @@ class Ansel_Faces
             'view',
             array('view' => 'Image',
                   'gallery' => $face['gallery_id'],
-                  'image' => $face['image_id']));
+                  'image' => $face['image_id'])
+        );
     }
 
     /**
@@ -137,16 +141,20 @@ class Ansel_Faces
         $face_id = $face['face_id'];
 
         // The HTML to display the face image.
-        $imghtml = sprintf("<img src=\"%s\" class=\"bordered-facethumb\" id=\"%s\" alt=\"%s\" />",
+        $imghtml = sprintf(
+            "<img src=\"%s\" class=\"bordered-facethumb\" id=\"%s\" alt=\"%s\" />",
             $faces->getFaceUrl($face['image_id'], $face_id),
             'facethumb' . $face_id,
-            htmlspecialchars($face['face_name']));
+            htmlspecialchars($face['face_name'])
+        );
 
-        $img_view_url = Ansel::getUrlFor('view',
+        $img_view_url = Ansel::getUrlFor(
+            'view',
             array('gallery' => $face['gallery_id'],
                   'view' => 'Image',
-                  'image'=> $face['image_id'],
-                  'havesearch' => false));
+                  'image' => $face['image_id'],
+                  'havesearch' => false)
+        );
 
         // Build the actual html
         $html = '<div id="face' . $face_id . '"><table><tr><td>' . $img_view_url->link() . $imghtml . '</a></td><td>';

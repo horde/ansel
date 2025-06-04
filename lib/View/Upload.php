@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
  *
@@ -91,7 +92,7 @@ class Ansel_View_Upload
         $startText = _("Upload");
         $addText = _("Add Images");
         $header = _("Upload to gallery");
-        $returnText =_("View Gallery");
+        $returnText = _("View Gallery");
         $subText = _("Add files to the upload queue and click the start button.");
         $sizeError = _("File size error.");
         $typeError = _("File type error.");
@@ -186,10 +187,14 @@ EOT;
                 } catch (Horde_Browser_Exception $e) {
                     if (!empty($info['file' . $i]['error'])) {
                         $notification->push(
-                            sprintf(_("There was a problem uploading the photo: %s"), $info['file' . $i]['error']), 'horde.error');
+                            sprintf(_("There was a problem uploading the photo: %s"), $info['file' . $i]['error']),
+                            'horde.error'
+                        );
                     } elseif (!filesize($info['file' . $i]['file'])) {
                         $notification->push(
-                            _("The uploaded file appears to be empty. It may not exist on your computer."), 'horde.error');
+                            _("The uploaded file appears to be empty. It may not exist on your computer."),
+                            'horde.error'
+                        );
                     }
                     $valid = false;
                     continue;
@@ -203,7 +208,7 @@ EOT;
                         'application/x-compressed',
                         'application/x-zip-compressed',
                         'application/zip')
-                    ) ||
+                ) ||
                     Horde_Mime_Magic::filenameToMime($info['file' . $i]['name']) == 'application/zip') {
 
                     $this->_handleZip($info['file' . $i]['name']);
@@ -217,7 +222,8 @@ EOT;
                     if (getimagesize($info['file' . $i]['file']) === false) {
                         $notification->push(
                             _("The file you uploaded does not appear to be a valid photo."),
-                            'horde.error');
+                            'horde.error'
+                        );
                         continue;
                     }
 
@@ -230,12 +236,15 @@ EOT;
                         'tags' => (isset($info['image' . $i . '_tags']) ? explode(',', $info['image' . $i . '_tags']) : array()));
                     try {
                         $image_ids[] = $this->_gallery->addImage(
-                            $image_data, (bool)$vars->get('image' . $i . '_default'));
+                            $image_data,
+                            (bool)$vars->get('image' . $i . '_default')
+                        );
                         ++$uploaded;
                     } catch (Ansel_Exception $e) {
                         $notification->push(
                             sprintf(_("There was a problem saving the photo: %s"), $e->getMessage()),
-                            'horde.error');
+                            'horde.error'
+                        );
                         $valid = false;
                     }
                 }
@@ -250,7 +259,8 @@ EOT;
                 // postupload hook if needed
                 try {
                     Horde::callHook('postupload', array($image_ids), 'ansel');
-                } catch (Horde_Exception_HookNotSet $e) {}
+                } catch (Horde_Exception_HookNotSet $e) {
+                }
 
                 $notification->push(sprintf(ngettext("%d photo was uploaded.", "%d photos were uploaded.", $uploaded), $uploaded), 'horde.success');
             } elseif ($vars->get('submitbutton') != _("Cancel")) {
@@ -266,7 +276,8 @@ EOT;
                         'slug' => $this->_gallery->get('slug'),
                         'view' => 'Gallery',
                         'page' => $page),
-                    true)->redirect();
+                    true
+                )->redirect();
                 exit;
             }
         }
@@ -394,12 +405,13 @@ EOT;
 
             // Figure out what to do with the file
             if (in_array(
-                    $type,
-                    array(
+                $type,
+                array(
                         'x-extension/zip',
                         'application/x-compressed',
                         'application/x-zip-compressed',
-                        'application/zip')) ||
+                        'application/zip')
+            ) ||
                 Horde_Mime_Magic::filenameToMime($temp) == 'application/zip') {
 
                 // ZIP file
@@ -407,7 +419,9 @@ EOT;
                     $image_ids = $this->_handleZip($temp);
                 } catch (Ansel_Exception $e) {
                     $notification->push(
-                        sprintf(_("There was an error processing the uploaded archive: %s"), $e->getMessage()), 'horde.error');
+                        sprintf(_("There was an error processing the uploaded archive: %s"), $e->getMessage()),
+                        'horde.error'
+                    );
                 }
             } else {
                 // Try and make sure the image is in a recognizeable format.
@@ -506,7 +520,8 @@ EOT;
                     array(
                         'image_filename' => $zinfo['name'],
                         'image_caption' => '',
-                        'data' => $zdata));
+                        'data' => $zdata)
+                );
                 $image_ids[] = $image_id;
                 unset($zdata);
             }
@@ -537,7 +552,8 @@ EOT;
                         array(
                             'action' => Horde_Compress_Zip::ZIP_DATA,
                             'info' => $files,
-                            'key' => $key));
+                            'key' => $key)
+                    );
                 } catch (Horde_Compress_Exception $e) {
                     throw new Ansel_Exception($e);
                 }
@@ -547,7 +563,8 @@ EOT;
                     array(
                         'image_filename' => $zinfo['name'],
                         'image_caption' => '',
-                        'data' => $zdata));
+                        'data' => $zdata)
+                );
                 $image_ids[] = $image_id;
                 unset($zdata);
             }

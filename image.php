@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Responsible for making changes to image properties as well as making,
  * previewing and saving changes to the image.
@@ -29,7 +30,8 @@ if (Ansel_ActionHandler::imageActions($actionID)) {
     $children = $gallery->countGalleryChildren(Horde_Perms::SHOW);
     $perpage = min(
         $prefs->getValue('tilesperpage'),
-        $conf['thumbnail']['perpage']);
+        $conf['thumbnail']['perpage']
+    );
     $pages = ceil($children / $perpage);
     if ($page > $pages) {
         $page = $pages;
@@ -44,8 +46,10 @@ if (Ansel_ActionHandler::imageActions($actionID)) {
                 'view' => 'Gallery',
                 'page' => $page,
                 'slug' => $gallery->get('slug')),
-            $date),
-        true)->redirect();
+            $date
+        ),
+        true
+    )->redirect();
     exit;
 }
 

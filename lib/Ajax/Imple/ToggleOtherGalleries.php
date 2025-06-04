@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Ajax_Imple_ToggleOtherGalleries:: class for performing Ajax setting of
  * the gallery show_actions user pref.

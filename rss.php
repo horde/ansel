@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel RSS feed. Note that we always return a 'normal' thumb image
  * and not a prettythumb since we have no way of knowing what the client
@@ -39,204 +40,244 @@ if (empty($rss)) {
 
     // Determine what we are requesting
     switch ($stream_type) {
-    case 'all':
-        try {
-            $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRecentImages();
-        } catch (Ansel_Exception $e) {
-            $images = array();
-        }
-
-        // Eventually would like the link to link to a search
-        // results page containing the same images present in this
-        // feed. For now, just link to the List view until some of
-        // the search code can be refactored.
-        $params = array('last_modified' => $images[0]->uploaded,
-                        'name' => sprintf(_("Recently added photos on %s"),
-                                          $conf['server']['name']),
-                        'link' => Ansel::getUrlFor('view',
-                                                   array('view' => 'List'),
-                                                   true),
-                        'desc' => sprintf(_("Recently added photos on %s"),
-                                          $conf['server']['name']),
-                        'image_url' => Ansel::getImageUrl($images[0]->id,
-                                                          'thumb', true),
-                        'image_alt' => $images[0]->caption,
-                        'image_link' => Ansel::getUrlFor(
-                            'view', array('image' => $images[0]->id,
-                                          'view' => 'Image',
-                                          'gallery' => $images[0]->gallery),
-                            true));
-
-        break;
-
-    case 'gallery':
-        // Retrieve latest from specified gallery
-        // Try a slug first.
-        if ($slug) {
-            $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGalleryBySlug($slug);
-        } elseif (is_numeric($id)) {
-            $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($id);
-        }
-        if ($gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::SHOW) &&
-            !$gallery->hasPasswd() && $gallery->isOldEnough()) {
-
-            if (!$gallery->countImages() && $gallery->hasSubGalleries()) {
-                $subgalleries = $GLOBALS['injector']
-                    ->getInstance('Ansel_Storage')
-                    ->listGalleries(array('parent' => $gallery));
-                $subs = array();
-                foreach ($subgalleries as $subgallery) {
-                    $subs[] = $subgallery->id;
-                }
-                $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRecentImages($subs);
-            } else {
-                $images = $gallery->getRecentImages();
-                $owner = $gallery->getIdentity();
-                $author = $owner->getValue('from_addr');
-            }
-        }
-
-        if (!count($images)) {
-            $images = array();
-        } else {
-            $viewurl = Ansel::getUrlFor('view',
-                                        array('view' => 'Gallery',
-                                              'gallery' => $id),
-                                        true);
-            $img = &$GLOBALS['injector']->getInstance('Ansel_Storage')->getImage($gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')));
-            $params = array('last_modified' => $gallery->get('last_modified'),
-                            'name' => sprintf(_("%s on %s"),
-                                              $gallery->get('name'),
-                                              $conf['server']['name']),
-                            'link' => $viewurl,
-                            'desc' => $gallery->get('desc'),
-                            'image_url' => Ansel::getImageUrl($img->id, 'thumb', true),
-                            'image_alt' => $img->caption,
-                            'image_link' => Ansel::getUrlFor('view',
-                                                             array('image' => $img->id,
-                                                                   'gallery' => $img->gallery,
-                                                                   'view' => 'Image'),
-                                                             true));
-        }
-        break;
-
-    case 'user':
-        $galleries = array();
-        try {
-            $shares = $GLOBALS['injector']
-                ->getInstance('Ansel_Storage')
-                ->listGalleries(array('attributes' => $id));
-            foreach ($shares as $gallery) {
-                if ($gallery->isOldEnough() && !$gallery->hasPasswd()) {
-                    $galleries[] = $gallery->id;
-                }
-            }
-        } catch (Horde_Share_Exception $e) {
-            Horde::log($e->getMessage(), 'ERR');
-        }
-        $images = array();
-        if (isset($galleries) && count($galleries)) {
+        case 'all':
             try {
-                $images = $GLOBALS['injector']
-                    ->getInstance('Ansel_Storage')
-                    ->getRecentImages($galleries);
+                $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRecentImages();
             } catch (Ansel_Exception $e) {
-                 Horde::log($e->getMessage(), 'ERR');
+                $images = array();
+            }
+
+            // Eventually would like the link to link to a search
+            // results page containing the same images present in this
+            // feed. For now, just link to the List view until some of
+            // the search code can be refactored.
+            $params = array('last_modified' => $images[0]->uploaded,
+                            'name' => sprintf(
+                                _("Recently added photos on %s"),
+                                $conf['server']['name']
+                            ),
+                            'link' => Ansel::getUrlFor(
+                                'view',
+                                array('view' => 'List'),
+                                true
+                            ),
+                            'desc' => sprintf(
+                                _("Recently added photos on %s"),
+                                $conf['server']['name']
+                            ),
+                            'image_url' => Ansel::getImageUrl(
+                                $images[0]->id,
+                                'thumb',
+                                true
+                            ),
+                            'image_alt' => $images[0]->caption,
+                            'image_link' => Ansel::getUrlFor(
+                                'view',
+                                array('image' => $images[0]->id,
+                                              'view' => 'Image',
+                                              'gallery' => $images[0]->gallery),
+                                true
+                            ));
+
+            break;
+
+        case 'gallery':
+            // Retrieve latest from specified gallery
+            // Try a slug first.
+            if ($slug) {
+                $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGalleryBySlug($slug);
+            } elseif (is_numeric($id)) {
+                $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($id);
+            }
+            if ($gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::SHOW) &&
+                !$gallery->hasPasswd() && $gallery->isOldEnough()) {
+
+                if (!$gallery->countImages() && $gallery->hasSubGalleries()) {
+                    $subgalleries = $GLOBALS['injector']
+                        ->getInstance('Ansel_Storage')
+                        ->listGalleries(array('parent' => $gallery));
+                    $subs = array();
+                    foreach ($subgalleries as $subgallery) {
+                        $subs[] = $subgallery->id;
+                    }
+                    $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRecentImages($subs);
+                } else {
+                    $images = $gallery->getRecentImages();
+                    $owner = $gallery->getIdentity();
+                    $author = $owner->getValue('from_addr');
+                }
+            }
+
+            if (!count($images)) {
+                $images = array();
+            } else {
+                $viewurl = Ansel::getUrlFor(
+                    'view',
+                    array('view' => 'Gallery',
+                                                  'gallery' => $id),
+                    true
+                );
+                $img = &$GLOBALS['injector']->getInstance('Ansel_Storage')->getImage($gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')));
+                $params = array('last_modified' => $gallery->get('last_modified'),
+                                'name' => sprintf(
+                                    _("%s on %s"),
+                                    $gallery->get('name'),
+                                    $conf['server']['name']
+                                ),
+                                'link' => $viewurl,
+                                'desc' => $gallery->get('desc'),
+                                'image_url' => Ansel::getImageUrl($img->id, 'thumb', true),
+                                'image_alt' => $img->caption,
+                                'image_link' => Ansel::getUrlFor(
+                                    'view',
+                                    array('image' => $img->id,
+                                                                       'gallery' => $img->gallery,
+                                                                       'view' => 'Image'),
+                                    true
+                                ));
+            }
+            break;
+
+        case 'user':
+            $galleries = array();
+            try {
+                $shares = $GLOBALS['injector']
+                    ->getInstance('Ansel_Storage')
+                    ->listGalleries(array('attributes' => $id));
+                foreach ($shares as $gallery) {
+                    if ($gallery->isOldEnough() && !$gallery->hasPasswd()) {
+                        $galleries[] = $gallery->id;
+                    }
+                }
+            } catch (Horde_Share_Exception $e) {
+                Horde::log($e->getMessage(), 'ERR');
+            }
+            $images = array();
+            if (isset($galleries) && count($galleries)) {
+                try {
+                    $images = $GLOBALS['injector']
+                        ->getInstance('Ansel_Storage')
+                        ->getRecentImages($galleries);
+                } catch (Ansel_Exception $e) {
+                    Horde::log($e->getMessage(), 'ERR');
+                }
+                if (count($images)) {
+                    $owner = $injector->getInstance('Horde_Core_Factory_Identity')->create($id);
+                    $name = $owner->getValue('fullname');
+                    $author = $owner->getValue('from_addr');
+                    if (!$name) {
+                        $name = $id;
+                    }
+                    $params = array('last_modified' => $images[0]->uploaded,
+                                    'name' => sprintf(
+                                        _("Photos by %s"),
+                                        $name
+                                    ),
+                                    'link' => Ansel::getUrlFor(
+                                        'view',
+                                        array('view' => 'List',
+                                                                     'groupby' => 'owner',
+                                                                     'owner' => $id),
+                                        true
+                                    ),
+                                    'desc' => sprintf(
+                                        _("Recently added photos by %s on %s"),
+                                        $name,
+                                        $conf['server']['name']
+                                    ),
+                                    'image_url' => Ansel::getImageUrl($images[0]->id, 'thumb', true),
+                                    'image_alt' => $images[0]->caption,
+                                    'image_link' => Ansel::getUrlFor(
+                                        'view',
+                                        array('image' => $images[0]->id,
+                                                      'gallery' => $images[0]->gallery,
+                                                      'view' => 'Image'),
+                                        true
+                                    )
+                    );
+                }
+            }
+            break;
+
+        case 'tag':
+            $filter = array('typeId' => 'image',
+                            'limit' => 10);
+            $images = $GLOBALS['injector']->getInstance('Ansel_Tagger')->search(array($id), $filter);
+
+            try {
+                $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImages(array('ids' => $images['images']));
+            } catch (Ansel_Exception $e) {
+                Horde::log($e->getMessage(), 'ERR');
+                $images = array();
             }
             if (count($images)) {
-                $owner = $injector->getInstance('Horde_Core_Factory_Identity')->create($id);
-                $name = $owner->getValue('fullname');
-                $author = $owner->getValue('from_addr');
-                if (!$name) {
-                    $name = $id;
-                }
+                $images = array_values($images);
                 $params = array('last_modified' => $images[0]->uploaded,
-                                'name' => sprintf(_("Photos by %s"),
-                                                  $name),
-                                'link' => Ansel::getUrlFor('view',
-                                                           array('view' => 'List',
-                                                                 'groupby' => 'owner',
-                                                                 'owner' => $id),
-                                                           true),
-                                'desc' => sprintf(_("Recently added photos by %s on %s"),
-                                                  $name, $conf['server']['name']),
-                                'image_url' => Ansel::getImageUrl($images[0]->id, 'thumb', true),
+                                'name' => sprintf(
+                                    _("Photos tagged with %s on %s"),
+                                    $id,
+                                    $conf['server']['name']
+                                ),
+                                'link' => Ansel::getUrlFor(
+                                    'view',
+                                    array('tag' => $id,
+                                                                 'view' => 'Results'),
+                                    true
+                                ),
+                                'desc' => sprintf(
+                                    _("Photos tagged with %s on %s"),
+                                    $id,
+                                    $conf['server']['name']
+                                ),
+                                'image_url' => Ansel::getImageUrl($images[0]->id, 'thumb', true, 'ansel_default'),
                                 'image_alt' => $images[0]->caption,
                                 'image_link' => Ansel::getUrlFor(
-                                    'view', array('image' => $images[0]->id,
-                                                  'gallery' => $images[0]->gallery,
-                                                  'view' => 'Image'), true)
-                );
-            }
-        }
-        break;
-
-    case 'tag':
-        $filter = array('typeId' => 'image',
-                        'limit' => 10);
-        $images = $GLOBALS['injector']->getInstance('Ansel_Tagger')->search(array($id), $filter);
-
-        try {
-            $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImages(array('ids' => $images['images']));
-        } catch (Ansel_Exception $e) {
-             Horde::log($e->getMessage(), 'ERR');
-             $images = array();
-        }
-        if (count($images)) {
-            $images = array_values($images);
-            $params = array('last_modified' => $images[0]->uploaded,
-                            'name' => sprintf(_("Photos tagged with %s on %s"),
-                                              $id, $conf['server']['name']),
-                            'link' => Ansel::getUrlFor('view',
-                                                       array('tag' => $id,
-                                                             'view' => 'Results'),
-                                                       true),
-                            'desc' => sprintf(_("Photos tagged with %s on %s"),
-                                              $id, $conf['server']['name']),
-                            'image_url' => Ansel::getImageUrl($images[0]->id, 'thumb', true, 'ansel_default'),
-                            'image_alt' => $images[0]->caption,
-                            'image_link' => Ansel::getUrlFor('view',
-                                                             array('view' => 'Image',
-                                                                   'image' => $images[0]->id,
-                                                                   'gallery' => $images[0]->gallery),
-                                                             true)
-                      );
-        }
-
-        // Do this here to avoid iterating the images twice
-        $galleries = array();
-        $imgs = array();
-        $cnt = count($images);
-        for ($i = 0; $i < $cnt; ++$i) {
-            $gallery_id = $images[$i]->gallery;
-            if (empty($galleries[$gallery_id])) {
-                try {
-                    $galleries[$gallery_id]['gallery'] = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($gallery_id);
-                } catch (Ansel_Exception $e) {}
-            }
-            if (!isset($galleries[$gallery_id]['perm'])) {
-                $galleries[$gallery_id]['perm'] =
-                    ($galleries[$gallery_id]['gallery']->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ) &&
-                     $galleries[$gallery_id]['gallery']->isOldEnough() &&
-                     !$galleries[$gallery_id]['gallery']->hasPasswd());
+                                    'view',
+                                    array('view' => 'Image',
+                                                                       'image' => $images[0]->id,
+                                                                       'gallery' => $images[0]->gallery),
+                                    true
+                                )
+                          );
             }
 
-            if ($galleries[$gallery_id]['perm']) {
-                $imgs[$i]['link'] = Ansel::getUrlFor(
-                    'view',
-                    array('view' => 'Image',
-                          'gallery' => $images[$i]->gallery,
-                          'image' => $images[$i]->id), true);
-                $imgs[$i]['filename'] = $images[$i]->filename;
-                $imgs[$i]['caption'] = $images[$i]->caption;
-                $imgs[$i]['url'] = htmlspecialchars(Ansel::getImageUrl($images[$i]->id, 'screen', true));
-                $imgs[$i]['type'] = $images[$i]->getType('screen');
-                $imgs[$i]['author'] = $author;
-                $imgs[$i]['thumb'] = htmlspecialchars(Ansel::getImageUrl($images[$i]->id, 'thumb', true));
-                $imgs[$i]['latitude'] = $images[$i]->lat;
-                $imgs[$i]['longitude'] = $images[$i]->lng;
+            // Do this here to avoid iterating the images twice
+            $galleries = array();
+            $imgs = array();
+            $cnt = count($images);
+            for ($i = 0; $i < $cnt; ++$i) {
+                $gallery_id = $images[$i]->gallery;
+                if (empty($galleries[$gallery_id])) {
+                    try {
+                        $galleries[$gallery_id]['gallery'] = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($gallery_id);
+                    } catch (Ansel_Exception $e) {
+                    }
+                }
+                if (!isset($galleries[$gallery_id]['perm'])) {
+                    $galleries[$gallery_id]['perm'] =
+                        ($galleries[$gallery_id]['gallery']->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ) &&
+                         $galleries[$gallery_id]['gallery']->isOldEnough() &&
+                         !$galleries[$gallery_id]['gallery']->hasPasswd());
+                }
+
+                if ($galleries[$gallery_id]['perm']) {
+                    $imgs[$i]['link'] = Ansel::getUrlFor(
+                        'view',
+                        array('view' => 'Image',
+                              'gallery' => $images[$i]->gallery,
+                              'image' => $images[$i]->id),
+                        true
+                    );
+                    $imgs[$i]['filename'] = $images[$i]->filename;
+                    $imgs[$i]['caption'] = $images[$i]->caption;
+                    $imgs[$i]['url'] = htmlspecialchars(Ansel::getImageUrl($images[$i]->id, 'screen', true));
+                    $imgs[$i]['type'] = $images[$i]->getType('screen');
+                    $imgs[$i]['author'] = $author;
+                    $imgs[$i]['thumb'] = htmlspecialchars(Ansel::getImageUrl($images[$i]->id, 'thumb', true));
+                    $imgs[$i]['latitude'] = $images[$i]->lat;
+                    $imgs[$i]['longitude'] = $images[$i]->lng;
+                }
             }
-        }
 
     }
 
@@ -248,7 +289,9 @@ if (empty($rss)) {
                 'view',
                 array('view' => 'Image',
                       'gallery' => $images[$i]->gallery,
-                      'image' => $images[$i]->id), true);
+                      'image' => $images[$i]->id),
+                true
+            );
             $imgs[$i]['filename'] = $images[$i]->filename;
             $imgs[$i]['caption'] = $images[$i]->caption;
             $imgs[$i]['url'] = htmlspecialchars(Ansel::getImageUrl($images[$i]->id, 'screen', true));

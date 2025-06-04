@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Utility class for specifying scope-specific ansel configuration.
  *
@@ -9,7 +10,7 @@ class Ansel_Config
 
     /**
      * Const'r - set the default scope to ansel.
-     * 
+     *
      */
     public function __construct()
     {

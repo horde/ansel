@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Imple for performing Ajax discovery and editing of image faces.
  *
@@ -46,7 +47,7 @@ class Ansel_Ajax_Imple_EditFaces extends Horde_Core_Ajax_Imple
         // results, or if we were asked to explicitly try again.
         if (empty($results)) {
             $image = $injector->getInstance('Ansel_Storage')->getImage($image_id);
-            $image->createView('screen', null, ($prefs->getValue('watermark_auto') ?  $prefs->getValue('watermark_text', '') : ''));
+            $image->createView('screen', null, ($prefs->getValue('watermark_auto') ? $prefs->getValue('watermark_text', '') : ''));
             $results = $faces->getFromPicture($image_id, true);
         }
 

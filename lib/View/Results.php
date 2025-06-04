@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
  *
@@ -68,7 +69,10 @@ class Ansel_View_Results extends Ansel_View_Ansel
         $ansel_storage = $injector->getInstance('Ansel_Storage');
         $this->_owner = Horde_Util::getFormData('owner', '');
         $this->_browser = new Ansel_TagBrowser(
-            $injector->getInstance('Ansel_Tagger'), null, $this->_owner);
+            $injector->getInstance('Ansel_Tagger'),
+            null,
+            $this->_owner
+        );
 
         $this->_page = Horde_Util::getFormData('page', 0);
         $actionID = Horde_Util::getFormData('actionID', '');
@@ -78,7 +82,8 @@ class Ansel_View_Results extends Ansel_View_Ansel
         // Number perpage from prefs or config.
         $this->_perPage = min(
             $prefs->getValue('tilesperpage'),
-            $conf['thumbnail']['perpage']);
+            $conf['thumbnail']['perpage']
+        );
 
         // Common image actions.
         if (Ansel_ActionHandler::imageActions($actionID)) {
@@ -88,22 +93,22 @@ class Ansel_View_Results extends Ansel_View_Ansel
 
         // Tag browsing actions.
         switch ($actionID) {
-        case 'remove':
-            $tag = Horde_Util::getFormData('tag');
-            if (isset($tag)) {
-                $this->_browser->removeTag($tag);
-                $this->_browser->save();
-            }
-            break;
+            case 'remove':
+                $tag = Horde_Util::getFormData('tag');
+                if (isset($tag)) {
+                    $this->_browser->removeTag($tag);
+                    $this->_browser->save();
+                }
+                break;
 
-        case 'add':
-        default:
-            $tag = Horde_Util::getFormData('tag');
-            if (isset($tag)) {
-                $this->_browser->addTag($tag);
-                $this->_browser->save();
-            }
-            break;
+            case 'add':
+            default:
+                $tag = Horde_Util::getFormData('tag');
+                if (isset($tag)) {
+                    $this->_browser->addTag($tag);
+                    $this->_browser->save();
+                }
+                break;
         }
 
         // Check for empty tag search and redirect if empty
@@ -164,12 +169,14 @@ class Ansel_View_Results extends Ansel_View_Ansel
         $vars = Horde_Variables::getDefaultVariables();
         $option_move = $option_copy = $ansel_storage->countGalleries(
             $GLOBALS['registry']->getAuth(),
-            array('perm' => Horde_Perms::EDIT));
+            array('perm' => Horde_Perms::EDIT)
+        );
 
         $this->_pagestart = ($this->_page * $this->_perPage) + 1;
         $this->_pageend = min(
             $this->_pagestart + $view->numimages - 1,
-            $this->_pagestart + $this->_perPage - 1);
+            $this->_pagestart + $this->_perPage - 1
+        );
 
         $view->pageStart = $this->_pageStart;
         $view->pageEnd = $this->_pageEnd;
@@ -179,7 +186,8 @@ class Ansel_View_Results extends Ansel_View_Ansel
         $view->params = $this->_params;
 
         $view->style = Ansel::getStyleDefinition(
-            $GLOBALS['prefs']->getValue('default_gallerystyle'));
+            $GLOBALS['prefs']->getValue('default_gallerystyle')
+        );
 
         $viewurl = Horde::url('view.php')->add(array(
             'view' => 'Results',

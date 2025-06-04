@@ -1,16 +1,17 @@
 <?php
+
 /**
  * Report by email class
  *
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
-class Ansel_Report_mail extends Ansel_Report {
-
+class Ansel_Report_mail extends Ansel_Report
+{
     /**
      * Report
      */
-    function report($message, $users = array())
+    public function report($message, $users = array())
     {
         global $conf;
 

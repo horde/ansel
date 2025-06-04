@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright 2008-2017 Horde LLC (http://www.horde.org)
  * @author Michael J Rubinsky <mrubinsk@horde.org>
@@ -147,7 +148,8 @@ abstract class Ansel_View_GalleryRenderer_Base
         } else {
             $this->perpage = min(
                 $prefs->getValue('tilesperpage'),
-                $conf['thumbnail']['perpage']);
+                $conf['thumbnail']['perpage']
+            );
         }
         $this->pagestart = ($this->page * $this->perpage) + 1;
 
@@ -192,7 +194,7 @@ abstract class Ansel_View_GalleryRenderer_Base
             $page_output->addScriptFile('views/gallery.js');
             $page_output->addScriptFile('popup.js', 'horde');
 
-            $strings = array (
+            $strings = array(
                 'delete_conf' => _("Are you sure you want to delete the selected photos?"),
                 'choose_gallery_move' => _("You must choose a gallery to move photos to."),
                 'choose_images' => _("You must first choose photos.")
@@ -243,7 +245,8 @@ abstract class Ansel_View_GalleryRenderer_Base
             ->filter(
                 $this->view->gallery->get('desc'),
                 'text2html',
-                array('parselevel' => Horde_Text_Filter_Text2html::MICRO));
+                array('parselevel' => Horde_Text_Filter_Text2html::MICRO)
+            );
         $view->children = $this->children;
         $view->view = $this->view;
         $view->style = $this->style;
@@ -251,10 +254,14 @@ abstract class Ansel_View_GalleryRenderer_Base
         // Don't bother if we are being called from the api
         if (empty($this->view->api)) {
             $view->option_edit = $this->view->gallery->hasPermission(
-                $registry->getAuth(), Horde_Perms::EDIT);
+                $registry->getAuth(),
+                Horde_Perms::EDIT
+            );
 
             $view->option_select = $view->option_delete = $this->view->gallery->hasPermission(
-                $registry->getAuth(), Horde_Perms::DELETE);
+                $registry->getAuth(),
+                Horde_Perms::DELETE
+            );
 
             $view->option_move = ($view->option_delete && $injector
                 ->getInstance('Ansel_Storage')
@@ -299,7 +306,8 @@ abstract class Ansel_View_GalleryRenderer_Base
                 array('gallery' => $this->galleryId,
                       'view' => 'Gallery',
                       'slug' => $this->view->gallery->get('slug')),
-                $date_params);
+                $date_params
+            );
             $pagerurl = Ansel::getUrlfor('view', $pager_params, true);
         }
 
@@ -353,7 +361,8 @@ abstract class Ansel_View_GalleryRenderer_Base
             Horde_Perms::SHOW,
             $this->page * $this->perpage,
             $this->perpage,
-            !empty($this->view->force_grouping));
+            !empty($this->view->force_grouping)
+        );
 
         // The last tile number to display on the current page
         $this->pageend = min($this->numTiles, $this->pagestart + $this->perpage - 1);

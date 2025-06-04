@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_View_Abstract:: Parent class for the various Ansel_View classes
  *
@@ -147,7 +148,8 @@ abstract class Ansel_View_Base
             $date = Ansel::getDateParameter(
                 array('year' => $this->_params['year'],
                       'month' => $this->_params['month'],
-                      'day' => $this->_params['day']));
+                      'day' => $this->_params['day'])
+            );
         } else {
             $date = array();
         }
@@ -157,25 +159,25 @@ abstract class Ansel_View_Base
     }
 
 
-   /**
-     * JSON representation of this gallery's images. We don't use
-     * Ansel_Gallery::toJson() on purpose since that is a general jsonification
-     * of the gallery data. This method is specific to the view, paging, links
-     * etc...
-     *
-     * @param Ansel_Gallery $gallery  The gallery to represent in this view
-     * @param array $params           An array of parameters for this method:
-     *   <pre>
-     *      full       - Should a full URL be generated? [false]
-     *      from       - Starting image count [0]
-     *      count      - The number of images to include (starting at from) [0]
-     *      image_view - The type of ImageGenerator to obtain the src url for. [screen]
-     *      view_links - Should the JSON include links to the Image and/or Gallery View? [false]
-     *      perpage    - Number of images per page [from user prefs]
-     *   </pre>
-     *
-     * @return string  A serialized JSON array.
-     */
+    /**
+      * JSON representation of this gallery's images. We don't use
+      * Ansel_Gallery::toJson() on purpose since that is a general jsonification
+      * of the gallery data. This method is specific to the view, paging, links
+      * etc...
+      *
+      * @param Ansel_Gallery $gallery  The gallery to represent in this view
+      * @param array $params           An array of parameters for this method:
+      *   <pre>
+      *      full       - Should a full URL be generated? [false]
+      *      from       - Starting image count [0]
+      *      count      - The number of images to include (starting at from) [0]
+      *      image_view - The type of ImageGenerator to obtain the src url for. [screen]
+      *      view_links - Should the JSON include links to the Image and/or Gallery View? [false]
+      *      perpage    - Number of images per page [from user prefs]
+      *   </pre>
+      *
+      * @return string  A serialized JSON array.
+      */
     public static function json(Ansel_Gallery $gallery, $params = array())
     {
         global $conf, $prefs;
@@ -215,18 +217,22 @@ abstract class Ansel_View_Base
                 $curpage
             );
             if ($params['view_links']) {
-                $data[] = (string)Ansel::getUrlFor('view',
+                $data[] = (string)Ansel::getUrlFor(
+                    'view',
                     array('gallery' => $gallery->id,
                           'slug' => $gallery->get('slug'),
                           'image' => $image->id,
                           'view' => 'Image',
                           'page' => $curpage),
-                    true);
-                $data[] = (string)Ansel::getUrlFor('view',
+                    true
+                );
+                $data[] = (string)Ansel::getUrlFor(
+                    'view',
                     array('gallery' => $image->gallery,
                           'slug' => $gallery->get('slug'),
                           'view' => 'Gallery'),
-                    true);
+                    true
+                );
             }
             // Source, Width, Height, Name, Caption, Image Id, Gallery Page
             $json[] = $data;

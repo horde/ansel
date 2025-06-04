@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Migrate to Horde_Share_Sql hierarchical shares.
  *
@@ -21,10 +22,12 @@ class AnselUpgradeSqlHierarchical extends Horde_Db_Migration_Base
     {
         try {
             $this->removeIndex('ansel_shares', 'share_parents');
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
         try {
             $this->removeIndex('ansel_shares', array('name' => 'ansel_shares_share_parents_idx'));
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
         $this->addColumn('ansel_shares', 'share_name', 'string', array('limit' => 255, 'null' => false, 'default' => ''));
         $this->changeColumn('ansel_shares', 'share_parents', 'text');
 

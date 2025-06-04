@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Explicitly add/edit a face range to an image.
  *

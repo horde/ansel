@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Base class for the creation of various image views.
  *
@@ -60,7 +61,7 @@ class Ansel_ImageGenerator
      *
      * @var array
      */
-    public  $need = array();
+    public $need = array();
 
     /**
      * Human readable title for this thumbnail style.
@@ -132,13 +133,13 @@ class Ansel_ImageGenerator
         }
     }
 
-   /**
-    * Utility function to return an array of Horde_Images to use in building a
-    * stack. Returns a random set of 5 images from the gallery, or the
-    * explicitly set key image plus 4 others.
-    *
-    * @return array An array of Horde_Image objects.
-    */
+    /**
+     * Utility function to return an array of Horde_Images to use in building a
+     * stack. Returns a random set of 5 images from the gallery, or the
+     * explicitly set key image plus 4 others.
+     *
+     * @return array An array of Horde_Image objects.
+     */
     protected function _getStackImages()
     {
         $images = array();

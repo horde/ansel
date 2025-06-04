@@ -1,12 +1,13 @@
 <?php
+
 /**
  * Ecard generator.
  *
  * @package Ansel
  */
 
-class Ansel_Form_Ecard extends Horde_Form {
-
+class Ansel_Form_Ecard extends Horde_Form
+{
     protected $_useFormToken = true;
 
     public function __construct($vars, $title)
@@ -38,10 +39,10 @@ class Ansel_Form_Ecard extends Horde_Form {
                 _("Spam protection"),
                 'captcha',
                 'figlet',
-                 true,
-                 false,
-                 null,
-                 array(
+                true,
+                false,
+                null,
+                array(
                     Ansel::getCAPTCHA(!$this->isSubmitted()),
                     $conf['ecard']['figlet_font']
                 )

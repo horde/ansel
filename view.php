@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Delegates to the correct view.
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows all images that the supplied, named face appears on.
  *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Widget:: class wraps the display of widgets to be displayed in various
  * Ansel_Views.
@@ -102,8 +103,8 @@ abstract class Ansel_Widget_Base
     public function __get($property)
     {
         switch ($property) {
-        case 'autoRender':
-            return $this->_autoRender;
+            case 'autoRender':
+                return $this->_autoRender;
         }
     }
 

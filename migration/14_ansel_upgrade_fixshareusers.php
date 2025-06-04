@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Fix column type of ansel_shares_users.user_uid.
  *

@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../lib/Style.php';
 
 /**
@@ -23,7 +24,8 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
         // Create: ansel_hashes
         $t = $this->createTable(
             'ansel_hashes',
-            array('autoincrementKey' => false));
+            array('autoincrementKey' => false)
+        );
         $t->column('style_hash', 'string', array('limit' => 255));
         $t->primaryKey(array('style_hash'));
         $t->end();
@@ -79,7 +81,7 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
     {
         $sql = "UPDATE ansel_shares set attribute_style = 'ansel_default'";
         $this->_connection->execute($sql);
-        $this->changeColumn('ansel_shares', 'attribute_style', 'string',  array('limit' => 255));
+        $this->changeColumn('ansel_shares', 'attribute_style', 'string', array('limit' => 255));
         $this->dropTable('ansel_hashes');
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author Michael J Rubinsky <mrubinsk@horde.org>
@@ -28,8 +29,11 @@ class Ansel_Tile_Image
      * @return  Outputs the HTML for the image tile.
      */
     public static function getTile(
-        Ansel_Image $image, Ansel_Style $style = null, $mini = false, array $params = array())
-    {
+        Ansel_Image $image,
+        Ansel_Style $style = null,
+        $mini = false,
+        array $params = array()
+    ) {
         global $conf, $registry, $injector;
 
         $page = isset($params['page']) ? $params['page'] : 0;
@@ -65,12 +69,14 @@ class Ansel_Tile_Image
 
         // URL for image properties/actions
         $view->image_url = Horde::url('image.php')->add(
-             array_merge(
-               array('gallery' => $image->gallery,
+            array_merge(
+                array('gallery' => $image->gallery,
                      'page' => $page,
                      'image' => $image->id,
                      'havesearch' => $haveSearch),
-               $date));
+                $date
+            )
+        );
 
         // URL to view the image. This is the link for the Tile.
         // $view_url is the link for the thumbnail and since this might not
@@ -81,9 +87,10 @@ class Ansel_Tile_Image
                   'slug' => $view->parent->get('slug'),
                   'page' => $page,
                   'view' => 'Image',
-                  'image'=> $image->id,
+                  'image' => $image->id,
                   'havesearch' => $haveSearch),
-            $date));
+            $date
+        ));
 
         if (!empty($params['image_view_src'])) {
             $view->view_url = Ansel::getImageUrl($image->id, 'screen', true);
@@ -113,7 +120,8 @@ class Ansel_Tile_Image
                         'slug' => $view->parent->get('slug'),
                         'view' => 'Gallery',
                         'havesearch' => $haveSearch),
-                    $date)
+                    $date
+                )
             );
         }
 
@@ -132,7 +140,8 @@ class Ansel_Tile_Image
             ->filter(
                 $image->caption,
                 'text2html',
-                array('parselevel' => Horde_Text_Filter_Text2html::MICRO));
+                array('parselevel' => Horde_Text_Filter_Text2html::MICRO)
+            );
 
         if (!empty($params['image_view_title']) &&
             !empty($image->_data[$params['image_view_title']])) {
@@ -150,7 +159,8 @@ class Ansel_Tile_Image
                     array(
                         'dataid' => $image->id,
                         'id' => $image->id . 'caption',
-                        'width' => $geometry['width']));
+                        'width' => $geometry['width'])
+                );
             } catch (Ansel_Exception $e) {
             }
         }

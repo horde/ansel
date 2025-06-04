@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @copyright 2003-2017 Horde LLC (http://www.horde.org)
@@ -55,7 +56,8 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
             $date = Ansel::getDateParameter(
                 array('year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
                       'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0));
+                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+            );
 
             $galleryurl = Ansel::getUrlFor(
                 'view',
@@ -65,8 +67,10 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
                         'slug' => empty($params['slug']) ? '' : $params['slug'],
                         'page' => empty($params['page']) ? 0 : $params['page'],
                         'view' => 'Gallery'),
-                    $date),
-                true);
+                    $date
+                ),
+                true
+            );
 
             $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl));
             Horde::url('disclaimer.php')->add($params)->setRaw(true)->redirect();
@@ -80,19 +84,22 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
             $date = Ansel::getDateParameter(
                 array('year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
                       'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0));
+                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+            );
 
-                $galleryurl = Ansel::getUrlFor(
-                    'view',
-                    array_merge(
-                        array(
-                            'gallery' => $this->gallery->id,
-                            'slug' => empty($params['slug']) ? '' : $params['slug'],
-                            'page' => empty($params['page']) ? 0 : $params['page'],
-                            'view' => 'Gallery'),
-                        $date),
-                    true);
-                $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl));
+            $galleryurl = Ansel::getUrlFor(
+                'view',
+                array_merge(
+                    array(
+                        'gallery' => $this->gallery->id,
+                        'slug' => empty($params['slug']) ? '' : $params['slug'],
+                        'page' => empty($params['page']) ? 0 : $params['page'],
+                        'view' => 'Gallery'),
+                    $date
+                ),
+                true
+            );
+            $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl));
             Horde::url('protect.php')->add($params)->setRaw(true)->redirect();
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Displays mini thumbnails of images in the selected (or random) gallery.
  *
@@ -53,7 +54,8 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
             ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
-                array('perm' => Horde_Perms::READ)) < $GLOBALS['conf']['gallery']['listlimit'])) {
+                array('perm' => Horde_Perms::READ)
+            ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
             foreach ($storage->listGalleries() as $gal) {
                 $params['gallery']['values'][$gal->id] = $gal->get('name');
@@ -80,11 +82,13 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         } else {
             $name = $gallery->get('name');
         }
-        $viewurl = Ansel::getUrlFor('view',
+        $viewurl = Ansel::getUrlFor(
+            'view',
             array('view' => 'Gallery',
                   'gallery' => $gallery->id,
                   'slug' => $gallery->get('slug')),
-            true);
+            true
+        );
 
         return $viewurl->link() . htmlspecialchars($name) . '</a>';
     }
@@ -94,7 +98,7 @@ class Ansel_Block_Gallery extends Horde_Core_Block
     protected function _content()
     {
         try {
-           $gallery = $this->_getGallery();
+            $gallery = $this->_getGallery();
         } catch (Ansel_Exception $e) {
             return $e->getMessage();
         }
@@ -107,10 +111,13 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         $html = Ansel::embedCode($params);
 
         // Be nice to people with <noscript>
-        $viewurl = Ansel::getUrlFor('view', array('view' => 'Gallery',
+        $viewurl = Ansel::getUrlFor(
+            'view',
+            array('view' => 'Gallery',
                                                   'gallery' => $gallery->id,
                                                   'slug' => $gallery->get('slug')),
-                                    true);
+            true
+        );
         $html .= '<noscript>';
         $html .= $viewurl->link(array('title' => sprintf(_("View %s"), $gallery->get('name'))));
         if ($iid = $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')) &&

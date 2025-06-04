@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ensures that all known style definitions have a hash entry.
  *
@@ -22,7 +23,7 @@ class AnselUpgradeComputestylehashes extends Horde_Db_Migration_Base
         $rows = $this->_connection->select($sql);
         $this->_ensureHashes($rows);
 
-         // Migrate existing data for shareng
+        // Migrate existing data for shareng
         $sql = 'SELECT attribute_style, share_id FROM ansel_sharesng';
         $this->announce('Computing style hashes from ansel_sharesng.', 'cli.message');
         $rows = $this->_connection->select($sql);

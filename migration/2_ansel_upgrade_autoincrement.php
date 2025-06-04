@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Upgrade for autoincrement
  *

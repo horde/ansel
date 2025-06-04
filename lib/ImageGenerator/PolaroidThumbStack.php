@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ImageGenerator to create the gallery polaroid stacks.
  *
@@ -29,10 +30,13 @@ class Ansel_ImageGenerator_PolaroidThumbStack extends Ansel_ImageGenerator
                       'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
                       'padding' => 10,
                       'background' => $style->background,
-                      'type' => 'polaroid'));
+                      'type' => 'polaroid')
+            );
             $baseImg->applyEffects();
-            $baseImg->resize($GLOBALS['conf']['thumbnail']['width'],
-                             $GLOBALS['conf']['thumbnail']['height']);
+            $baseImg->resize(
+                $GLOBALS['conf']['thumbnail']['width'],
+                $GLOBALS['conf']['thumbnail']['height']
+            );
 
         } catch (Horde_Image_Exception $e) {
             throw new Ansel_Exception($e);

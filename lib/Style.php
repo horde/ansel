@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_Style:: class is responsible for holding information about a
  * single Ansel style.
@@ -51,7 +52,8 @@ class Ansel_Style
             array(
                 'gallery_view' => 'Gallery',
                 'background' => 'none'),
-            $properties);
+            $properties
+        );
     }
 
     /**
@@ -95,14 +97,14 @@ class Ansel_Style
     public function __set($property, $value)
     {
         switch ($property) {
-        case 'thumbstyle':
-        case 'background':
-        case 'width':
-        case 'height':
-            $this->_properties[$property] = $value;
-            break;
-        default:
-            throw new Ansel_Exception('Invalid property');
+            case 'thumbstyle':
+            case 'background':
+            case 'width':
+            case 'height':
+                $this->_properties[$property] = $value;
+                break;
+            default:
+                throw new Ansel_Exception('Invalid property');
         }
     }
 
@@ -118,11 +120,10 @@ class Ansel_Style
      */
     public function __wakeup()
     {
-       if (!empty($this->_properties['widgets'])) {
-           $this->widgets = $this->_properties['widgets'];
-           unset($this->_properties['widgets']);
-       }
+        if (!empty($this->_properties['widgets'])) {
+            $this->widgets = $this->_properties['widgets'];
+            unset($this->_properties['widgets']);
+        }
     }
 
 }
-

@@ -7,7 +7,7 @@
  *
  */
 class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
- {
+{
     public $need = array('PhotoStack');
 
     /**
@@ -31,11 +31,14 @@ class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
                       'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
                       'padding' => 0,
                       'background' => $style->background,
-                      'type' => 'rounded'));
+                      'type' => 'rounded')
+            );
 
             $baseImg->applyEffects();
-            $baseImg->resize($GLOBALS['conf']['thumbnail']['width'],
-                             $GLOBALS['conf']['thumbnail']['height']);
+            $baseImg->resize(
+                $GLOBALS['conf']['thumbnail']['width'],
+                $GLOBALS['conf']['thumbnail']['height']
+            );
         } catch (Horde_Image_Exception $e) {
             throw new Ansel_Exception($e);
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_GalleryMode_Base:: Class for encapsulating gallery methods that
  * depend on the current display mode of the gallery.
@@ -13,8 +14,8 @@
  */
 abstract class Ansel_GalleryMode_Base
 {
-    const MODE_NORMAL = 0;
-    const MODE_DATE   = 1;
+    public const MODE_NORMAL = 0;
+    public const MODE_DATE   = 1;
     /**
      * @var Ansel_Gallery
      */

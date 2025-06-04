@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class to encapsulate the UI for adding/viewing/changing galleries.
  *
@@ -52,21 +53,21 @@ class Ansel_View_GalleryProperties
     public function run()
     {
         switch ($this->_params['actionID']) {
-        case 'add':
-            $this->_runNew();
-            $this->_output();
-            break;
-        case 'addchild':
-            $this->_runNewChild();
-            $this->_output();
-            break;
-        case 'modify':
-            $this->_runEdit();
-            $this->_output();
-            break;
-        case 'save':
-            $this->_runSave();
-            break;
+            case 'add':
+                $this->_runNew();
+                $this->_output();
+                break;
+            case 'addchild':
+                $this->_runNewChild();
+                $this->_output();
+                break;
+            case 'modify':
+                $this->_runEdit();
+                $this->_output();
+                break;
+            case 'save':
+                $this->_runSave();
+                break;
         }
     }
 
@@ -328,7 +329,7 @@ class Ansel_View_GalleryProperties
                 }
                 try {
                     $result = $gallery->save();
-                    $GLOBALS['notification']->push(_("The gallery was saved."),'horde.success');
+                    $GLOBALS['notification']->push(_("The gallery was saved."), 'horde.success');
                 } catch (Ansel_Exception $e) {
                     $GLOBALS['notification']->push($e->getMessage(), 'horde.error');
                 }
@@ -346,7 +347,8 @@ class Ansel_View_GalleryProperties
                 if (!$parent->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
                     $GLOBALS['notification']->push(
                         _("You do not have permission to add sub galleries to this gallery."),
-                        'horde.error');
+                        'horde.error'
+                    );
 
                     Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
                     exit;
@@ -357,7 +359,8 @@ class Ansel_View_GalleryProperties
             if (!$gallery_name) {
                 $GLOBALS['notification']->push(
                     _("You must provide a display name for your new gallery."),
-                    'horde.warning');
+                    'horde.warning'
+                );
                 $actionId = 'add';
                 $title = _("Adding A New Gallery");
             }
@@ -367,7 +370,7 @@ class Ansel_View_GalleryProperties
 
             try {
                 $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->createGallery(
-                        array('name' => $gallery_name,
+                    array('name' => $gallery_name,
                               'desc' => $gallery_desc,
                               'tags' => explode(',', $gallery_tags),
                               'style' => $style,
@@ -377,7 +380,9 @@ class Ansel_View_GalleryProperties
                               'view_mode' => $gallery_mode,
                               'passwd' => $gallery_passwd,
                               ),
-                        $perm, $gallery_parent);
+                    $perm,
+                    $gallery_parent
+                );
 
                 $galleryId = $gallery->id;
                 $msg = sprintf(_("The gallery \"%s\" was created successfully."), $gallery_name);
@@ -385,8 +390,11 @@ class Ansel_View_GalleryProperties
                 Horde::url('img/upload.php')->add('gallery', $galleryId)->redirect();
             } catch (Ansel_Exception $e) {
                 $galleryId = null;
-                $error = sprintf(_("The gallery \"%s\" couldn't be created: %s"),
-                                 $gallery_name, $e->getMessage());
+                $error = sprintf(
+                    _("The gallery \"%s\" couldn't be created: %s"),
+                    $gallery_name,
+                    $e->getMessage()
+                );
                 Horde::log($error, 'ERR');
                 $GLOBALS['notification']->push($error, 'horde.error');
                 Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
@@ -437,9 +445,11 @@ class Ansel_View_GalleryProperties
                 try {
                     $generator = Ansel_ImageGenerator::factory(
                         substr($file, 0, -4),
-                        array('style' => Ansel::getStyleDefinition('ansel_default')));
+                        array('style' => Ansel::getStyleDefinition('ansel_default'))
+                    );
                     $thumbs[substr($file, 0, -4)] = $generator->title;
-                } catch (Ansel_Exception $e) {}
+                } catch (Ansel_Exception $e) {
+                }
             }
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Predefined gallery styles.  These are used to select a predefined set of
  * styles on the gallery's property page. Style may then be tweaked by the

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process an single image (to be called by ajax)
  *
@@ -39,8 +40,10 @@ if ($form->validate()) {
     }
 
     try {
-        $img->resize(min($conf['screen']['width'], $dimensions['width']),
-                     min($conf['screen']['height'], $dimensions['height']));
+        $img->resize(
+            min($conf['screen']['width'], $dimensions['width']),
+            min($conf['screen']['height'], $dimensions['height'])
+        );
     } catch (Horde_Image_Exception $e) {
         $notification->push($e->getMessage());
         Horde::url('faces/search/image.php')->redirect();

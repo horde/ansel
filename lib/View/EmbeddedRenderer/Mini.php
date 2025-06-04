@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_View_EmbeddedRenderer_Mini
  *
@@ -51,7 +52,7 @@ class Ansel_View_EmbeddedRenderer_Mini extends Ansel_View_Base
             'mini';
 
         if ($thumbsize != 'mini' && $thumbsize != 'thumb' && $thumbsize != 'screen') {
-             $thumbsize = 'mini';
+            $thumbsize = 'mini';
         }
         $thumbtype = !empty($this->_params['thumbtype']) ?
             $this->_params['thumbtype'] :
@@ -102,18 +103,22 @@ class Ansel_View_EmbeddedRenderer_Mini extends Ansel_View_Base
 
         if (empty($images)) {
             $images =
-            $json = self::json($this->gallery,
-                                array('full' => true,
+            $json = self::json(
+                $this->gallery,
+                array('full' => true,
                                       'from' => $start,
                                       'count' => $count,
                                       'image_view' => $thumbsize,
                                       'view_links' => true,
-                                      'generator' => $thumbtype));
-            $json_full = self::json($this->gallery,
-                                     array('full' => true,
+                                      'generator' => $thumbtype)
+            );
+            $json_full = self::json(
+                $this->gallery,
+                array('full' => true,
                                            'from' => $start,
                                            'count' => $count,
-                                           'view_links' => true));
+                                           'view_links' => true)
+            );
         } else {
             if ($thumbsize == 'thumb') {
                 $style = Ansel::getStyleDefinition('ansel_default');
@@ -185,13 +190,13 @@ class Ansel_View_EmbeddedRenderer_Mini extends Ansel_View_Base
             //]]>
 
 EOT;
-            /* Special requirements for lightbox */
-            if (!empty($lbjsurl)) {
-                $loading_img = Horde_Themes::img('lightbox/loading.gif');
-                $close_img = Horde_Themes::img('lightbox/closelabel.gif');
-                $imageText = _("Photo");
-                $labelOf = _("of");
-                $html .= <<<EOT
+        /* Special requirements for lightbox */
+        if (!empty($lbjsurl)) {
+            $loading_img = Horde_Themes::img('lightbox/loading.gif');
+            $close_img = Horde_Themes::img('lightbox/closelabel.gif');
+            $imageText = _("Photo");
+            $labelOf = _("of");
+            $html .= <<<EOT
                 if (typeof Effect == 'undefined') {
                     document.write('<script type="text/javascript" src="$effectsurl"></script>');
                 }

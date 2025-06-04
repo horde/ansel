@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Process an single image (to be called by ajax)
  *
@@ -35,10 +36,12 @@ if (!empty($name)) {
 
 $vars = Horde_Variables::getDefaultVariables();
 $pager = new Horde_Core_Ui_Pager(
-    'page', $vars,
+    'page',
+    $vars,
     array('num' => $count,
             'url' => 'faces/search/name.php',
-            'perpage' => $perpage));
+            'perpage' => $perpage)
+);
 $title = _("Search by name");
 
 $page_output->header(array(

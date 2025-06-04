@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_Queue_ProcessThumbs class provides a queue task for generating
  * thumbnails.
@@ -12,9 +13,8 @@
  * @package Ansel
  */
 
- class Ansel_Queue_ProcessThumbs implements Horde_Queue_Task
- {
-
+class Ansel_Queue_ProcessThumbs implements Horde_Queue_Task
+{
     protected $_images;
 
     /**
@@ -34,21 +34,22 @@
      *  - thumb (currently, only the image's gallery's configured style)
      *
      */
-     public function run()
-     {
+    public function run()
+    {
         global $prefs;
 
-         foreach ($this->_images as $id) {
+        foreach ($this->_images as $id) {
             try {
                 $image = $GLOBALS['injector']
                     ->getInstance('Ansel_Storage')
                     ->getImage($id);
-                $image->createView('screen', null, $prefs->getValue('watermark_auto') ? $prefs->getValue('watermark_text', '') : '');                $image->createView('thumb');
+                $image->createView('screen', null, $prefs->getValue('watermark_auto') ? $prefs->getValue('watermark_text', '') : '');
+                $image->createView('thumb');
                 $image->createView('mini');
             } catch (Ansel_Exception $e) {
                 Horde::log($e->getMessage, 'ERR');
             }
-         }
-     }
+        }
+    }
 
- }
+}

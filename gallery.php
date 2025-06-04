@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
  *
@@ -23,4 +24,3 @@ if (!Ansel_ActionHandler::galleryActions($actionID)) {
     Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
     exit;
 }
-

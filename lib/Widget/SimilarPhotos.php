@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Widget_SimilarPhotos:: class to display a widget containing mini
  * thumbnails of images that are similar, based on tags.
@@ -65,15 +66,17 @@ class Ansel_Widget_SimilarPhotos extends Ansel_Widget_Base
                 $img = $result['image'];
                 try {
                     $rGal = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($img->gallery);
-                    if ($rGal->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ))
-                    $html .= Ansel::getUrlFor(
+                    if ($rGal->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
+                        $html .= Ansel::getUrlFor(
                             'view',
-                             array('image' => $img->id,
-                                   'view' => 'Image',
-                                   'gallery' => abs($img->gallery),
-                                   'slug' => $rGal->get('slug')),
-                             true)->link(array('title' =>  sprintf(_("%s from %s"), $img->filename, $rGal->get('name'))))
-                        . '<img src="'. Ansel::getImageUrl($img->id, 'mini', true) . '" alt="' . htmlspecialchars($img->filename) . '" /></a>';
+                            array('image' => $img->id,
+                                       'view' => 'Image',
+                                       'gallery' => abs($img->gallery),
+                                       'slug' => $rGal->get('slug')),
+                            true
+                        )->link(array('title' =>  sprintf(_("%s from %s"), $img->filename, $rGal->get('name'))))
+                            . '<img src="'. Ansel::getImageUrl($img->id, 'mini', true) . '" alt="' . htmlspecialchars($img->filename) . '" /></a>';
+                    }
                 } catch (Ansel_Exception $e) {
                     Horde::log($e->getMessage(), 'ERR');
                 }

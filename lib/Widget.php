@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Widget:: class wraps the display of widgets to be displayed in various
  * Ansel_Views.

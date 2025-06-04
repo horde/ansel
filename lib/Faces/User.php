@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author  Duck <duck@obala.net>
  * @package Ansel

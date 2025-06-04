@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Tile_Gallery:: class wraps display of thumbnail 'tiles' displayed
  * for a gallery on the Ansel_View_Gallery view.
@@ -27,8 +28,11 @@ class Ansel_Tile_Gallery
      * @return  Outputs the HTML for the tile.
      */
     public static function getTile(
-        Ansel_Gallery $gallery, Ansel_Style $style = null, $mini = false, array $params = array())
-    {
+        Ansel_Gallery $gallery,
+        Ansel_Style $style = null,
+        $mini = false,
+        array $params = array()
+    ) {
         global $prefs, $registry, $injector;
 
         // Create view
@@ -65,10 +69,15 @@ class Ansel_Tile_Gallery
                 foreach ($galleries as $sgallery) {
                     if ($default_img = $sgallery->getKeyImage($style)) {
                         $view->gallery_image = Ansel::getImageUrl(
-                            $default_img, ($mini ? 'mini' : 'thumb'), true, $style);
+                            $default_img,
+                            ($mini ? 'mini' : 'thumb'),
+                            true,
+                            $style
+                        );
                     }
                 }
-            } catch (Ansel_Exception $e) {}
+            } catch (Ansel_Exception $e) {
+            }
 
         } elseif ($gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) &&
                   $gallery->countImages()) {
@@ -81,7 +90,8 @@ class Ansel_Tile_Gallery
                     $gallery->getKeyImage($style),
                     $thumbstyle,
                     true,
-                    $style);
+                    $style
+                );
             }
 
         }
@@ -99,13 +109,16 @@ class Ansel_Tile_Gallery
                     'gallery' => $gallery->id,
                     'view' => 'Gallery',
                     'havesearch' => $haveSearch,
-                    'slug' => $gallery->get('slug')));
+                    'slug' => $gallery->get('slug'))
+            );
         } else {
             $view->view_link = new Horde_Url(
                 str_replace(
                     array('%g', '%s'),
                     array($gallery->id, $gallery->get('slug')),
-                    urldecode($params['gallery_view_url'])));
+                    urldecode($params['gallery_view_url'])
+                )
+            );
         }
 
         if ($gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT) && !$mini) {
@@ -113,7 +126,8 @@ class Ansel_Tile_Gallery
                 array('gallery' => $gallery->id,
                       'actionID' => 'modify',
                       'havesearch' => $haveSearch,
-                      'url' => Horde::signUrl(Horde::selfUrl(true, false, true))));
+                      'url' => Horde::signUrl(Horde::selfUrl(true, false, true)))
+            );
         }
 
         if ($showOwner && !$mini &&
@@ -124,7 +138,8 @@ class Ansel_Tile_Gallery
                     'view' => 'List',
                     'owner' => $gallery->get('owner'),
                     'groupby' => 'owner'),
-                true);
+                true
+            );
             $view->owner_string = $gallery->getIdentity()->getValue('fullname');
             if (empty($view->owner_string)) {
                 $view->owner_string = $gallery->get('owner');

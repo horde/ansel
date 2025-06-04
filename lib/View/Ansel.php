@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Abstract Ansel_View class for Ansel UI specific views.
  * Copyright 2011-2017 Horde LLC (http://www.horde.org/)

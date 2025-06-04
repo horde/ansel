@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Gallery_Mode_Normal:: Class for encapsulating gallery methods that
  * depend on the current display mode of the gallery.
@@ -42,16 +43,18 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
             $numimages = $this->countImages();
             $num_galleries = $storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
-                array('parent' => $this->_gallery, 'all_levels' => false));
+                array('parent' => $this->_gallery, 'all_levels' => false)
+            );
 
             /* Now fetch the subgalleries, but only if we need to */
             if ($num_galleries > $from) {
                 $galleries = $storage->listGalleries(
-                        array('parent' => $this->_gallery->id,
+                    array('parent' => $this->_gallery->id,
                               'all_levels' => false,
                               'from' => $from,
                               'count' => $to,
-                              'sort_by' => 'name'));
+                              'sort_by' => 'name')
+                );
             }
         }
 
@@ -117,7 +120,8 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
                     $GLOBALS['registry']->getAuth(),
                     array('perm' => $perm,
                           'parent' => $this->_gallery,
-                          'all_levels' => false));
+                          'all_levels' => false)
+                );
 
         if (!$galleries_only) {
             $iCnt = $this->countImages(false);
@@ -159,7 +163,7 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
     public function moveImagesTo($images, $gallery)
     {
         if (!$gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
-          throw new Horde_Exception_PermissionDenied(("Access denied moving photos to this gallery."));
+            throw new Horde_Exception_PermissionDenied(("Access denied moving photos to this gallery."));
         } elseif (!$this->_gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::DELETE)) {
             throw new Horde_Exception_PermissionDenied(_("Access denied removing photos from this gallery."));
         }
@@ -219,7 +223,8 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
         /* Delete original image from VFS. */
         try {
             $GLOBALS['injector']->getInstance('Horde_Core_Factory_Vfs')->create('images')->deleteFile($image->getVFSPath('full'), $image->getVFSName('full'));
-        } catch (Horde_Vfs_Exception $e) {}
+        } catch (Horde_Vfs_Exception $e) {
+        }
 
         /* Delete from storage */
         $GLOBALS['injector']->getInstance('Ansel_Storage')->removeImage($image->id);

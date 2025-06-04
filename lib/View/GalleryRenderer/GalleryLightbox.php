@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright 2008-2017 Horde LLC (http://www.horde.org)
  * @author Michael J Rubinsky <mrubinsk@horde.org>

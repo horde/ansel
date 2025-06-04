@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Move tags from ansel to content storage.
  *
@@ -49,7 +50,8 @@ class AnselUpgradeTagsToContent extends Horde_Db_Migration_Base
                 $this->_tagger->tag(
                     $row['share_owner'],
                     array('object' => (string)$row['gallery_id'], 'type' => $this->_type_ids['gallery']),
-                    $row['tag_name']);
+                    $row['tag_name']
+                );
             }
             $this->announce('Gallery tags finished.');
             $sql = 'SELECT ansel_images.image_id AS iid, tag_name, share_owner FROM ansel_images '
@@ -62,7 +64,8 @@ class AnselUpgradeTagsToContent extends Horde_Db_Migration_Base
                 $this->_tagger->tag(
                     $row['share_owner'],
                     array('object' => (string)$row['gallery_id'], 'type' => $this->_type_ids['image']),
-                    $row['tag_name']);
+                    $row['tag_name']
+                );
             }
             $this->announce('Image tags finished.');
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Display summary information on top level galleries.
  *
@@ -17,7 +18,7 @@ class Ansel_Block_MyGalleries extends Horde_Core_Block
     {
         parent::__construct($app, $params);
         $this->_name = _("My Galleries");
-   }
+    }
 
     /**
      */
@@ -37,11 +38,12 @@ class Ansel_Block_MyGalleries extends Horde_Core_Block
     protected function _title()
     {
         return Ansel::getUrlFor(
-          'view',
-          array(
+            'view',
+            array(
             'groupby' => 'owner',
             'owner' => $GLOBALS['registry']->getAuth(),
-            'view' => 'List'))
+            'view' => 'List')
+        )
           ->link() . _("My Galleries") . '</a>';
     }
 
@@ -56,13 +58,14 @@ class Ansel_Block_MyGalleries extends Horde_Core_Block
             $galleries = $GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
                 ->listGalleries(
-                  array(
+                    array(
                     'perm' => Horde_Perms::EDIT,
                     'attributes' => $GLOBALS['registry']->getAuth(),
                     'all_levels' => false,
                     'count' => empty($this->_params['limit']) ? 0 : $this->_params['limit'],
                     'sort_by' => 'last_modified',
-                    'direction' => Ansel::SORT_DESCENDING));
+                    'direction' => Ansel::SORT_DESCENDING)
+                );
         } catch (Ansel_Exception $e) {
             return $e->getMessage();
         }
@@ -80,12 +83,13 @@ HEADER;
 
         foreach ($galleries as $gallery) {
             $url = Ansel::getUrlFor(
-              'view',
-              array(
+                'view',
+                array(
                   'view' => 'Gallery',
                   'slug' => $gallery->get('slug'),
                   'gallery' => $gallery->id),
-              true);
+                true
+            );
 
             $html .= '<tr><td>'
                 . $url->link(array('onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',

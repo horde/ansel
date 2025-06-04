@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright 2008-2017 Horde LLC (http://www.horde.org)
  * @author Michael J Rubinsky <mrubinsk@horde.org>
@@ -23,7 +24,6 @@
  */
 class Ansel_View_GalleryRenderer_Gallery extends Ansel_View_GalleryRenderer_Base
 {
-
     public function __construct(Ansel_View_Gallery $view = null)
     {
         parent::__construct($view);

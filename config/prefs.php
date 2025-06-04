@@ -1,4 +1,5 @@
 <?php
+
 /**
  * See horde/config/prefs.php for documentation on the structure of this file.
  *
@@ -92,7 +93,7 @@ $_prefs['facesperpage'] = array(
     'value' => '20',
     'type' => 'number',
     'desc' => _("Number of faces per page"),
-    'suppress' => function() {
+    'suppress' => function () {
         return empty($GLOBALS['conf']['faces']['driver']);
     }
 );

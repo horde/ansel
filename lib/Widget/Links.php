@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Ansel_Widget_links:: class to wrap the display of various feed links etc...
  *
@@ -30,7 +31,7 @@ class Ansel_Widget_Links extends Ansel_Widget_Base
         if (empty($this->_view->_params['image_id'])) {
             /* Gallery view */
             $params = array('count' => 10);
-            if (!empty($slug))  {
+            if (!empty($slug)) {
                 $params['gallery_slug'] = $slug;
             } else {
                 $params['gallery_id'] = $this->_view->gallery->id;

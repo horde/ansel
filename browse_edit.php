@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 1999-2017 Horde LLC (http://www.horde.org/)
  *
@@ -13,9 +14,11 @@ $blocks = $injector->getInstance('Horde_Core_Factory_BlockCollection')->create(a
 $layout = $blocks->getLayoutManager();
 
 // Handle requested actions.
-$layout->handle(Horde_Util::getFormData('action'),
-                (int)Horde_Util::getFormData('row'),
-                (int)Horde_Util::getFormData('col'));
+$layout->handle(
+    Horde_Util::getFormData('action'),
+    (int)Horde_Util::getFormData('row'),
+    (int)Horde_Util::getFormData('col')
+);
 if ($layout->updated()) {
     $prefs->setValue('myansel_layout', $layout->serialize());
     if ($url = Horde::verifySignedUrl(Horde_Util::getFormData('url'))) {

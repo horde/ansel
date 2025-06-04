@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Find faces and display faces UI for entire gallery.
  *
@@ -54,9 +55,9 @@ $pager = new Horde_Core_Ui_Pager(
         'perpage' => $perpage
     )
 );
-$pager->preserve('gallery',  $gallery_id);
+$pager->preserve('gallery', $gallery_id);
 
-$title = sprintf(_("Searching for faces in %s"),Ansel::getUrlFor('view', array('gallery' => $gallery_id, 'view' => 'Gallery'))->link() . $gallery->get('name') . '</a>');
+$title = sprintf(_("Searching for faces in %s"), Ansel::getUrlFor('view', array('gallery' => $gallery_id, 'view' => 'Gallery'))->link() . $gallery->get('name') . '</a>');
 $page_output->addScriptFile('stripe.js', 'horde');
 $page_output->addScriptFile('popup.js', 'horde');
 

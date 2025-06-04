@@ -26,7 +26,9 @@
             <?php echo $this->contentTag('a', _("None"), array('title' => _("Select None"), 'id' => 'anselgallery_select_none')) ?>
           </td>
           <td class="rightAlign">
-            <?php if ($this->option_delete || $this->option_move || $this->option_copy) echo _("Actions: ") ?>
+            <?php if ($this->option_delete || $this->option_move || $this->option_copy) {
+                echo _("Actions: ");
+            } ?>
             <?php if ($GLOBALS['conf']['gallery']['downloadzip']): ?>
               <?php echo $this->contentTag('a', _("Download selected photos"), array('class' => 'widget', 'id' => 'anselgallery_download')) ?> |
             <?php endif; ?>
@@ -58,7 +60,8 @@
           <tr><td colspan="<?php echo $this->tilesperrow ?>" valign="top"><?php echo $this->pager ?></td></tr>
           <tr>
           <?php
-            $count = 0; foreach ($this->results as $result): ?>
+            $count = 0;
+          foreach ($this->results as $result): ?>
               <td class="ansel-tile" width="<?php echo $this->cellwidth ?>%" valign="top"> <?php echo $result->getTile(null, $this->style, false, $this->params) ?></td>
               <?php if (!(++$count % $this->tilesperrow) && $count < $this->total): ?>
                 </tr><tr>
@@ -82,7 +85,7 @@
                 <?php if (!empty($this->owner)): ?>
                 <?php   $this->taglinks[$id]->add('owner', $this->owner) ?>
                 <?php endif ?>
-                <li><?php echo $this->contentTag('a', $this->h($taginfo['tag_name']), array('href' => strval($this->taglinks[$id]), 'title' => sprintf(ngettext("%d photo", "%d photos",$taginfo['total']),$taginfo['total']))) ?></li>
+                <li><?php echo $this->contentTag('a', $this->h($taginfo['tag_name']), array('href' => strval($this->taglinks[$id]), 'title' => sprintf(ngettext("%d photo", "%d photos", $taginfo['total']), $taginfo['total']))) ?></li>
               <?php endforeach ?>
             </ul></div>
           </div>

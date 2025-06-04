@@ -31,10 +31,10 @@
   <select name="gallery_parent" id="gallery_parent">
    <option value=""><?php echo _("Top Level Gallery") ?></option>
    <?php echo Ansel::selectGalleries(
-     array(
-       'selected' => $this->properties['parent'],
-       'perm' => Horde_Perms::EDIT,
-       'ignore' => $this->properties['id']))?>
+       array(
+         'selected' => $this->properties['parent'],
+         'perm' => Horde_Perms::EDIT,
+         'ignore' => $this->properties['id']))?>
   </select>
  </td>
 </tr>
@@ -92,7 +92,7 @@
    <select name="gallery_age">
      <option value="0" <?php echo (empty($this->properties['age']) ? 'selected="selected"' : '') ?>><?php echo _("Allow all ages") ?></option>
      <?php foreach ($this->ages as $age): ?>
-       <option value="<?php echo $age ?>" <?php echo ($this->properties['age'] == $age ? ' selected="selected"' : '' ) ?>> <?php echo sprintf(_("User must be over %d"), $age) ?> </option>
+       <option value="<?php echo $age ?>" <?php echo ($this->properties['age'] == $age ? ' selected="selected"' : '') ?>> <?php echo sprintf(_("User must be over %d"), $age) ?> </option>
      <?php endforeach; ?>
    </select>
   </td>
@@ -107,9 +107,15 @@
     <td class="rightAlign"><strong><?php echo _("Who should be allowed to download original photos?") ?></strong>&nbsp;</td>
     <td>
       <select name="gallery_download">
-        <option value="all" <?php if ($this->properties['download'] == 'all')  echo 'selected="selected"'; ?>><?php echo _("Anyone") ?></option>
-        <option value="authenticated" <?php if ($this->properties['download'] == 'authenticated') echo 'selected="selected"'; ?>><?php echo _("Authenticated users") ?></option>
-        <option value="edit" <?php if ($this->properties['download'] == 'edit') echo 'selected="selected"'; ?>><?php echo _("Users with edit permissions") ?></option>
+        <option value="all" <?php if ($this->properties['download'] == 'all') {
+            echo 'selected="selected"';
+        } ?>><?php echo _("Anyone") ?></option>
+        <option value="authenticated" <?php if ($this->properties['download'] == 'authenticated') {
+            echo 'selected="selected"';
+        } ?>><?php echo _("Authenticated users") ?></option>
+        <option value="edit" <?php if ($this->properties['download'] == 'edit') {
+            echo 'selected="selected"';
+        } ?>><?php echo _("Users with edit permissions") ?></option>
       </select>
     </td>
   </tr>
@@ -124,7 +130,9 @@
 <?php endif; ?>
 
 <!-- Gallery Style -->
-<?php if ($this->havePretty) { echo $this->renderPartial('styles'); }?>
+<?php if ($this->havePretty) {
+    echo $this->renderPartial('styles');
+}?>
 
 <!-- Submission -->
 <tr>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Ansel_View_List:: provides a view for handling lists of galleries.
  *
@@ -82,8 +83,9 @@ class Ansel_View_List extends Ansel_View_Ansel
         // Check for grouping.
         if (empty($this->_params['groupby'])) {
             $this->_view->groupby = Horde_Util::getFormData(
-              'groupby',
-              $prefs->getValue('groupby'));
+                'groupby',
+                $prefs->getValue('groupby')
+            );
         } else {
             $this->_view->groupby = $this->_params['groupby'];
         }
@@ -99,10 +101,10 @@ class Ansel_View_List extends Ansel_View_Ansel
 
         // Special?
         $this->_special = Horde_Util::getFormData('special');
-        if (!$this->_owner && !$this->_special && $this->_view->groupby != 'none' ) {
+        if (!$this->_owner && !$this->_special && $this->_view->groupby != 'none') {
             Ansel::getUrlFor(
-              'group',
-              array('groupby' => $this->_view->groupby)
+                'group',
+                array('groupby' => $this->_view->groupby)
             )->redirect();
             exit;
         }
@@ -122,7 +124,8 @@ class Ansel_View_List extends Ansel_View_Ansel
                 $getThese = array_slice(
                     $this->_params['gallery_ids'],
                     $this->_view->start,
-                    $this->_view->gPerPage);
+                    $this->_view->gPerPage
+                );
                 $this->_view->galleryList = $ansel_storage->getGalleries($getThese);
             } else {
                 $this->_view->galleryList = array();
@@ -138,7 +141,8 @@ class Ansel_View_List extends Ansel_View_Ansel
                 $registry->getAuth(),
                 array('attributes' => $filter,
                       'all_levels' => false,
-                      'tags' => !empty($params['tags']) ? $params['tags'] : null));
+                      'tags' => !empty($params['tags']) ? $params['tags'] : null)
+            );
 
             if ($this->_view->numGalleries == 0 && empty($this->_params['api'])) {
                 if ($this->_owner && $this->_owner == $registry->getAuth()) {
@@ -157,7 +161,8 @@ class Ansel_View_List extends Ansel_View_Ansel
                           'count' => $this->_view->gPerPage,
                           'sort_by' => $this->_view->sortBy,
                           'direction' => $this->_view->sortDir,
-                          'tags' => !empty($params['tags']) ? $params['tags'] : null));
+                          'tags' => !empty($params['tags']) ? $params['tags'] : null)
+                );
             }
         }
     }
@@ -222,12 +227,13 @@ class Ansel_View_List extends Ansel_View_Ansel
         } else {
             $override = false;
             $this->_pagerurl = Ansel::getUrlFor(
-              'view',
-               array(
+                'view',
+                array(
                  'owner' => $this->_owner,
                  'special' => $this->_special,
                  'groupby' => $this->_view->groupby,
-                 'view' => 'List'));
+                 'view' => 'List')
+            );
         }
         $p_params = array('num' => $this->_view->numGalleries,
                           'url' => $this->_pagerurl,
@@ -254,19 +260,21 @@ class Ansel_View_List extends Ansel_View_Ansel
 
             if ($this->_owner) {
                 $this->_view->refresh_link = Ansel::getUrlFor(
-                  'view',
-                   array(
+                    'view',
+                    array(
                      'groupby' => $this->_view->groupby,
                      'owner' => $this->_owner,
                      'page' => $this->_page,
-                     'view' => 'List'));
+                     'view' => 'List')
+                );
             } else {
                 $this->_view->refresh_link = Ansel::getUrlFor(
-                  'view',
-                  array(
+                    'view',
+                    array(
                     'view' => 'List',
                     'groupby' => $this->_view->groupby,
-                    'page' => $this->_page));
+                    'page' => $this->_page)
+                );
             }
 
             // Get top-level / default gallery style.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Horde_Widget_ImageFaces:: class to display a widget containing mini
  * thumbnails of faces in the image.
