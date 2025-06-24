@@ -173,7 +173,7 @@ EOT;
         if ($form->validate($vars)) {
             $valid = true;
             $uploaded = 0;
-            $info = $form->getInfo($vars, $info);
+            $info = $form->getInfo($vars);
 
             // Remember the ids of the images we uploaded so we can autogen
             $image_ids = array();

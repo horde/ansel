@@ -20,7 +20,7 @@ $form->setButtons(_("Upload"));
 
 if ($form->validate()) {
 
-    $info = $form->getInfo(null, $info);
+    $info = $form->getInfo(null);
 
     $tmp = Horde::getTempDir();
     $img = Ansel::getImageObject();
