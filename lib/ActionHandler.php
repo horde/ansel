@@ -391,7 +391,7 @@ class Ansel_ActionHandler
 
                 // Update existing image.
                 if ($form->validate($vars)) {
-                    $form->getInfo($vars, $info);
+                    $info = $form->getInfo($vars, $info);
                     // Replacing photo
                     if (!empty($info['file0']['file'])) {
                         try {
