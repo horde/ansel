@@ -1,4 +1,16 @@
 ---
+4.0.0-alpha6:
+  api: 4.0.0-alpha6
+  state:
+    release: alpha
+    api: alpha
+  date: 2026-03-07
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    fix: Drop unnecessary / uninitialized form parameter
+    fix: getInfo() no longer writes back to second parameter. Use return value.
 4.0.0-alpha5:
   api: 4.0.0-alpha1
   state:
