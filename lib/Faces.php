@@ -168,7 +168,7 @@ class Ansel_Faces
         }
 
         // Link for searching for similar faces.
-        if (Horde_Util::loadExtension('libpuzzle') !== false) {
+        if (extension_loaded('libpuzzle') !== false) {
             $html .= Horde::url('faces/search/image_search.php')->add('face_id', $face_id)->link() . _("Find similar") . '</a>';
         }
         $html .= '</td></tr></table></div>';

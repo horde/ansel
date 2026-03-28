@@ -642,7 +642,7 @@ class Ansel_Faces_Base
     {
         // can we get it?
         if (empty($GLOBALS['conf']['faces']['search']) ||
-            Horde_Util::loadExtension('libpuzzle') === false) {
+            extension_loaded('libpuzzle') === false) {
 
             return;
         }
@@ -707,7 +707,7 @@ class Ansel_Faces_Base
     public function getSignatureFromFile($filename)
     {
         if ($GLOBALS['conf']['faces']['search'] == 0 ||
-            Horde_Util::loadExtension('libpuzzle') === false) {
+            extension_loaded('libpuzzle') === false) {
 
             return '';
         }

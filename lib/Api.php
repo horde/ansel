@@ -282,13 +282,13 @@ class Ansel_Api extends Horde_Registry_Api
 
         switch ($compression) {
             case 'gzip':
-                if (Horde_Util::loadExtension('zlib')) {
+                if (extension_loaded('zlib')) {
                     return $upload ? gzuncompress($data) : gzcompress($data);
                 }
                 break;
 
             case 'lzf':
-                if (Horde_Util::loadExtension('lzf')) {
+                if (extension_loaded('lzf')) {
                     return $upload ? lzf_decompress($data) : lzf_compress($data);
                 }
                 break;

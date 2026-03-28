@@ -37,7 +37,7 @@ class Ansel_Faces_Facedetect extends Ansel_Faces_Base
      */
     protected function _getFaces($file)
     {
-        if (!Horde_Util::loadExtension('facedetect')) {
+        if (!extension_loaded('facedetect')) {
             throw new Ansel_Exception('You do not have the facedetect extension enabled in PHP');
         }
 
