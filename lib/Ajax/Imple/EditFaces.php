@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Util\Variables;
+
 /**
  * Imple for performing Ajax discovery and editing of image faces.
  *
@@ -35,7 +37,7 @@ class Ansel_Ajax_Imple_EditFaces extends Horde_Core_Ajax_Imple
 
     /**
      */
-    protected function _handle(Horde_Variables $vars)
+    protected function _handle(Variables|Horde_Variables $vars)
     {
         global $injector, $prefs;
 

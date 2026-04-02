@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Util\Variables;
+
 /**
  * Imple for performing AJAX setting of image captions.
  *
@@ -12,7 +14,7 @@ class Ansel_Ajax_Imple_EditCaption extends Horde_Core_Ajax_Imple_InPlaceEditor
 {
     /**
      */
-    protected function _handleEdit(Horde_Variables $vars)
+    protected function _handleEdit(Variables|Horde_Variables $vars)
     {
         $as = $GLOBALS['injector']->getInstance('Ansel_Storage');
         try {
