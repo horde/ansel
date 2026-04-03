@@ -66,7 +66,13 @@ $page_output->header(array(
 ));
 $notification->notify(array('listeners' => 'status'));
 echo $tabs->render(Horde_Util::getGet('search_faces', 'image'));
-$form->renderActive(null, null, null, 'post');
+$form->renderActive(
+    renderer: null,
+    vars: null,
+    action: null,
+    method: 'post',
+    enctype: 'multipart/form-data'
+);
 
 if (empty($name)) {
     // Do noting
