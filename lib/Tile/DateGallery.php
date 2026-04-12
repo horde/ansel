@@ -63,7 +63,7 @@ class Ansel_Tile_DateGallery
                 'month' => date('n', $full_date->timestamp()));
         } else {
             // unit == day
-            $view->caption = $full_date->strftime($date_format);
+            $view->caption = \Horde\Date\Format::formatDate($full_date->timestamp(), $date_format);
             $next_date = array(
                 'year' => date('Y', $full_date->timestamp()),
                 'month' => date('n', $full_date->timestamp()),
