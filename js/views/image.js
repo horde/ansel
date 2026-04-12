@@ -6,23 +6,24 @@ AnselImageView = {
             return;
         }
 
-        theElement = Event.element(e);
-        switch (theElement.tagName) {
+        switch (e.target.tagName) {
         case 'INPUT':
         case 'SELECT':
         case 'TEXTAREA':
             return;
         }
-        switch (e.keyCode || e.charCode) {
-        case Event.KEY_LEFT:
-            if ($('PrevLink')) {
-                document.location.href = $('PrevLink').href;
+        switch (e.key) {
+        case 'ArrowLeft':
+            var prev = document.getElementById('PrevLink');
+            if (prev) {
+                document.location.href = prev.href;
             }
             break;
 
-        case Event.KEY_RIGHT:
-            if ($('NextLink')) {
-                document.location.href = $('NextLink').href;
+        case 'ArrowRight':
+            var next = document.getElementById('NextLink');
+            if (next) {
+                document.location.href = next.href;
             }
             break;
         }
@@ -30,28 +31,32 @@ AnselImageView = {
 
     onload: function()
     {
-        Event.observe($('ansel-photodiv'), 'load', function() {
-            new Effect.Appear($('ansel-photodiv'), {
-                duration: 0.5,
-                afterFinish: function() {
-                    $$('.imgloading').each(function(n) { n.setStyle({ visibility: 'hidden' }) });
-                   new Effect.Appear($('anselcaption'), { duration: 0.5 });
-                }
-            });
+        var photo = document.getElementById('ansel-photodiv');
+        photo.addEventListener('load', function() {
+            photo.style.opacity = '1';
+            photo.style.transition = 'opacity 0.5s';
+            document.querySelectorAll('.imgloading').forEach(function(n) { n.style.visibility = 'hidden'; });
+            var caption = document.getElementById('anselcaption');
+            caption.style.opacity = '1';
+            caption.style.transition = 'opacity 0.5s';
+
             var nextImg = new Image();
             var prvImg = new Image();
             nextImg.src = AnselImageView.nextImgSrc;
             prvImg.src = AnselImageView.prevImgSrc;
         });
-        new Effect.Opacity('ansel-photodiv', {
-            to: 0,
-            duration: 0.5,
-            afterFinish: function() { $('ansel-photodiv').src = AnselImageView.urls['imgsrc'] }
+
+        // Fade out then load new image
+        photo.style.transition = 'opacity 0.5s';
+        photo.style.opacity = '0';
+        photo.addEventListener('transitionend', function handler() {
+            photo.removeEventListener('transitionend', handler);
+            photo.src = AnselImageView.urls['imgsrc'];
         });
 
         // Arrow keys for navigation
-        document.observe('keydown', AnselImageView.arrowHandler);
+        document.addEventListener('keydown', AnselImageView.arrowHandler);
     }
 };
 
-document.observe('dom:loaded', AnselImageView.onload);
+document.addEventListener('DOMContentLoaded', AnselImageView.onload);

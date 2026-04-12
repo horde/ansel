@@ -1,20 +1,24 @@
 function showFace(id)
 {
-    $('facediv' + id).addClassName('shown');
-    $('facethumb' + id).style.border = '1px solid red';
-    $('facedivname' + id).style.display = 'inline';
+    document.getElementById('facediv' + id).classList.add('shown');
+    document.getElementById('facethumb' + id).style.border = '1px solid red';
+    document.getElementById('facedivname' + id).style.display = 'inline';
 }
 function hideFace(id)
 {
-    $('facediv' + id).removeClassName('shown');
-    $('facethumb' + id).style.border = '1px solid black';
-    $('facedivname' + id).style.display = 'none';
+    document.getElementById('facediv' + id).classList.remove('shown');
+    document.getElementById('facethumb' + id).style.border = '1px solid black';
+    document.getElementById('facedivname' + id).style.display = 'none';
 }
-document.observe('dom:loaded', function() {
-    Event.observe($('ansel-photodiv'), 'load', function() {
-        if ($('faces-on-image')) {
-            $('faces-on-image').immediateDescendants().collect(function(element) {
-                element.clonePosition($('ansel-photodiv'), {setWidth: false, setHeight: false});
+document.addEventListener('DOMContentLoaded', function() {
+    var photo = document.getElementById('ansel-photodiv');
+    photo.addEventListener('load', function() {
+        var faces = document.getElementById('faces-on-image');
+        if (faces) {
+            var photoRect = photo.getBoundingClientRect();
+            Array.from(faces.children).forEach(function(element) {
+                element.style.left = photoRect.left + 'px';
+                element.style.top = photoRect.top + 'px';
             });
         }
     });

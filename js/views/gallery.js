@@ -99,23 +99,27 @@ var AnselGalleryView = {
 
     onLoad: function()
     {
-        $('anselgallery_select_all').observe('click', AnselGalleryView.selectAll);
-        $('anselgallery_select_none').observe('click', AnselGalleryView.selectNone);
-        if ($('anselgallery_download')) {
-            $('anselgallery_download').observe('click', AnselGalleryView.downloadSelected);
+        document.getElementById('anselgallery_select_all').addEventListener('click', AnselGalleryView.selectAll);
+        document.getElementById('anselgallery_select_none').addEventListener('click', AnselGalleryView.selectNone);
+        var dl = document.getElementById('anselgallery_download');
+        if (dl) {
+            dl.addEventListener('click', AnselGalleryView.downloadSelected);
         }
 
-        if ($('anselgallery_editdates')) {
-            $('anselgallery_editdates').observe('click', AnselGalleryView.editDates);
+        var ed = document.getElementById('anselgallery_editdates');
+        if (ed) {
+            ed.addEventListener('click', AnselGalleryView.editDates);
         }
-        if ($('anselgallery_copy')) {
-            $('anselgallery_copy').observe('click', AnselGalleryView.copySelected);
+        var cp = document.getElementById('anselgallery_copy');
+        if (cp) {
+            cp.addEventListener('click', AnselGalleryView.copySelected);
         }
-        if ($('anselgallery_move')) {
-            $('anselgallery_move').observe('click', AnselGalleryView.moveSelected);
-            $('anselgallery_delete').observe('click', AnselGalleryView.deleteSelected);
+        var mv = document.getElementById('anselgallery_move');
+        if (mv) {
+            mv.addEventListener('click', AnselGalleryView.moveSelected);
+            document.getElementById('anselgallery_delete').addEventListener('click', AnselGalleryView.deleteSelected);
         }
     }
 };
 
-document.observe('dom:loaded', AnselGalleryView.onLoad);
+document.addEventListener('DOMContentLoaded', AnselGalleryView.onLoad);

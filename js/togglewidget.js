@@ -7,21 +7,21 @@ function doActionToggle(node, pref_name)
 {
     togglePlusMinus(node, pref_name);
     node = node.replace('-toggle', '');
-    $(node).toggle();
+    var el = document.getElementById(node);
+    el.hidden = !el.hidden;
     return false;
 }
 
 function togglePlusMinus(node, pref_name)
 {
-    var pref_value;
+    var pref_value,
+        el = document.getElementById(node);
 
-    if ($(node).hasClassName('show')) {
-        $(node).removeClassName('show');
-        $(node).addClassName('hide');
+    if (el.classList.contains('show')) {
+        el.classList.replace('show', 'hide');
         pref_value = 1;
-    } else if ($(node).hasClassName('hide')) {
-        $(node).removeClassName('hide');
-        $(node).addClassName('show');
+    } else if (el.classList.contains('hide')) {
+        el.classList.replace('hide', 'show');
         pref_value = 0;
     }
 

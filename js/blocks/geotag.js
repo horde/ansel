@@ -1,22 +1,21 @@
-AnselBlockGeoTag = Class.create({
+function AnselBlockGeoTag(imgs, opts)
+{
+    this.opts = opts;
+    AnselMap.initMainMap('ansel_map', {
+        'onHover': function() { return true },
+        'onClick': function(f) {
+            var uri = f.feature.attributes.image_link;
+            location.href = uri;
+        }.bind(this),
+       'defaultBaseLayer': opts.defaultBaseLayer,
+       'onBaseLayerChange': this.updateBaseLayer.bind(this)
+    });
+    this.placeImages(imgs);
+}
 
+AnselBlockGeoTag.prototype = {
     _map: null,
     _imgs: null,
-
-    initialize: function(imgs, opts)
-    {
-        this.opts = opts;
-        AnselMap.initMainMap('ansel_map', {
-            'onHover': function() { return true },
-            'onClick': function(f) {
-                var uri = f.feature.attributes.image_link;
-                location.href = uri;
-            }.bind(this),
-           'defaultBaseLayer': opts.defaultBaseLayer,
-           'onBaseLayerChange': this.updateBaseLayer.bind(this)
-        });
-        this.placeImages(imgs);
-    },
 
     /**
      * Place image markers on the map.
@@ -47,13 +46,13 @@ AnselBlockGeoTag = Class.create({
 
     updateBaseLayer: function(l)
     {
-        new Ajax.Request(this.opts.layerUpdateEndpoint, {
-            method: 'post',
-            parameters: {
+        fetch(this.opts.layerUpdateEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
                 pref: this.opts.layerUpdatePref,
                 value: l.layer.name
-            }
+            })
         });
     }
-
-});
+};

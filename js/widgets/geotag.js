@@ -8,7 +8,21 @@
  *
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  */
-AnselGeoTagWidget = Class.create({
+function AnselGeoTagWidget(imgs, opts)
+{
+     var o = {
+        smallMap: 'ansel_map_small',
+        mainMap:  'ansel_map',
+        geocoder: 'None',
+        calculateMaxZoom: true,
+        deleteGeotagCallback: this.deleteLocation.bind(this),
+        defaultBaseLayer: false
+    };
+    this._images = imgs;
+    this.opts = Object.assign(o, opts || {});
+}
+
+AnselGeoTagWidget.prototype = {
     _bigMap: null,
     _smallMap: null,
     _images: null,
@@ -19,121 +33,117 @@ AnselGeoTagWidget = Class.create({
     opts: null,
     _iLayer: null,
 
-    /**
-     * Const'r.
-     *
-     * Required opts:
-     *   viewType [Gallery|Image]
-     *   relocateUrl [Url for relocate popup]
-     *   relocateText [Localized text]
-     *   deleteGeotagText [Localized text]
-     *   hasEdit [boolean do we have PERMS_EDIT?]
-     *   updateEndpoint [AJAX endpoint for updating image data]
-     */
-    initialize: function(imgs, opts)
-    {
-         var o = {
-            smallMap: 'ansel_map_small',
-            mainMap:  'ansel_map',
-            geocoder: 'None',
-            calculateMaxZoom: true,
-            deleteGeotagCallback: this.deleteLocation.bind(this),
-            defaultBaseLayer: false
-        };
-        this._images = imgs;
-        this.opts = Object.extend(o, opts || {});
-    },
-
     setLocation: function(img, lat, lng)
     {
-        new Ajax.Request(this.opts.updateEndpoint, {
-            method: 'post',
-            parameters: {
+        fetch(this.opts.updateEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
                 action: 'geotag',
                 img: img,
                 lat: lat,
                 lng: lng
-           },
-            onComplete: function(transport) {
-                 if (transport.responseJSON.response == 1) {
-                    var w = new Element('div');
-                    w.appendChild(new Element('div', {id: 'ansel_map'}));
-                    var ag = new Element('div', {'class': 'ansel_geolocation'});
-                    ag.appendChild(new Element('div', {id: 'ansel_locationtext'}));
-                    ag.appendChild(new Element('div', {id: 'ansel_latlng'}));
-                    ag.appendChild(new Element('div', {id: 'ansel_relocate'}));
-                    ag.appendChild(new Element('div', {id: 'ansel_deleteGeotag'}));
-                    w.appendChild(ag);
-                    w.appendChild(new Element('div', {id: 'ansel_map_small'}));
-                    $('ansel_geo_widget').update(w);
-                    this._images.unshift({
-                        image_id: img,
-                        image_latitude: lat,
-                        image_longitude: lng,
-                        image_location: '',
-                        markerOnly: true
-                    });
-                    this.doMap();
-                 }
-             }.bind(this)
-        });
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+             if (data.response == 1) {
+                var w = document.createElement('div');
+                var mapDiv = document.createElement('div');
+                mapDiv.id = 'ansel_map';
+                w.appendChild(mapDiv);
+                var ag = document.createElement('div');
+                ag.className = 'ansel_geolocation';
+                var locDiv = document.createElement('div');
+                locDiv.id = 'ansel_locationtext';
+                ag.appendChild(locDiv);
+                var latlngDiv = document.createElement('div');
+                latlngDiv.id = 'ansel_latlng';
+                ag.appendChild(latlngDiv);
+                var relocDiv = document.createElement('div');
+                relocDiv.id = 'ansel_relocate';
+                ag.appendChild(relocDiv);
+                var delDiv = document.createElement('div');
+                delDiv.id = 'ansel_deleteGeotag';
+                ag.appendChild(delDiv);
+                w.appendChild(ag);
+                var smallMapDiv = document.createElement('div');
+                smallMapDiv.id = 'ansel_map_small';
+                w.appendChild(smallMapDiv);
+                document.getElementById('ansel_geo_widget').innerHTML = '';
+                document.getElementById('ansel_geo_widget').appendChild(w);
+                this._images.unshift({
+                    image_id: img,
+                    image_latitude: lat,
+                    image_longitude: lng,
+                    image_location: '',
+                    markerOnly: true
+                });
+                this.doMap();
+             }
+         }.bind(this));
     },
 
     deleteLocation: function(iid)
     {
-        new Ajax.Request(this.opts.updateEndpoint, {
-            method: 'post',
-            parameters: {
+        fetch(this.opts.updateEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
                 action: 'untag',
                 img: iid
-            },
-            onComplete: function(transport) {
-                if (transport.responseJSON.response == 1) {
-                    $('ansel_geo_widget').update(transport.responseJSON.message);
-                }
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.response == 1) {
+                document.getElementById('ansel_geo_widget').innerHTML = data.message;
             }
         });
     },
 
     updateBaseLayer: function(l)
     {
-        new Ajax.Request(this.opts.layerUpdateEndpoint, {
-            method: 'post',
-            parameters: {
+        fetch(this.opts.layerUpdateEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
                 pref: this.opts.layerUpdatePref,
                 value: l.layer.name
-            }
+            })
         });
     },
 
     doMap: function()
     {
+        var self = this;
+
         // Create map and geocoder objects
         this._bigMap = AnselMap.initMainMap('ansel_map', {
             'onHover': function(e) {
                 switch (e.type) {
                 case 'featurehighlighted':
-                    if (this.opts.viewType == 'Gallery') {
-                        $$('#imagetile_' + e.feature.attributes.image_id + ' img')[0].toggleClassName('image-tile-highlight');
+                    if (self.opts.viewType == 'Gallery') {
+                        document.querySelector('#imagetile_' + e.feature.attributes.image_id + ' img').classList.toggle('image-tile-highlight'); // eslint-disable-line horde/no-prototype-methods -- native classList.toggle()
                     }
                     break;
                 case 'featureunhighlighted':
-                    if (this.opts.viewType == 'Gallery') {
-                        $$('#imagetile_' + e.feature.attributes.image_id + ' img')[0].toggleClassName('image-tile-highlight');
+                    if (self.opts.viewType == 'Gallery') {
+                        document.querySelector('#imagetile_' + e.feature.attributes.image_id + ' img').classList.toggle('image-tile-highlight'); // eslint-disable-line horde/no-prototype-methods -- native classList.toggle()
                     }
                 }
                 return true;
-            }.bind(this),
+            },
 
             'onClick': function(f) {
-                if (f.object.name == this.opts.markerLayerTitle) {
-                   this._bigMap.setCenter(f.feature.getLonLat());
-                   this._bigMap.zoomToFit();
+                if (f.object.name == self.opts.markerLayerTitle) {
+                   self._bigMap.setCenter(f.feature.getLonLat());
+                   self._bigMap.zoomToFit();
                    return false;
                 }
                 var uri = f.feature.attributes.image_link;
                 location.href = uri;
-            }.bind(this),
+            },
             'onBaseLayerChange': this.updateBaseLayer.bind(this),
             'imageLayer': (this.opts.viewType == 'Image') ? true : false,
             'imageLayerText': this.opts.imageLayerTitle,
@@ -145,7 +155,7 @@ AnselGeoTagWidget = Class.create({
 
         // Place the image markers
         var centerImage;
-        this._images.each(function(img) {
+        this._images.forEach(function(img) {
             if (img.markerOnly) {
                 // Only here in ImageView and for the current image
                 AnselMap.placeMapMarker(
@@ -159,8 +169,8 @@ AnselGeoTagWidget = Class.create({
                 (function() {
                     var p = img;
                     var f = m;
-                    this.getLocation(p, m);
-                }.bind(this))();
+                    self.getLocation(p, m);
+                })();
                 centerImage = img;
                 return;
             }
@@ -181,7 +191,7 @@ AnselGeoTagWidget = Class.create({
             );
 
             // Watch for hover on imagetiles too, need closures
-            if (this.opts.viewType == 'Gallery') {
+            if (self.opts.viewType == 'Gallery') {
                 AnselMap.placeMapMarker(
                     'ansel_map_small',
                     {
@@ -191,21 +201,21 @@ AnselGeoTagWidget = Class.create({
                 );
                 (function() {
                     var f = m;
-                    $$('#imagetile_' + img.image_id + ' img')[0].observe(
+                    document.querySelector('#imagetile_' + img.image_id + ' img').addEventListener(
                         'mouseover',
                         function(e) {
                             AnselMap.selectMarker('ansel_map', f);
                         }
                     );
-                    $$('#imagetile_' + img.image_id + ' img')[0].observe(
+                    document.querySelector('#imagetile_' + img.image_id + ' img').addEventListener(
                         'mouseout',
                         function(e) {
                             AnselMap.unselectMarker('ansel_map', f);
                         }
                     );
-                }.bind(this))();
+                })();
             }
-        }.bind(this));
+        });
         if (centerImage) {
             AnselMap.placeMapMarker(
                 'ansel_map',
@@ -224,7 +234,6 @@ AnselGeoTagWidget = Class.create({
                 }
             );
         } else {
-            //this._bigMap.markerLayer.redraw();
             this._bigMap.zoomToFit();
         }
         // Attempt to make a good guess as to where to center the mini-map
@@ -249,7 +258,7 @@ AnselGeoTagWidget = Class.create({
         } else {
             this.geocoder.reverseGeocode(
                 { lat: p.image_latitude, lon: p.image_longitude },
-                this.getLocationCallback.bind(this).curry(p, true, m),
+                this.getLocationCallback.bind(this, p, true, m),
                 this.onError.bind(this));
         }
     },
@@ -264,46 +273,48 @@ AnselGeoTagWidget = Class.create({
      */
     getLocationCallback: function(i, u, m, r)
     {
+        var self = this;
         // Update image view links
         if (i.markerOnly) {
             if (r.length) {
-                r.each(function(result) {
+                var found = false;
+                r.forEach(function(result) {
+                    if (found) {
+                        return;
+                    }
                     if (result.precision == 1) {
-                        if (this.locationId) {
-                            $(this.locationId).update(result.address);
+                        if (self.locationId) {
+                            document.getElementById(self.locationId).textContent = result.address;
                         }
-                        if (this.coordId) {
-                            $(this.coordId).update(AnselMap.point2Deg({ lat: result.lat, lon: result.lon }));
+                        if (self.coordId) {
+                            document.getElementById(self.coordId).textContent = AnselMap.point2Deg({ lat: result.lat, lon: result.lon });
                         }
-                        if (this.relocateId) {
-                            $(this.relocateId).update(this._getRelocateLink(i.image_id));
+                        if (self.relocateId) {
+                            var relocateEl = document.getElementById(self.relocateId);
+                            relocateEl.innerHTML = '';
+                            relocateEl.appendChild(self._getRelocateLink(i.image_id));
                         }
-                        if (this.deleteId) {
-                            $(this.deleteId).update(this._getDeleteLink(i.image_id));
+                        if (self.deleteId) {
+                            var deleteEl = document.getElementById(self.deleteId);
+                            deleteEl.innerHTML = '';
+                            deleteEl.appendChild(self._getDeleteLink(i.image_id));
                         }
                         // Save the results?
                         if (u) {
-                            new Ajax.Request(this.opts.updateEndpoint,
-                                {
-                                    method: 'post',
-                                    parameters: {
-                                        action: 'location',
-                                        location: result.address,
-                                        img: i.image_id
-                                   }
-                                }
-                            );
+                            fetch(self.opts.updateEndpoint, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: new URLSearchParams({
+                                    action: 'location',
+                                    location: result.address,
+                                    img: i.image_id
+                                })
+                            });
                         }
-                        throw $break;
+                        found = true;
                    }
-               }.bind(this));
+               });
            }
-        } else if (this.opts.viewType == 'Gallery') {
-            // console.log('foobar');
-            // $$('#imagetile_' + i.image_id + ' img')[0].observe('mouseover', function(e) {
-            //     console.log(e);
-            //     e.toggleClassName('image-tile-highlight');
-            // });
         }
     },
 
@@ -314,42 +325,43 @@ AnselGeoTagWidget = Class.create({
     _getRelocateLink: function(iid)
     {
         if (this.opts.hasEdit) {
-            var a = new Element('a', {
-                href: this.opts.relocateUrl + '?image=' + iid }
-            ).update(this.opts.relocateText);
+            var a = document.createElement('a');
+            a.href = this.opts.relocateUrl + '?image=' + iid;
+            a.textContent = this.opts.relocateText;
 
-            a.observe('click', function(e) {
+            var self = this;
+            a.addEventListener('click', function(e) {
                 HordePopup.popup({
-                    url: this.opts.relocateUrl,
+                    url: self.opts.relocateUrl,
                     params: { 'image': iid },
                     width: 720,
                     height: 520
                 });
-                e.stop();
-            }.bind(this));
+                e.preventDefault();
+            });
 
             return a;
         } else {
-            return '';
+            return document.createTextNode('');
         }
     },
 
     _getDeleteLink: function(iid)
     {
         if (this.opts.hasEdit) {
-            var x = new Element('a', {
-                href: this.opts.relocateUrl + '?image=' + iid }
-            ).update(this.opts.deleteGeotagText);
+            var x = document.createElement('a');
+            x.href = this.opts.relocateUrl + '?image=' + iid;
+            x.textContent = this.opts.deleteGeotagText;
 
-            x.observe('click', function(img, e) {
-                this.opts.deleteGeotagCallback(img);
-                e.stop();
-            }.curry(iid).bindAsEventListener(this));
+            var self = this;
+            x.addEventListener('click', function(e) {
+                self.opts.deleteGeotagCallback(iid);
+                e.preventDefault();
+            });
 
             return x;
         } else {
-            return '';
+            return document.createTextNode('');
         }
     }
-
-});
+};
