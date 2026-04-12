@@ -140,7 +140,7 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
                     $caption .= '...';
                 }
                 $html .= '<tr><td>'
-                    . strftime('%x', $comment['message_timestamp'])
+                    . \Horde\Date\Format::formatDate($comment['message_timestamp'], '%x')
                     . '</td><td class="nowrap">'
                     . $url->link(array('onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
                                        'onmouseover' => 'previewImage(event, ' . $comment['image_id'] . ');'))

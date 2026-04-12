@@ -95,7 +95,7 @@ HEADER;
                 . $url->link(array('onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
                                    'onmouseover' => 'Ansel.previewImage(event, ' . $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')) . ');'))
                 . htmlspecialchars($gallery->get('name')) . '</a></td><td>'
-                . strftime($GLOBALS['prefs']->getValue('date_format'), $gallery->get('last_modified'))
+                . \Horde\Date\Format::formatDate($gallery->get('last_modified'), $GLOBALS['prefs']->getValue('date_format'))
                 . '</td><td>' . (int)$gallery->countImages(true) . '</td></tr>';
         }
         $html .= '</tbody></table>';

@@ -622,7 +622,7 @@ class Ansel_ActionHandler
                         array_values($watermark_array),
                         $watermark
                     );
-                    $watermark = strftime($watermark);
+                    $watermark = \Horde\Date\Format::formatDate(time(), $watermark);
                 }
                 if (!$gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
                     $notification->push(

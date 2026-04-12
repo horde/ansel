@@ -170,7 +170,7 @@ HEADER;
                     'gallery_view' => $style->gallery_view)
             );
 
-            $html .= '<tr><td>' . strftime('%x', $image->uploaded)
+            $html .= '<tr><td>' . \Horde\Date\Format::formatDate($image->uploaded, '%x')
                 . '</td><td class="nowrap">'
                 . $url->link(
                     array(
