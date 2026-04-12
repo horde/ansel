@@ -22,7 +22,6 @@ var SlideController = {
     baseUrl: null,
     galleryId: 0,
     playing: false,
-    interval: null,
     tempImage: new Image(),
 
     /**
@@ -34,13 +33,13 @@ var SlideController = {
         SlideController.baseUrl = baseUrl;
         SlideController.galleryId = galleryId;
 
-        Event.observe(window, 'load', function() {
+        window.addEventListener('load', function() {
             SlideController.photos = photos;
             SlideController.photo = new Slide(SlideController.photoId);
-            Event.observe(SlideController.tempImage, 'load', function() {
+            SlideController.tempImage.addEventListener('load', function() {
                 SlideController.photo.initSwap(SlideController.tempImage.width, SlideController.tempImage.height);
             });
-            Event.observe($(SlideController.photo.photo), 'load', function() {
+            document.getElementById(SlideController.photo.photo).addEventListener('load', function() {
                 SlideController.photo.showPhoto();
             });
 
@@ -55,8 +54,8 @@ var SlideController = {
      */
     play: function()
     {
-        $('ssPlay').hide();
-        $('ssPause').show();
+        document.getElementById('ssPlay').hidden = true;
+        document.getElementById('ssPause').hidden = false;
         // This sets the first interval for the currently displayed image.
         if (SlideController.interval) {
             clearTimeout(SlideController.interval);
@@ -70,8 +69,8 @@ var SlideController = {
      */
     pause: function()
     {
-        $('ssPause').hide();
-        $('ssPlay').show();
+        document.getElementById('ssPause').hidden = true;
+        document.getElementById('ssPlay').hidden = false;
         if (SlideController.interval) {
             clearTimeout(SlideController.interval);
         }
@@ -94,7 +93,7 @@ var SlideController = {
         SlideController.photo.nextPhoto();
     }
 
-}
+};
 
 // -----------------------------------------------------------------------------------
 //
@@ -113,24 +112,22 @@ var SlideController = {
 // Various changes for properly updating image links, image comments, get rid
 // of redundant functions that prototype can take care of etc...
 // added 4/07 by Michael Rubinsky <mrubinsk@horde.org>
-var Slide = Class.create();
-Slide.prototype =
+function Slide(photoId)
 {
-    initialize: function(photoId)
-    {
-        this.photoId = photoId;
-        this.photo = 'anselphoto';
-        this.captionBox = 'anselcaptioncontainer';
-        this.caption = 'anselcaption';
-    },
+    this.photoId = photoId;
+    this.photo = 'anselphoto';
+    this.captionBox = 'anselcaptioncontainer';
+    this.caption = 'anselcaption';
+}
 
+Slide.prototype = {
     setNewPhotoParams: function()
     {
         // Set source of new image.
-        $(this.photo).src = SlideController.photos[SlideController.photoId][0];
+        document.getElementById(this.photo).src = SlideController.photos[SlideController.photoId][0];
 
         // Add caption from gallery array.
-        $(this.caption).update(SlideController.photos[SlideController.photoId][2]);
+        document.getElementById(this.caption).textContent = SlideController.photos[SlideController.photoId][2];
 
         document.title = document.title.replace(SlideController.photos[this.photoId][1],
                                                 SlideController.photos[SlideController.photoId][1]);
@@ -139,35 +136,45 @@ Slide.prototype =
     updateLinks: function()
     {
         var params = '?gallery=' + SlideController.galleryId + '&image=' + SlideController.photos[SlideController.photoId][3] + '&page=' + SlideController.photos[SlideController.photoId][4];
-        $('PhotoName').update(SlideController.photos[SlideController.photoId][1]);
-        if ($('image_properties_link')) {
-            $('image_properties_link').href = SlideController.baseUrl + '/image.php' + params + '&actionID=modify';
-            $('image_properties_link').stopObserving('click');
-            $('image_properties_link').observe('click', function(e){ SlideController.pause();HordePopup.popup({ url: this.href }); e.stop(); });
+        document.getElementById('PhotoName').textContent = SlideController.photos[SlideController.photoId][1];
+        var propLink = document.getElementById('image_properties_link');
+        if (propLink) {
+            propLink.href = SlideController.baseUrl + '/image.php' + params + '&actionID=modify';
+            propLink.onclick = function(e){ SlideController.pause();HordePopup.popup({ url: this.href }); e.preventDefault(); };
         }
-        if ($('image_edit_link')) {
-            $('image_edit_link').href = SlideController.baseUrl + '/image.php' + params + '&actionID=editimage';
+        var editLink = document.getElementById('image_edit_link');
+        if (editLink) {
+            editLink.href = SlideController.baseUrl + '/image.php' + params + '&actionID=editimage';
         }
-        if ($('image_ecard_link')) {
-          $('image_ecard_link').href = SlideController.baseUrl + '/img/ecard.php?image=' + SlideController.photos[SlideController.photoId][3] + '&gallery=' + SlideController.galleryId;
-          $('image_ecard_link').stopObserving('click');
-          $('image_ecard_link').observe('click', function(e){ SlideController.pause();HordePopup.popup({ url: this.href }); e.stop(); });
+        var ecardLink = document.getElementById('image_ecard_link');
+        if (ecardLink) {
+          ecardLink.href = SlideController.baseUrl + '/img/ecard.php?image=' + SlideController.photos[SlideController.photoId][3] + '&gallery=' + SlideController.galleryId;
+          ecardLink.onclick = function(e){ SlideController.pause();HordePopup.popup({ url: this.href }); e.preventDefault(); };
         }
-        if ($('image_delete_link')) {
-            //TODO : Guess we should have PHP save the localized text for this...
-            var deleteAction = function() { SlideController.pause(); if (!window.confirm("Do you want to permanently delete " +  SlideController.photos[SlideController.photoId][1])) { alert("blah"); return false; } return true;};
-            $('image_delete_link').href = SlideController.baseUrl + '/image.php' + params + '&actionID=delete';
-            $('image_delete_link').stopObserving('click');
-            $('image_delete_link').observe('click', function(e) { return deleteAction(); e.stop(); });
+        var deleteLink = document.getElementById('image_delete_link');
+        if (deleteLink) {
+            var deleteAction = function() { SlideController.pause(); if (!window.confirm("Do you want to permanently delete " +  SlideController.photos[SlideController.photoId][1])) { return false; } return true;};
+            deleteLink.href = SlideController.baseUrl + '/image.php' + params + '&actionID=delete';
+            deleteLink.onclick = function(e) { return deleteAction(); };
         }
-        $('image_download_link').href = SlideController.baseUrl + '/img/download.php?image=' + SlideController.photos[SlideController.photoId][3];
-        $('image_download_link').stopObserving('click');
-        $('image_download_link').observe('click', function(e) { SlideController.pause(); e.stop(); });
+        var dlLink = document.getElementById('image_download_link');
+        dlLink.href = SlideController.baseUrl + '/img/download.php?image=' + SlideController.photos[SlideController.photoId][3];
+        dlLink.onclick = function(e) { SlideController.pause(); };
     },
 
     showPhoto: function()
     {
-        new Effect.Appear(this.photo, { duration: 1.0, queue: 'end', afterFinish: (function() { $(this.captionBox).show(); this.updateLinks();}).bind(this) });
+        var photoEl = document.getElementById(this.photo),
+            captionBoxEl = document.getElementById(this.captionBox),
+            self = this;
+
+        photoEl.style.transition = 'opacity 1s';
+        photoEl.style.opacity = '1';
+        photoEl.addEventListener('transitionend', function handler() {
+            photoEl.removeEventListener('transitionend', handler);
+            captionBoxEl.hidden = false;
+            self.updateLinks();
+        });
 
         if (SlideController.playing) {
             if (SlideController.interval) {
@@ -195,9 +202,25 @@ Slide.prototype =
 
     initSwap: function(w, h)
     {
+        var captionBoxEl = document.getElementById(this.captionBox),
+            photoEl = document.getElementById(this.photo),
+            self = this;
+
         // Begin by hiding main elements.
-        new Effect.Fade(this.captionBox, {duration: 0.5 });
-        new Effect.Fade(this.photo, { duration: 1.0, afterFinish: (function(w, h) { if (w) { this.fixSize(w, h); } SlideController.photo.setNewPhotoParams();}.bind(this, w, h))});
+        captionBoxEl.style.transition = 'opacity 0.5s';
+        captionBoxEl.style.opacity = '0';
+        captionBoxEl.addEventListener('transitionend', function handler() {
+            captionBoxEl.removeEventListener('transitionend', handler);
+            captionBoxEl.hidden = true;
+        });
+
+        photoEl.style.transition = 'opacity 1s';
+        photoEl.style.opacity = '0';
+        photoEl.addEventListener('transitionend', function handler() {
+            photoEl.removeEventListener('transitionend', handler);
+            if (w) { self.fixSize(w, h); }
+            SlideController.photo.setNewPhotoParams();
+        });
 
         // Update the current photo id.
         this.photoId = SlideController.photoId;
@@ -205,26 +228,25 @@ Slide.prototype =
 
     fixSize: function(w, h)
     {
-        $(this.photo).width = w;
-        $(this.photo).height = h;
-        $(this.captionBox).style.width = w + 'px';
+        document.getElementById(this.photo).width = w;
+        document.getElementById(this.photo).height = h;
+        document.getElementById(this.captionBox).style.width = w + 'px';
     }
-
-}
+};
 
 // Arrow keys for navigation
-document.observe('keydown', function(e) {
+document.addEventListener('keydown', function(e) {
     if (e.altKey || e.shiftKey || e.ctrlKey) {
         return;
     }
 
-    switch (e.keyCode || e.charCode) {
-    case Event.KEY_LEFT:
+    switch (e.key) {
+    case 'ArrowLeft':
         SlideController.prev();
         break;
 
-    case Event.KEY_RIGHT:
-        SlideController.next();
+    case 'ArrowRight':
+        SlideController.next(); // eslint-disable-line horde/no-prototype-methods -- SlideController.next()
         break;
     }
 });

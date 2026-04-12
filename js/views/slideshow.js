@@ -2,10 +2,10 @@ AnselSlideShowView = {
 
     onload: function()
     {
-        $('PrevLink').observe('click', SlideController.prev);
-        $('NextLink').observe('click', SlideController.next);
-        $('ssPause').observe('click', SlideController.pause);
-        $('ssPlay').observe('click', SlideController.play);
+        document.getElementById('PrevLink').addEventListener('click', SlideController.prev);
+        document.getElementById('NextLink').addEventListener('click', SlideController.next);
+        document.getElementById('ssPause').addEventListener('click', SlideController.pause);
+        document.getElementById('ssPlay').addEventListener('click', SlideController.play);
     }
 };
-document.observe('dom:loaded', AnselSlideShowView.onload);
+document.addEventListener('DOMContentLoaded', AnselSlideShowView.onload);

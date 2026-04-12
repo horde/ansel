@@ -8,34 +8,34 @@
  *
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  */
-AnselMapEdit = Class.create({
+function AnselMapEdit(img, opts)
+{
+    this._img = img[0];
+    this._opts = Object.assign(
+        {
+            'geocoder': 'Null'
+        },
+        opts
+    );
+    this._map = AnselMap.initEditMap('ansel_map', {
+        'mapClick': this._mapClickHandler.bind(this),
+        'markerDragEnd': this._markerMoveHandler.bind(this)
+    });
+    this._geocoder = new HordeMap.Geocoder[this._opts.geocoder](this._map, 'ansel_map');
+    if (this._img.image_location) {
+        this.setLocation(
+            this._img.image_latitude,
+            this._img.image_longitude,
+            this._img.image_location);
+    }
+}
+
+AnselMapEdit.prototype = {
     _marker: null,
     _map: null,
     _geocoder: null,
     _opts: null,
     _img: null,
-
-    initialize: function(img, opts)
-    {
-        this._img = img[0];
-        this._opts = Object.extend(
-            {
-                'geocoder': 'Null'
-            },
-            opts
-        );
-        this._map = AnselMap.initEditMap('ansel_map', {
-            'mapClick': this._mapClickHandler.bind(this),
-            'markerDragEnd': this._markerMoveHandler.bind(this)
-        });
-        this._geocoder = new HordeMap.Geocoder[this._opts.geocoder](this._map, 'ansel_map');
-        if (this._img.image_location) {
-            this.setLocation(
-                this._img.image_latitude,
-                this._img.image_longitude,
-                this._img.image_location);
-        }
-    },
 
     placeMapMarker: function(ll)
     {
@@ -65,25 +65,27 @@ AnselMapEdit = Class.create({
     {
         this._geocoder.geocode(
             loc,
-            this._geocodeCallback.curry(loc).bind(this),
+            this._geocodeCallback.bind(this, loc),
             this._onError.bind(this));
     },
 
     save: function()
     {
-        new Ajax.Request(this._opts.ajaxuri, {
-            method: 'post',
-            parameters: {
+        fetch(this._opts.ajaxuri, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
                 action: 'geotag',
                 img: this._opts.image_id,
                 lat: this._marker.getLonLat().lat,
                 lng: this._marker.getLonLat().lon
-            },
-            onComplete: function(transport) {
-                if (transport.responseJSON.response > 0) {
-                    window.opener.location.href = window.opener.location.href;
-                    window.close();
-                }
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
+            if (data.response > 0) {
+                window.opener.location.href = window.opener.location.href;
+                window.close();
             }
         });
     },
@@ -121,26 +123,25 @@ AnselMapEdit = Class.create({
         if (r.length) {
             for (var i = 0; i < r.length; i++) {
                 if (r[i].precision === 1) {
-                    $('ansel_locationtext').update(r[i].address);
-                    $('ansel_latlng').update(AnselMap.point2Deg(r[i]));
+                    document.getElementById('ansel_locationtext').textContent = r[i].address;
+                    document.getElementById('ansel_latlng').textContent = AnselMap.point2Deg(r[i]);
                     break;
                 }
             }
         } else {
-            $('ansel_locationtext').update('');
-            $('ansel_latlng').update('');
+            document.getElementById('ansel_locationtext').textContent = '';
+            document.getElementById('ansel_latlng').textContent = '';
         }
     },
 
     _updateFields: function(ll, loc)
     {
-        $('ansel_locationtext').update(loc);
-        $('ansel_latlng').update(AnselMap.point2Deg(ll));
+        document.getElementById('ansel_locationtext').textContent = loc;
+        document.getElementById('ansel_latlng').textContent = AnselMap.point2Deg(ll);
     },
 
     _onError: function(r)
     {
-        $('ansel_locationtext').update('');
+        document.getElementById('ansel_locationtext').textContent = '';
     }
-
-});
+};

@@ -1,10 +1,10 @@
 //<![CDATA[
-Event.observe(window, 'load', function() {
+window.addEventListener('load', function() {
     // The number of unique, embedded instances
     var nodeCount = anselnodes.length;
 
     // Holds any lightbox json
-    var lightboxData = new Array();
+    var lightboxData = [];
 
     // Iterate over each embedded instance and create the DOM elements.
     for (var n = 0; n < nodeCount; n++) {
@@ -18,13 +18,13 @@ Event.observe(window, 'load', function() {
         }
 
         // Top level DOM node for this embedded instannce
-        var mainNode = $(j);
+        var mainNode = document.getElementById(j);
 
         // Used if we have requested the optional paging feature
         if (anseljson[j]['perpage']) {
             var pagecount = anseljson[j]['perpage'];
         } else {
-            var pagecount = anseljson[j]['data'].size();
+            var pagecount = anseljson[j]['data'].length;
         }
 
         // For each image in this instance, create the DOM structure
@@ -33,29 +33,33 @@ Event.observe(window, 'load', function() {
             (function() {
                 var jx = j;
                 var ix = i;
-                var imgContainer = new Element('span', {className: 'anselGalleryWidget'});
+                var imgContainer = document.createElement('span');
+                imgContainer.className = 'anselGalleryWidget';
                 if (!anseljson[jx]['hideLinks']) {
                     if (anseljson[jx]['linkToGallery']) {
                         var idx = 6;
                     } else {
                         var idx = 5;
                     }
-                    var imgLink = imgContainer.appendChild(new Element('a',
-                        {
-                            href: anseljson[jx]['data'][ix][idx],
-                            title: anseljson[jx]['data'][ix][2]
-                         }));
+                    var imgLink = document.createElement('a');
+                    imgLink.href = anseljson[jx]['data'][ix][idx];
+                    imgLink.title = anseljson[jx]['data'][ix][2];
+                    imgContainer.appendChild(imgLink);
                    var lb_data = {image: anseljson[jx]['data'][ix][3]};
-                   imgLink.appendChild(new Element('img', {src: anseljson[jx]['data'][ix][0]}));
+                   var img = document.createElement('img');
+                   img.src = anseljson[jx]['data'][ix][0];
+                   imgLink.appendChild(img);
                    // Attach the lightbox action if we have lightbox data
                    if (typeof anseljson[j]['lightbox'] != 'undefined') {
-                       imgLink.observe('click', function(e) {ansel_lb.start(lb_data.image); e.stop();});
+                       imgLink.addEventListener('click', function(e) {ansel_lb.start(lb_data.image); e.preventDefault();});
                    }
                 } else {
-                    imgContainer.appendChild(new Element('img', {src: anseljson[jx]['data'][ix][0]}));
+                    var img = document.createElement('img');
+                    img.src = anseljson[jx]['data'][ix][0];
+                    imgContainer.appendChild(img);
                     // Attach the lightbox action if we have lightbox data
                     if (typeof anseljson[j]['lightbox'] != 'undefined') {
-                        imgLink.observe('click', function(e) {ansel_lb.start(lb_data.image); e.stop();});
+                        imgLink.addEventListener('click', function(e) {ansel_lb.start(lb_data.image); e.preventDefault();});
                     }
                 }
 
@@ -67,17 +71,25 @@ Event.observe(window, 'load', function() {
             (function() {
                 var jx = j;
 
-                var nextLink = new Element('a',{href: '#', title: 'Next Image', className: 'anselNext', style: 'text-decoration:none;width:40%;float:right;'});
-                nextLink.update('>>');
+                var nextLink = document.createElement('a');
+                nextLink.href = '#';
+                nextLink.title = 'Next Image';
+                nextLink.className = 'anselNext';
+                nextLink.style.cssText = 'text-decoration:none;width:40%;float:right;';
+                nextLink.textContent = '>>';
                 var arg1 = {node: jx, page: 1};
-                nextLink.observe('click', function(e) {displayPage(e, arg1)});
+                nextLink.addEventListener('click', function(e) {displayPage(e, arg1)});
 
-                var prevLink = new Element('a',{href: '#', title: 'Previous Image', className: 'anselPrev', style: 'text-decoration:none;width:40%;float:right;'});
-                prevLink.update('<<');
+                var prevLink = document.createElement('a');
+                prevLink.href = '#';
+                prevLink.title = 'Previous Image';
+                prevLink.className = 'anselPrev';
+                prevLink.style.cssText = 'text-decoration:none;width:40%;float:right;';
+                prevLink.textContent = '<<';
                 var arg2 = {node: jx, page: -1};
-                prevLink.observe('click', function(e) {displayPage(e, arg2)});
-                $(jx).appendChild(nextLink);
-                $(jx).appendChild(prevLink);
+                prevLink.addEventListener('click', function(e) {displayPage(e, arg2)});
+                document.getElementById(jx).appendChild(nextLink);
+                document.getElementById(jx).appendChild(prevLink);
 
             })();
         }
@@ -98,7 +110,7 @@ function displayPage(event, args) {
     var node = args.node;
     var page = args.page;
     var perpage = anseljson[node]['perpage'];
-    var imgcount = anseljson[node]['data'].size();
+    var imgcount = anseljson[node]['data'].length;
     var pages = Math.ceil(imgcount / perpage) - 1;
     var oldPage = anseljson[node]['page'];
 
@@ -112,37 +124,46 @@ function displayPage(event, args) {
         page = pages;
     }
 
-    var mainNode = $(node);
-    mainNode.update();
+    var mainNode = document.getElementById(node);
+    mainNode.innerHTML = '';
     var start = page * perpage;
     var end = Math.min(imgcount - 1, start + perpage - 1);
     for (var i = start; i <= end; i++) {
-        var imgContainer = mainNode.appendChild(new Element('span', {className: 'anselGalleryWidget'}));
-        var imgLink = imgContainer.appendChild(new Element('a',
-            {
-                href: anseljson[node]['data'][i][5],
-                alt: anseljson[node]['data'][i][2],
-                title: anseljson[node]['data'][i][2]
-             }));
-        imgLink.appendChild(new Element('img', {src: anseljson[node]['data'][i][0]}));
+        var imgContainer = document.createElement('span');
+        imgContainer.className = 'anselGalleryWidget';
+        mainNode.appendChild(imgContainer);
+        var imgLink = document.createElement('a');
+        imgLink.href = anseljson[node]['data'][i][5];
+        imgLink.alt = anseljson[node]['data'][i][2];
+        imgLink.title = anseljson[node]['data'][i][2];
+        imgContainer.appendChild(imgLink);
+        var img = document.createElement('img');
+        img.src = anseljson[node]['data'][i][0];
+        imgLink.appendChild(img);
     }
 
-     var nextLink = new Element('a',{href: '', title: 'Next Image', style: 'text-decoration:none;width:40%;float:right;'});
-     nextLink.update('>>');
+     var nextLink = document.createElement('a');
+     nextLink.href = '';
+     nextLink.title = 'Next Image';
+     nextLink.style.cssText = 'text-decoration:none;width:40%;float:right;';
+     nextLink.textContent = '>>';
 
-     var args = {node: node, page: ++oldPage};
-     nextLink.observe('click', function(e) {displayPage(e, args);}.bind());
+     var args1 = {node: node, page: ++oldPage};
+     nextLink.addEventListener('click', function(e) {displayPage(e, args1);});
 
-     var prevLink = new Element('a',{href: '', title: 'Previous Image', style: 'text-decoration:none;width:40%;float:right;'});
-     prevLink.update('<<');
+     var prevLink = document.createElement('a');
+     prevLink.href = '';
+     prevLink.title = 'Previous Image';
+     prevLink.style.cssText = 'text-decoration:none;width:40%;float:right;';
+     prevLink.textContent = '<<';
 
-     var args = {node: node, page: --oldPage};
-     prevLink.observe('click', function(e) {displayPage(e, args);}.bind());
+     var args2 = {node: node, page: --oldPage};
+     prevLink.addEventListener('click', function(e) {displayPage(e, args2);});
 
      mainNode.appendChild(nextLink);
      mainNode.appendChild(prevLink);
 
      anseljson[node]['page'] = page;
-     event.stop();
+     event.preventDefault();
 }
 //]

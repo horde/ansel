@@ -7,7 +7,7 @@ var AnselSlugCheck = {
 
     checkSlug: function()
     {
-        var slug = $F('gallery_slug');
+        var slug = document.getElementById('gallery_slug').value;
 
         // Empty slugs are always allowed.
         if (slug.length && slug != this.text) {
@@ -23,24 +23,27 @@ var AnselSlugCheck = {
 
     checkSlugCallback: function(r)
     {
-        var slugFlag = $('slug_flag');
+        var slugFlag = document.getElementById('slug_flag'),
+            submitBtn = document.getElementById('gallery_submit');
 
         if (r) {
-            slugFlag.removeClassName('problem').addClassName('success');
-            $('gallery_submit').enable();
+            slugFlag.classList.remove('problem');
+            slugFlag.classList.add('success');
+            submitBtn.disabled = false;
             // In case we try various slugs
             this.text = slug;
         } else {
-            slugFlag.removeClassName('success').addClassName('problem');
-            $('gallery_submit').disable();
+            slugFlag.classList.remove('success');
+            slugFlag.classList.add('problem');
+            submitBtn.disabled = true;
         }
     },
 
     onDomLoad: function()
     {
-        $('gallery_slug').observe('change', this.checkSlug.bind(this));
+        document.getElementById('gallery_slug').addEventListener('change', this.checkSlug.bind(this));
     }
 
 };
 
-document.observe('dom:loaded', AnselSlugCheck.onDomLoad.bind(AnselSlugCheck));
+document.addEventListener('DOMContentLoaded', AnselSlugCheck.onDomLoad.bind(AnselSlugCheck));

@@ -7,14 +7,15 @@ var AnselTagActions = {
 
     add: function()
     {
-        if (!$('addtag').value.blank()) {
+        var addtag = document.getElementById('addtag');
+        if (addtag.value.trim() !== '') {
             HordeCore.doAction('addTag', {
                 gallery: this.gallery,
                 image: this.image,
-                tags: $F('addtag')
+                tags: addtag.value
             }, {
                 callback: function(r) {
-                    $('addtag').value = "";
+                    addtag.value = '';
                     AnselTagActions.updateTags(r);
                 }
             });
@@ -47,20 +48,31 @@ var AnselTagActions = {
 
     updateTags: function(r)
     {
-        $('tags').down('ul').remove();
-        if (r.length == 0) {
+        var tags = document.getElementById('tags'),
+            oldUl = tags.querySelector('ul');
+        if (oldUl) {
+            oldUl.remove();
+        }
+        if (Object.keys(r).length === 0) {
             return;
         }
-        var ul = new Element('ul', { 'class': 'horde-tags' });
-        $H(r).each(function(x) {
-            var a = new Element('a', { 'href': x[1].link }).update(x[1].tag_name + '&nbsp;');
-            var l = new Element('li').update(a);
-            var r = new Element('img', {'src': this.remove_image });
-            r.observe('click', function() { return this.remove(x[1].tag_id) }.bind(this));
-            l.insert(r);
-            ul.insert(l);
-        }.bind(this));
-        $('tags').insert({ 'top': ul });
+        var ul = document.createElement('ul');
+        ul.className = 'horde-tags';
+        var self = this;
+        Object.keys(r).forEach(function(key) {
+            var x = r[key];
+            var a = document.createElement('a');
+            a.href = x.link;
+            a.innerHTML = x.tag_name + '&nbsp;';
+            var l = document.createElement('li');
+            l.appendChild(a);
+            var img = document.createElement('img');
+            img.src = self.remove_image;
+            img.addEventListener('click', function() { return self.remove(x.tag_id); });
+            l.appendChild(img);
+            ul.appendChild(l);
+        });
+        tags.insertBefore(ul, tags.firstChild);
     }
 
 };
