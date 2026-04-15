@@ -10,6 +10,10 @@
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
+
+use Horde\Injector\Attribute\Factory;
+
+#[Factory(factory: Ansel_Factory_Faces::class, method: 'create')]
 class Ansel_Faces
 {
     /**

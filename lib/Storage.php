@@ -9,6 +9,9 @@
  * @license  http://www.horde.org/licenses/gpl GPL
  * @package  Ansel
  */
+
+use Horde\Injector\Attribute\Factory;
+
 /**
  * Class for interfacing with back end data storage.
  *
@@ -22,6 +25,7 @@
  * @license  http://www.horde.org/licenses/gpl GPL
  * @package  Ansel
  */
+#[Factory(factory: Ansel_Factory_Storage::class, method: 'create')]
 class Ansel_Storage
 {
     /**
