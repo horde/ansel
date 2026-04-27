@@ -1,4 +1,23 @@
 ---
+4.0.0-beta2:
+  api: 4.0.0-beta2
+  state:
+    release: beta
+    api: beta
+  date: 2026-04-27
+  license:
+    identifier: GPL-2.0-only
+    uri: https://spdx.org/licenses/GPL-2.0-only.html
+  notes: |-
+    fix: Wrong level of urlencode
+    feat: Add #[Factory] attribute to Ansel_Faces and Ansel_Storage
+    docs: create/update conf.php.dist
+    fix: Use strftime workaround with Horde\Date\Format until we can upgrade the string at their origin
+    refactor: convert from prototypejs to vanilla javascript
+    fix: More defensive code when trying to drop tables
+    docs: Clarify where to put local overrides
+    chore: Use named params for clarity
+    fix: Support both old-style Horde_Variables and modern Horde\Util\Variables
 4.0.0-beta1:
   api: 4.0.0-beta1
   state:
