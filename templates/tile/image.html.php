@@ -16,7 +16,7 @@
      <div>
         <span class="light">
         <?php if ($this->option_edit): ?>
-          <?php echo $this->contentTag('a', _("Properties"), array('href' => $this->image_url->copy()->add(array('actionID' => 'modify')), 'target' => '_blank', 'onclick' => Horde::popupJs(Horde::url($this->image_url), array('height' => 360, 'width' => 500, 'params' => array('actionID' => 'modify', 'urlencode' => true))) . ' return false;')) ?>
+          <?php echo $this->contentTag('a', _("Properties"), array('href' => $this->image_url->copy()->add(array('actionID' => 'modify')), 'target' => '_blank', 'onclick' => Horde::popupJs(Horde::url($this->image_url), array('height' => 360, 'width' => 500, 'params' => array('actionID' => 'modify'), 'urlencode' => true)) . ' return false;')) ?>
     |     <?php echo $this->contentTag('a', _("Edit"), array('href' => $this->image_url->copy()->add('actionID', 'editimage'))) ?>
         <?php endif; ?>
         </span>
