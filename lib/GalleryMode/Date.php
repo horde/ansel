@@ -12,6 +12,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Date\Formatter\IcuFormatter;
+
 class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
 {
     /**
@@ -74,7 +77,7 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
         if (!empty($year)) {
             if (!empty($day)) {
                 $date = new Horde_Date($this->_date);
-                $text = $date->strftime('%e');
+                $text = $date->format('j');
 
                 $navdata =  array(
                     'view' => 'Gallery',
@@ -93,7 +96,7 @@ class Ansel_GalleryMode_Date extends Ansel_GalleryMode_Base
                         'month' => $month,
                         'day' => 1)
                 );
-                $text = $date->strftime('%B');
+                $text = $date->format('MMMM', new IcuFormatter(), $GLOBALS['language']);
                 $navdata = array(
                     'view' => 'Gallery',
                     'gallery' => $this->_gallery->id,

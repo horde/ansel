@@ -9,6 +9,9 @@
  * @category Horde
  * @package  Ansel
  */
+
+use Horde\Date\Formatter\IcuFormatter;
+
 class Ansel_Tile_DateGallery
 {
     /**
@@ -53,11 +56,11 @@ class Ansel_Tile_DateGallery
         // have at least a year since we are in a date tile.
         if (empty($date_array['month'])) {
             // unit == year
-            $view->caption = $full_date->strftime('%Y');
+            $view->caption = $full_date->format('Y');
             $next_date = array('year' => (int)$view->caption);
         } elseif (empty($date_array['day'])) {
             // unit == month
-            $view->caption = $full_date->strftime('%B %Y');
+            $view->caption = $full_date->format('MMMM yyyy', new IcuFormatter(), $GLOBALS['language']);
             $next_date = array(
                 'year' => date('Y', $full_date->timestamp()),
                 'month' => date('n', $full_date->timestamp()));
