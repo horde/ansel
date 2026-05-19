@@ -1,4 +1,5 @@
 <?php
+use Horde\Injector\Injector;
 
 /**
  * Factory for Ansel_Storage.
@@ -25,7 +26,7 @@ class Ansel_Factory_Storage extends Horde_Core_Factory_Injector
      *
      * @return Ansel_Storage
      */
-    public function create(Horde_Injector $injector)
+    public function create(Horde_Injector|Injector $injector)
     {
         $scope = $injector->getInstance('Ansel_Config')->get('scope');
         if (empty($this->_instances[$scope])) {
