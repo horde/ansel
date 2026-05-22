@@ -1,5 +1,9 @@
 <?php
 
+use Horde\Compress\CompressFactory;
+use Horde\Compress\Driver\Zip as CompressZip;
+use Horde\Compress\Exception as CompressException;
+
 /**
  * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
  *
@@ -533,9 +537,9 @@ EOT;
 
             /* Get list of images */
             try {
-                $zip = Horde_Compress::factory('zip');
-                $files = $zip->decompress($data, array('action' => Horde_Compress_Zip::ZIP_LIST));
-            } catch (Horde_Compress_Exception $e) {
+                $zip = (new CompressFactory())->create('zip');
+                $files = $zip->decompress($data, array('action' => CompressZip::ZIP_LIST));
+            } catch (CompressException $e) {
                 throw new Ansel_Exception($e);
             }
 
@@ -547,14 +551,15 @@ EOT;
 
                 /* Extract the image */
                 try {
-                    $zdata = $zip->decompress(
+                    $result = $zip->decompress(
                         $data,
                         array(
-                            'action' => Horde_Compress_Zip::ZIP_DATA,
+                            'action' => CompressZip::ZIP_DATA,
                             'info' => $files,
                             'key' => $key)
                     );
-                } catch (Horde_Compress_Exception $e) {
+                    $zdata = is_array($result) ? $result['data'] : $result;
+                } catch (CompressException $e) {
                     throw new Ansel_Exception($e);
                 }
 
