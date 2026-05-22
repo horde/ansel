@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Compress\CompressFactory;
+
 /**
  * Ansel Base Class.
  *
@@ -830,8 +832,8 @@ class Ansel
                                 'name' => $image->filename);
         }
 
-        $zip = Horde_Compress::factory('zip');
-        $body = $zip->compress($zipfiles);
+        $zip = (new CompressFactory())->create('zip');
+        $body = $zip->compressFiles($zipfiles);
         if (!empty($gallery)) {
             $filename = (!empty($slug) ? $slug : $gallery->id) . '.zip';
         } else {
