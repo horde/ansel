@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -35,11 +35,11 @@ class Ansel_Form_Watermark extends Horde_Form
         );
         $w->setDefault($prefs->getValue('watermark_text'));
 
-        $fonts = array('tiny' => _("Tiny"),
-                       'small' => _("Small"),
-                       'medium' => _("Medium"),
-                       'large' => _("Large"),
-                       'giant' => _("Giant"));
+        $fonts = ['tiny' => _("Tiny"),
+            'small' => _("Small"),
+            'medium' => _("Medium"),
+            'large' => _("Large"),
+            'giant' => _("Giant")];
         $f = $this->addVariable(
             _("Watermark Font"),
             'font',
@@ -47,13 +47,13 @@ class Ansel_Form_Watermark extends Horde_Form
             false,
             false,
             null,
-            array($fonts)
+            [$fonts]
         );
         $f->setDefault($prefs->getValue('watermark_font'));
 
-        $ha = array('left' => _("Left"),
-                    'center' => _("Center"),
-                    'right' => _("Right"));
+        $ha = ['left' => _("Left"),
+            'center' => _("Center"),
+            'right' => _("Right")];
         $wha = $this->addVariable(
             _("Horizontal Alignment"),
             'whalign',
@@ -61,13 +61,13 @@ class Ansel_Form_Watermark extends Horde_Form
             false,
             false,
             null,
-            array($ha)
+            [$ha]
         );
         $wha->setDefault($prefs->getValue('watermark_horizontal'));
 
-        $va = array('top' => _("Top"),
-                    'center' => _("Center"),
-                    'bottom' => _("Bottom"));
+        $va = ['top' => _("Top"),
+            'center' => _("Center"),
+            'bottom' => _("Bottom")];
         $wva = $this->addVariable(
             _("Vertical Alignment"),
             'wvalign',
@@ -75,7 +75,7 @@ class Ansel_Form_Watermark extends Horde_Form
             false,
             false,
             null,
-            array($va)
+            [$va]
         );
         $wva->setDefault($prefs->getValue('watermark_vertical'));
     }

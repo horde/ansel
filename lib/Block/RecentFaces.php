@@ -3,7 +3,7 @@
 /**
  * This file provides a recent faces display in a block.
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -14,7 +14,7 @@ class Ansel_Block_RecentFaces extends Horde_Core_Block
 {
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
@@ -26,13 +26,13 @@ class Ansel_Block_RecentFaces extends Horde_Core_Block
      */
     protected function _params()
     {
-        return array(
-            'limit' => array(
+        return [
+            'limit' => [
                 'name' => _("Maximum number of faces"),
                 'type' => 'int',
-                'default' => 10
-            )
-        );
+                'default' => 10,
+            ],
+        ];
     }
 
     /**
@@ -46,7 +46,7 @@ class Ansel_Block_RecentFaces extends Horde_Core_Block
             $facename = htmlspecialchars($face['face_name']);
             $html .= '<a href="' . Ansel_Faces::getLink($face) . '" title="' . $facename . '">'
                     . '<img src="' . $faces->getFaceUrl($face['image_id'], $face['face_id'])
-                    . '" style="padding-bottom: 5px; padding-left: 5px" alt="' . $facename  . '" /></a>';
+                    . '" style="padding-bottom: 5px; padding-left: 5px" alt="' . $facename . '" /></a>';
         }
 
         return $html;

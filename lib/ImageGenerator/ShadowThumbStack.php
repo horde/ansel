@@ -8,7 +8,7 @@
  */
 class Ansel_ImageGenerator_ShadowThumbStack extends Ansel_ImageGenerator
 {
-    public $need = array('PhotoStack');
+    public $need = ['PhotoStack'];
 
     /**
      *
@@ -18,19 +18,19 @@ class Ansel_ImageGenerator_ShadowThumbStack extends Ansel_ImageGenerator
     {
         $imgobjs = $this->_getStackImages();
         $style = $this->_params['style'];
-        $params = array('width' => 100,
-                        'height' => 100,
-                        'background' => $style->background);
+        $params = ['width' => 100,
+            'height' => 100,
+            'background' => $style->background];
 
         $baseImg = Ansel::getImageObject($params);
         try {
             $baseImg->addEffect(
                 'PhotoStack',
-                array('images' => $imgobjs,
-                      'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
-                      'padding' => 0,
-                      'background' => $style->background,
-                      'type' => 'plain')
+                ['images' => $imgobjs,
+                    'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
+                    'padding' => 0,
+                    'background' => $style->background,
+                    'type' => 'plain']
             );
 
             $baseImg->applyEffects();

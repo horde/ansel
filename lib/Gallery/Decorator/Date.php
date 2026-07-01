@@ -4,7 +4,7 @@
  * A decorator around an Ansel_Gallery to allow multiple date groupings
  * to access the same Ansel_Gallery instance.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -45,7 +45,7 @@ class Ansel_Gallery_Decorator_Date
      * @param array $images           An array of image ids that this grouping
      *                                contains.
      */
-    public function __construct(Ansel_Gallery $gallery, $images = array())
+    public function __construct(Ansel_Gallery $gallery, $images = [])
     {
         $this->_gallery = $gallery;
         $this->_modeHelper = new Ansel_GalleryMode_Date($this);
@@ -72,9 +72,9 @@ class Ansel_Gallery_Decorator_Date
             case 'hasSubGalleries':
             case 'getDate':
             case 'setDate':
-                return call_user_func_array(array($this->_modeHelper, $method), $args);
+                return call_user_func_array([$this->_modeHelper, $method], $args);
             default:
-                return call_user_func_array(array($this->_gallery, $method), $args);
+                return call_user_func_array([$this->_gallery, $method], $args);
         }
     }
 
@@ -95,7 +95,7 @@ class Ansel_Gallery_Decorator_Date
      * @param array $params          Any additional parameters the Ansel_Tile
      *                               object may need.
      */
-    public function getTile($parent = null, $style = null, $mini = false, $params = array())
+    public function getTile($parent = null, $style = null, $mini = false, $params = [])
     {
         if (!is_null($parent) && is_null($style)) {
             $style = $parent->getStyle();
@@ -114,7 +114,7 @@ class Ansel_Gallery_Decorator_Date
     public function getRecentImages($limit = 10)
     {
         return $GLOBALS['injector']->getInstance('Ansel_Storage')
-            ->getRecentImages(array($this->_gallery->id), $limit);
+            ->getRecentImages([$this->_gallery->id], $limit);
     }
 
     /**

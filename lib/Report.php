@@ -3,12 +3,12 @@
 /**
  * Reporting abstraction class
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -23,7 +23,7 @@ class Ansel_Report
     /**
      * Create instance
      */
-    public function factory($driver = null, $params = array())
+    public function factory($driver = null, $params = [])
     {
         if ($driver === null) {
             $driver = $GLOBALS['conf']['report_content']['driver'];
@@ -67,7 +67,7 @@ class Ansel_Report
         $name = $GLOBALS['registry']->getApp() . ':admin';
 
         if ($GLOBALS['injector']->getInstance('Horde_Perms')->exists($name)) {
-            return array();
+            return [];
         }
 
         $permission = $GLOBALS['injector']->getInstance('Horde_Perms')->getPermission($name);
@@ -111,7 +111,7 @@ class Ansel_Report
      *
      * @param string $message to pass
      */
-    public function report($message, $users = array())
+    public function report($message, $users = [])
     {
         return PEAR::raiseError(_("Unsupported"));
     }

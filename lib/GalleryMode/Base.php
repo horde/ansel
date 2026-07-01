@@ -4,7 +4,7 @@
  * Ansel_GalleryMode_Base:: Class for encapsulating gallery methods that
  * depend on the current display mode of the gallery.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -25,7 +25,7 @@ abstract class Ansel_GalleryMode_Base
      *
      * @var array
      */
-    protected $_features = array();
+    protected $_features = [];
 
     /**
      * Constructor
@@ -49,9 +49,7 @@ abstract class Ansel_GalleryMode_Base
      *        objects that actually need it.
      * @param array $date   Date parts array
      */
-    public function setDate($date = array())
-    {
-    }
+    public function setDate($date = []) {}
 
     /**
      *
@@ -59,7 +57,7 @@ abstract class Ansel_GalleryMode_Base
      */
     public function getDate()
     {
-        return array();
+        return [];
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * Displays mini thumbnails of images in the selected (or random) gallery.
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -20,7 +20,7 @@ class Ansel_Block_Gallery extends Horde_Core_Block
 
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
@@ -31,30 +31,30 @@ class Ansel_Block_Gallery extends Horde_Core_Block
      */
     protected function _params()
     {
-        $params = array(
-            'gallery' => array(
+        $params = [
+            'gallery' => [
                 'name' => _("Gallery"),
                 'type' => 'enum',
                 'default' => '__random',
-                'values' => array('__random' => _("Random gallery"))
-            ),
-            'perpage' => array(
+                'values' => ['__random' => _("Random gallery")],
+            ],
+            'perpage' => [
                 'name' => _("Maximum number of photos to display (0 means unlimited)"),
                 'type' => 'int',
-                'default' => 20
-            ),
-            'use_lightbox' => array(
+                'default' => 20,
+            ],
+            'use_lightbox' => [
                 'name' => _("Use a lightbox to view photos"),
                 'type' => 'checkbox',
-                'default' => true
-            )
-        );
+                'default' => true,
+            ],
+        ];
 
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-        if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
-            ($storage->countGalleries(
+        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+            || ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
-                array('perm' => Horde_Perms::READ)
+                ['perm' => Horde_Perms::READ]
             ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
             foreach ($storage->listGalleries() as $gal) {
@@ -72,21 +72,21 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         try {
             $gallery = $this->_getGallery();
         } catch (Ansel_Exception $e) {
-            return Ansel::getUrlFor('view', array('view' => 'List'), true)->link() . $this->getName() . '</a>';
+            return Ansel::getUrlFor('view', ['view' => 'List'], true)->link() . $this->getName() . '</a>';
         }
 
         // Build the gallery name.
-        if (isset($this->_params['gallery']) &&
-            $this->_params['gallery'] == '__random') {
+        if (isset($this->_params['gallery'])
+            && $this->_params['gallery'] == '__random') {
             $name = _("Random Gallery") . ': ' . $gallery->get('name');
         } else {
             $name = $gallery->get('name');
         }
         $viewurl = Ansel::getUrlFor(
             'view',
-            array('view' => 'Gallery',
-                  'gallery' => $gallery->id,
-                  'slug' => $gallery->get('slug')),
+            ['view' => 'Gallery',
+                'gallery' => $gallery->id,
+                'slug' => $gallery->get('slug')],
             true
         );
 
@@ -103,8 +103,8 @@ class Ansel_Block_Gallery extends Horde_Core_Block
             return $e->getMessage();
         }
 
-        $params = array('gallery_id' => $gallery->id,
-                        'count' => $this->_params['perpage']);
+        $params = ['gallery_id' => $gallery->id,
+            'count' => $this->_params['perpage']];
         if (!empty($this->_params['use_lightbox'])) {
             $params['lightbox'] = true;
         }
@@ -113,19 +113,24 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         // Be nice to people with <noscript>
         $viewurl = Ansel::getUrlFor(
             'view',
-            array('view' => 'Gallery',
-                                                  'gallery' => $gallery->id,
-                                                  'slug' => $gallery->get('slug')),
+            ['view' => 'Gallery',
+                'gallery' => $gallery->id,
+                'slug' => $gallery->get('slug')],
             true
         );
         $html .= '<noscript>';
-        $html .= $viewurl->link(array('title' => sprintf(_("View %s"), $gallery->get('name'))));
-        if ($iid = $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')) &&
-            $gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
+        $html .= $viewurl->link(['title' => sprintf(_("View %s"), $gallery->get('name'))]);
+        if ($iid = $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default'))
+            && $gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
 
             $html .= '<img src="' . Ansel::getImageUrl($gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')), 'thumb', true) . '" alt="' . htmlspecialchars($gallery->get('name')) . '" />';
         } else {
-            $html .= Horde::img('thumb-error.png');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= Horde::img('thumb-error.png');
         }
 
         return $html . '</a></noscript>';
@@ -153,10 +158,10 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         // Protect at least a little bit against getting an empty gallery. We
         // can't just loop until we get one with images since it's possible we
         // actually don't *have* any with images yet.
-        if ($this->_params['gallery'] == '__random' &&
-            !empty($this->_gallery) &&
-            !$this->_gallery->countImages() &&
-            $this->_gallery->hasSubGalleries() && !$retry) {
+        if ($this->_params['gallery'] == '__random'
+            && !empty($this->_gallery)
+            && !$this->_gallery->countImages()
+            && $this->_gallery->hasSubGalleries() && !$retry) {
 
             $this->_gallery = null;
             $this->_gallery = $this->_getGallery(true);
@@ -164,8 +169,8 @@ class Ansel_Block_Gallery extends Horde_Core_Block
 
         if (empty($this->_gallery)) {
             throw new Horde_Exception_NotFound(_("Gallery does not exist."));
-        } elseif (!$this->_gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::SHOW) ||
-                  !$this->_gallery->isOldEnough() || $this->_gallery->hasPasswd()) {
+        } elseif (!$this->_gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::SHOW)
+                  || !$this->_gallery->isOldEnough() || $this->_gallery->hasPasswd()) {
             throw new Horde_Exception_PermissionDenied(_("Access denied viewing this gallery."));
         }
 

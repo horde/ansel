@@ -1,7 +1,9 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -15,7 +17,7 @@
  * The Ansel_View_Results:: class wraps display of images/galleries from
  * multiple parent sources..
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -62,21 +64,21 @@ class Ansel_View_Results extends Ansel_View_Ansel
      *
      * @return Ansel_View_Results
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         global $prefs, $conf, $injector, $notification;
 
         $ansel_storage = $injector->getInstance('Ansel_Storage');
-        $this->_owner = Horde_Util::getFormData('owner', '');
+        $this->_owner = Util::getFormData('owner', '');
         $this->_browser = new Ansel_TagBrowser(
             $injector->getInstance('Ansel_Tagger'),
             null,
             $this->_owner
         );
 
-        $this->_page = Horde_Util::getFormData('page', 0);
-        $actionID = Horde_Util::getFormData('actionID', '');
-        $image_id = Horde_Util::getFormData('image');
+        $this->_page = Util::getFormData('page', 0);
+        $actionID = Util::getFormData('actionID', '');
+        $image_id = Util::getFormData('image');
         $vars = Horde_Variables::getDefaultVariables();
 
         // Number perpage from prefs or config.
@@ -87,14 +89,14 @@ class Ansel_View_Results extends Ansel_View_Ansel
 
         // Common image actions.
         if (Ansel_ActionHandler::imageActions($actionID)) {
-            Ansel::getUrlFor('view', array('view' => 'Results'), true)->redirect();
+            Ansel::getUrlFor('view', ['view' => 'Results'], true)->redirect();
             exit;
         }
 
         // Tag browsing actions.
         switch ($actionID) {
             case 'remove':
-                $tag = Horde_Util::getFormData('tag');
+                $tag = Util::getFormData('tag');
                 if (isset($tag)) {
                     $this->_browser->removeTag($tag);
                     $this->_browser->save();
@@ -103,7 +105,7 @@ class Ansel_View_Results extends Ansel_View_Ansel
 
             case 'add':
             default:
-                $tag = Horde_Util::getFormData('tag');
+                $tag = Util::getFormData('tag');
                 if (isset($tag)) {
                     $this->_browser->addTag($tag);
                     $this->_browser->save();
@@ -169,7 +171,7 @@ class Ansel_View_Results extends Ansel_View_Ansel
         $vars = Horde_Variables::getDefaultVariables();
         $option_move = $option_copy = $ansel_storage->countGalleries(
             $GLOBALS['registry']->getAuth(),
-            array('perm' => Horde_Perms::EDIT)
+            ['perm' => Horde_Perms::EDIT]
         );
 
         $this->_pagestart = ($this->_page * $this->_perPage) + 1;
@@ -189,16 +191,16 @@ class Ansel_View_Results extends Ansel_View_Ansel
             $GLOBALS['prefs']->getValue('default_gallerystyle')
         );
 
-        $viewurl = Horde::url('view.php')->add(array(
+        $viewurl = Horde::url('view.php')->add([
             'view' => 'Results',
-            'actionID' => 'add'));
+            'actionID' => 'add']);
         $view->pager = new Horde_Core_Ui_Pager(
             'page',
             $vars,
-            array(
+            [
                 'num' => $view->total,
                 'url' => $viewurl,
-                'perpage' => $this->_perPage)
+                'perpage' => $this->_perPage]
         );
         $GLOBALS['page_output']->addScriptFile('views/common.js');
         $GLOBALS['page_output']->addScriptFile('views/gallery.js');
@@ -213,7 +215,7 @@ class Ansel_View_Results extends Ansel_View_Ansel
 
     public function getGalleryCrumbData()
     {
-        return array();
+        return [];
     }
 
 }

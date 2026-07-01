@@ -4,7 +4,7 @@
  * Horde_Widget_ImageFaces:: class to display a widget containing mini
  * thumbnails of faces in the image.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author Duck <duck@obala.net>
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
@@ -18,7 +18,7 @@ class Ansel_Widget_ImageFaces extends Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_supported_views = array('Image');
+    protected $_supported_views = ['Image'];
 
     /**
      * Attach widget to supplied view.
@@ -54,14 +54,14 @@ class Ansel_Widget_ImageFaces extends Ansel_Widget_Base
 
         if ($view->hasEdit) {
             $view->editUrl = strval(Horde::url('faces/gallery.php')->add('gallery', $this->_view->gallery->id));
-            $view->manualUrl = strval(Horde::url('faces/custom.php')->add(array('image' => $this->_view->resource->id, 'url' => $this->_params['selfUrl'])));
+            $view->manualUrl = strval(Horde::url('faces/custom.php')->add(['image' => $this->_view->resource->id, 'url' => $this->_params['selfUrl']]));
 
             // Attach the ajax edit actions
             $GLOBALS['injector']
                 ->getInstance('Horde_Core_Factory_Imple')
                 ->create(
                     'Ansel_Ajax_Imple_EditFaces',
-                    array('id' => 'edit_faces', 'image_id' => $this->_view->resource->id)
+                    ['id' => 'edit_faces', 'image_id' => $this->_view->resource->id]
                 );
         }
 

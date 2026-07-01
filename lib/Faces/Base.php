@@ -3,7 +3,7 @@
 /**
  * Face recognition class
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -28,7 +28,7 @@ class Ansel_Faces_Base
      */
     protected function _getFaces($file)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,13 +56,13 @@ class Ansel_Faces_Base
             $file = $image;
         }
         if (empty($file)) {
-            return array();
+            return [];
         }
 
         // Get faces from driver
         $faces = $this->_getFaces($file);
         if (empty($faces)) {
-            return array();
+            return [];
         }
 
         // Remove faces containg faces
@@ -97,7 +97,7 @@ class Ansel_Faces_Base
         if ($full) {
             $sql .= ', gallery_id, face_x1, face_y1, face_x2, face_y2';
         }
-        $sql .= ' FROM ansel_faces WHERE image_id = ' . (int)$image_id
+        $sql .= ' FROM ansel_faces WHERE image_id = ' . (int) $image_id
             . ' ORDER BY face_id DESC';
 
         try {
@@ -118,7 +118,7 @@ class Ansel_Faces_Base
     public function getGalleryFaces($gallery_id)
     {
         $sql = 'SELECT face_id, image_id, gallery_id, face_name FROM ansel_faces '
-            . ' WHERE gallery_id = ' . (int)$gallery_id . ' ORDER BY face_id DESC';
+            . ' WHERE gallery_id = ' . (int) $gallery_id . ' ORDER BY face_id DESC';
 
         try {
             return $GLOBALS['ansel_db']->selectAll($sql);
@@ -143,20 +143,20 @@ class Ansel_Faces_Base
     {
         $galleries = $GLOBALS['injector']
             ->getInstance('Ansel_Storage')
-            ->listGalleries(array('perm' => Horde_Perms::READ));
+            ->listGalleries(['perm' => Horde_Perms::READ]);
 
-        $ids = array();
+        $ids = [];
         foreach ($galleries as $gallery) {
             $ids[] = $gallery->id;
         }
         $sql = 'SELECT f.face_id, f.gallery_id, f.image_id, f.face_name FROM '
             . 'ansel_faces f WHERE f.gallery_id IN (' . implode(',', $ids)
             . ') ORDER BY '
-            . (isset($info['order']) ? $info['order'] : ' f.face_id DESC');
+            . ($info['order'] ?? ' f.face_id DESC');
 
         $sql = $GLOBALS['ansel_db']->addLimitOffset(
             $sql,
-            array('offset' => $from, 'limit' => $count)
+            ['offset' => $from, 'limit' => $count]
         );
         try {
             return $GLOBALS['ansel_db']->selectAll($sql);
@@ -177,9 +177,9 @@ class Ansel_Faces_Base
     {
         $galleries = $GLOBALS['injector']
             ->getInstance('Ansel_Storage')
-            ->listGalleries(array('perm' => Horde_Perms::READ));
+            ->listGalleries(['perm' => Horde_Perms::READ]);
 
-        $ids = array();
+        $ids = [];
         foreach ($galleries as $gallery) {
             $ids[] = $gallery->id;
         }
@@ -203,7 +203,7 @@ class Ansel_Faces_Base
      */
     public function allFaces($from = 0, $count = 0)
     {
-        $info = array('order' => 'f.face_id DESC');
+        $info = ['order' => 'f.face_id DESC'];
         return $this->_fetchFaces($info, $from, $count);
     }
 
@@ -217,7 +217,7 @@ class Ansel_Faces_Base
      */
     public function namedFaces($from = 0, $count = 0)
     {
-        $info = array('filter' => 'f.face_name IS NOT NULL AND f.face_name <> \'\'');
+        $info = ['filter' => 'f.face_name IS NOT NULL AND f.face_name <> \'\''];
         return $this->_fetchFaces($info, $from, $count);
     }
 
@@ -232,10 +232,10 @@ class Ansel_Faces_Base
      */
     public function ownerFaces($owner, $from = 0, $count = 0)
     {
-        $info = array(
+        $info = [
             'filter' => 's.share_owner = ' . $GLOBALS['ansel_db']->quoteString($owner),
-            'order' => 'f.face_id DESC'
-        );
+            'order' => 'f.face_id DESC',
+        ];
 
         if (!$GLOBALS['registry']->getAuth() || $owner != $GLOBALS['registry']->getAuth()) {
             $info['filter'] .= ' AND s.gallery_passwd IS NULL';
@@ -253,7 +253,7 @@ class Ansel_Faces_Base
      */
     public function searchFaces($name, $from = 0, $count = 0)
     {
-        $info = array('filter' => 'f.face_name LIKE ' . $GLOBALS['ansel_db']->quoteString("%$name%"));
+        $info = ['filter' => 'f.face_name LIKE ' . $GLOBALS['ansel_db']->quoteString("%$name%")];
         return $this->_fetchFaces($info, $from, $count);
     }
 
@@ -264,7 +264,7 @@ class Ansel_Faces_Base
      */
     public function countOwnerFaces($owner)
     {
-        $info = array('filter' => 's.share_owner = ' . $GLOBALS['ansel_db']->quoteString($owner));
+        $info = ['filter' => 's.share_owner = ' . $GLOBALS['ansel_db']->quoteString($owner)];
         if (!$GLOBALS['registry']->getAuth() || $owner != $GLOBALS['registry']->getAuth()) {
             $info['filter'] .= ' AND s.gallery_passwd IS NULL';
         }
@@ -277,7 +277,7 @@ class Ansel_Faces_Base
      */
     public function countAllFaces()
     {
-        return $this->_countFaces(array());
+        return $this->_countFaces([]);
     }
 
     /**
@@ -296,7 +296,7 @@ class Ansel_Faces_Base
      */
     public function countSearchFaces($name)
     {
-        $info = array('filter' => 'f.face_name LIKE ' . $GLOBALS['ansel_db']->quoteString("%$name%"));
+        $info = ['filter' => 'f.face_name LIKE ' . $GLOBALS['ansel_db']->quoteString("%$name%")];
         return $this->_countFaces($info);
     }
 
@@ -450,13 +450,13 @@ class Ansel_Faces_Base
             $sql = 'UPDATE ansel_faces SET face_name = ?, face_x1 = ?, '
                 . 'face_y1 = ?, face_x2 = ?, face_y2 = ? WHERE face_id = ?';
 
-            $params = array(
+            $params = [
                 $name,
                 $x1,
                 $y1,
                 $x2,
                 $y2,
-                $face_id);
+                $face_id];
 
             try {
                 $GLOBALS['ansel_db']->update($sql, $params);
@@ -468,14 +468,14 @@ class Ansel_Faces_Base
                 . ' face_x1, face_y1, face_x2, face_y2)'
                 . ' VALUES (?, ?, ?, ?, ?, ?, ?)';
 
-            $params = array(
+            $params = [
                 $image->id,
                 $image->gallery,
                 $name,
                 $x1,
                 $y1,
                 $x2,
-                $y2);
+                $y2];
 
             try {
                 $face_id = $GLOBALS['ansel_db']->insert($sql, $params);
@@ -538,14 +538,14 @@ class Ansel_Faces_Base
         // Get the rectangles for any faces in this image.
         $faces = $this->getFaces($image);
         if (empty($faces)) {
-            return array();
+            return [];
         }
 
         // Clean up any existing faces we may have had in this image.
         Ansel_Faces::delete($image);
 
         // Process faces
-        $fids = array();
+        $fids = [];
         foreach ($faces as $i => $rect) {
 
             // Store face id db
@@ -641,8 +641,8 @@ class Ansel_Faces_Base
     public function saveSignature($image_id, $face_id)
     {
         // can we get it?
-        if (empty($GLOBALS['conf']['faces']['search']) ||
-            extension_loaded('libpuzzle') === false) {
+        if (empty($GLOBALS['conf']['faces']['search'])
+            || extension_loaded('libpuzzle') === false) {
 
             return;
         }
@@ -663,14 +663,14 @@ class Ansel_Faces_Base
         try {
             $GLOBALS['ansel_db']->updateBlob(
                 'ansel_faces',
-                array('face_signature' => new Horde_Db_Value_Binary(
+                ['face_signature' => new Horde_Db_Value_Binary(
                     puzzle_compress_cvec($signature)
-                )
                 ),
-                array(
+                ],
+                [
                     'face_id = ?',
-                    array($face_id)
-                )
+                    [$face_id],
+                ]
             );
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($result);
@@ -683,11 +683,11 @@ class Ansel_Faces_Base
         $q = 'INSERT INTO  () VALUES (?, ?, ?)';
         $c = $str_len - $word_len;
         for ($i = 0; $i <= $c; $i++) {
-            $data = array(
+            $data = [
                 'face_id' => $face_id,
                 'index_position' => $i,
-                'index_part' => new Horde_Db_Value_Binary(substr($signature, $i, $word_len))
-            );
+                'index_part' => new Horde_Db_Value_Binary(substr($signature, $i, $word_len)),
+            ];
             try {
                 $GLOBALS['ansel_db']->insertBlob('ansel_faces_index', $data);
             } catch (Horde_Db_Exception $e) {
@@ -706,8 +706,8 @@ class Ansel_Faces_Base
      */
     public function getSignatureFromFile($filename)
     {
-        if ($GLOBALS['conf']['faces']['search'] == 0 ||
-            extension_loaded('libpuzzle') === false) {
+        if ($GLOBALS['conf']['faces']['search'] == 0
+            || extension_loaded('libpuzzle') === false) {
 
             return '';
         }
@@ -735,7 +735,7 @@ class Ansel_Faces_Base
         }
 
         $images = $gallery->getImages();
-        $faces = array();
+        $faces = [];
         foreach ($images as $image) {
             if ($image->facesCount && $force == false) {
                 continue;
@@ -763,7 +763,7 @@ class Ansel_Faces_Base
         try {
             return $GLOBALS['ansel_db']->update(
                 'UPDATE ansel_faces SET face_name = ? WHERE face_id = ?',
-                array($name, $face)
+                [$name, $face]
             );
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($e);
@@ -787,7 +787,7 @@ class Ansel_Faces_Base
         }
         $sql .= ' FROM ansel_faces WHERE face_id = ?';
         try {
-            $face = $GLOBALS['ansel_db']->selectOne($sql, array((int)$face_id));
+            $face = $GLOBALS['ansel_db']->selectOne($sql, [(int) $face_id]);
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($e);
         }
@@ -795,8 +795,8 @@ class Ansel_Faces_Base
             throw new Horde_Exception_NotFound('Face does not exist');
         }
 
-        if ($full && $GLOBALS['conf']['faces']['search'] &&
-            function_exists('puzzle_uncompress_cvec')) {
+        if ($full && $GLOBALS['conf']['faces']['search']
+            && function_exists('puzzle_uncompress_cvec')) {
             $columns = $GLOBALS['ansel_db']->columns('ansel_faces');
             $face['face_signature'] = puzzle_uncompress_cvec($columns['face_signature']->binaryToString($face['face_signature']));
         }
@@ -808,7 +808,7 @@ class Ansel_Faces_Base
 
         $sql = 'SELECT gallery_id, image_id FROM ansel_faces WHERE face_name = ?';
         try {
-            $galleries = $GLOBALS['ansel_db']->selectAll($sql, array($face['face_name']));
+            $galleries = $GLOBALS['ansel_db']->selectAll($sql, [$face['face_name']]);
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($e);
         }
@@ -838,7 +838,7 @@ class Ansel_Faces_Base
         $word_len = $GLOBALS['conf']['faces']['search'];
         $str_len = strlen($signature);
         $c = $str_len - $word_len;
-        $indexes = array();
+        $indexes = [];
         for ($i = 0; $i <= $c; $i++) {
             $sig = new Horde_Db_Value_Binary(substr($signature, $i, $word_len));
             $indexes[] = '(index_position = ' . $i . ' AND index_part = ' . $sig->quote($GLOBALS['ansel_db']) . ')';
@@ -849,7 +849,7 @@ class Ansel_Faces_Base
             . 'FROM ansel_faces_index i, ansel_faces f '
             . 'WHERE f.face_id = i.face_id';
         if ($face_id) {
-            $sql .= ' AND i.face_id <> ' . (int)$face_id;
+            $sql .= ' AND i.face_id <> ' . (int) $face_id;
         }
         if ($indexes) {
             $sql .= ' AND (' . implode(' OR ', $indexes) . ')';
@@ -859,10 +859,10 @@ class Ansel_Faces_Base
             . 'ORDER BY count(i.face_id) DESC';
         $sql = $GLOBALS['ansel_db']->addLimitOffset(
             $sql,
-            array(
+            [
                 'limit' => $count,
-                'offset' => $from
-            )
+                'offset' => $from,
+            ]
         );
 
         try {
@@ -872,7 +872,7 @@ class Ansel_Faces_Base
             throw new Ansel_Exception($e);
         }
         if (empty($faces)) {
-            return array();
+            return [];
         }
 
         foreach ($faces as &$face) {
@@ -881,20 +881,20 @@ class Ansel_Faces_Base
                 puzzle_uncompress_cvec($columns['face_signature']->binaryToString($face['face_signature']))
             );
         }
-        uasort($faces, array($this, '_getSignatureMatches'));
+        uasort($faces, [$this, '_getSignatureMatches']);
 
         return $faces;
     }
 
     protected function _getParamsArray($image, $rect)
     {
-        return array(
+        return [
             $image->id,
             $image->gallery,
             $rect['x'],
             $rect['y'],
             $rect['x'] + $rect['w'],
-            $rect['y'] + $rect['h']);
+            $rect['y'] + $rect['h']];
     }
 
     /**

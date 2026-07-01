@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -12,7 +12,7 @@
 /**
  * Ansel_Widget_Actions:: class to wrap the display of gallery actions
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -25,7 +25,7 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
     /**
      * @var string
      */
-    protected $_supported_views = array('Gallery');
+    protected $_supported_views = ['Gallery'];
 
     /**
      *
@@ -42,25 +42,25 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         $view->toggle_url = Horde::selfUrl(true, true)
             ->add('actionID', 'show_actions')
             ->link(
-                array(
-                'id' => 'gallery-actions-toggle',
-                'class' => ($GLOBALS['prefs']->getValue('show_actions') ? 'hide' : 'show')
-            )
+                [
+                    'id' => 'gallery-actions-toggle',
+                    'class' => ($GLOBALS['prefs']->getValue('show_actions') ? 'hide' : 'show'),
+                ]
             );
 
         $id = $this->_view->gallery->id;
         $galleryurl = Horde::url('gallery.php')->add('gallery', $id);
 
         // Slideshow
-        if (empty($this->_params['hide_slideshow']) &&
-            $this->_view->gallery->hasFeature('slideshow') &&
-            $this->_view->gallery->countImages()) {
+        if (empty($this->_params['hide_slideshow'])
+            && $this->_view->gallery->hasFeature('slideshow')
+            && $this->_view->gallery->countImages()) {
 
             // Slideshow link
             if (!empty($this->_params['slideshow_link'])) {
                 $view->slideshow_url = str_replace(
-                    array('%i', '%g'),
-                    array(array_pop($this->_view->gallery->listImages(0, 1)), $id),
+                    ['%i', '%g'],
+                    [array_pop($this->_view->gallery->listImages(0, 1)), $id],
                     urldecode($this->_params['slideshow_link'])
                 );
             } else {
@@ -69,35 +69,35 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
                 $imgs = $this->_view->gallery->listImages(0, 1);
                 $view->slideshow_url = Horde::url('view.php')
                     ->add(array_merge(
-                        array('gallery' => $id,
-                              'image' => array_pop($imgs),
-                              'view' => 'Slideshow'),
+                        ['gallery' => $id,
+                            'image' => array_pop($imgs),
+                            'view' => 'Slideshow'],
                         $date
                     ));
             }
         }
 
         // Upload and new subgallery Urls
-        if ($this->_view->gallery->hasFeature('upload') &&
-            $this->_view->gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
+        if ($this->_view->gallery->hasFeature('upload')
+            && $this->_view->gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
 
             $view->uploadurl_link = Horde::url('img/upload.php')->add(
-                array(
-                'gallery' => $id,
-                'page' => !empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)
-            )->link(array('class' => 'widget'));
+                [
+                    'gallery' => $id,
+                    'page' => !empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0]
+            )->link(['class' => 'widget']);
 
             if ($this->_view->gallery->hasFeature('subgalleries')) {
                 $view->subgallery_link = $galleryurl->copy()
-                    ->add(array('actionID' => 'addchild', 'url' => Horde::signUrl(Horde::selfUrl(true, false, true))))
-                    ->link(array('class' => 'widget'));
+                    ->add(['actionID' => 'addchild', 'url' => Horde::signUrl(Horde::selfUrl(true, false, true))])
+                    ->link(['class' => 'widget']);
             }
         }
         $this->_getGalleryActions($view);
         $injector->getInstance('Horde_Core_Factory_Imple')
             ->create(
                 'Ansel_Ajax_Imple_ToggleGalleryActions',
-                array('id' => 'gallery-actions-toggle')
+                ['id' => 'gallery-actions-toggle']
             );
 
         return $view->render('actions');
@@ -120,20 +120,20 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         $date = $this->_view->gallery->getDate();
 
         // Buid the url parameters to the zip link
-        $view_params = array(
+        $view_params = [
             'gallery' => $this->_view->gallery->id,
             'view' => 'Gallery',
             'slug' => $this->_view->gallery->get('slug'),
-            'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0));
+            'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)];
 
         // Append the date information to the parameters if we need it
         $view_params = array_merge($view_params, $date);
 
         // Bookmark link
         if ($registry->hasMethod('bookmarks/getAddUrl')) {
-            $api_params = array(
+            $api_params = [
                 'url' => Ansel::getUrlFor('view', $view_params, true),
-                'title' => $this->_view->gallery->get('name'));
+                'title' => $this->_view->gallery->get('name')];
 
             try {
                 $view->bookmark_url = new Horde_Url($registry->bookmarks->getAddUrl($api_params));
@@ -142,59 +142,59 @@ class Ansel_Widget_Actions extends Ansel_Widget_Base
         }
 
         // Download as ZIP link
-        if (!empty($conf['gallery']['downloadzip']) &&
-            $this->_view->gallery->canDownload() &&
-            $count &&
-            $this->_view->gallery->hasFeature('zipdownload')) {
+        if (!empty($conf['gallery']['downloadzip'])
+            && $this->_view->gallery->canDownload()
+            && $count
+            && $this->_view->gallery->hasFeature('zipdownload')) {
 
-            $zip_params = array_merge(array('actionID' => 'downloadzip'), $date);
-            $view->zip_url = $galleryurl->copy()->add($zip_params)->link(array('class' => 'widget'));
+            $zip_params = array_merge(['actionID' => 'downloadzip'], $date);
+            $view->zip_url = $galleryurl->copy()->add($zip_params)->link(['class' => 'widget']);
         }
 
         // Image upload, subgalleries, captions etc..
         if ($this->_view->gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
             $view->hasEdit = true;
-            $view->properties_url = $galleryurl->copy()->add(array('actionID' => 'modify', 'url' => Horde::signUrl($selfurl)))->link(array('class' => 'widget'));
+            $view->properties_url = $galleryurl->copy()->add(['actionID' => 'modify', 'url' => Horde::signUrl($selfurl)])->link(['class' => 'widget']);
             if ($count) {
                 if ($this->_view->gallery->hasFeature('image_captions')) {
-                    $params = array_merge(array('gallery' => $id), $date);
-                    $view->captions_url = Horde::url('gallery/captions.php')->add($params)->link(array('class' => 'widget'));
+                    $params = array_merge(['gallery' => $id], $date);
+                    $view->captions_url = Horde::url('gallery/captions.php')->add($params)->link(['class' => 'widget']);
                 }
                 if ($this->_view->gallery->hasFeature('sort_images')) {
-                    $view->sort_url = Horde::url('gallery/sort.php')->add(array_merge(array('gallery' => $id), $date))->link(array('class' => 'widget'));
-                    $view->resetsort_url = Horde::url('gallery/sort.php')->add(array_merge(array('gallery' => $id, 'action' => 'Reset'), $date))->link(array('class' => 'widget'));
+                    $view->sort_url = Horde::url('gallery/sort.php')->add(array_merge(['gallery' => $id], $date))->link(['class' => 'widget']);
+                    $view->resetsort_url = Horde::url('gallery/sort.php')->add(array_merge(['gallery' => $id, 'action' => 'Reset'], $date))->link(['class' => 'widget']);
                 }
-                $view->regenerate_url = $galleryurl->copy()->add(array('actionID' => 'generateThumbs'))->link(array('class' => 'widget'));
-                $view->regenerate_all = $galleryurl->copy()->add(array('actionID' => 'deleteCache'))->link(array('class' => 'widget'));
+                $view->regenerate_url = $galleryurl->copy()->add(['actionID' => 'generateThumbs'])->link(['class' => 'widget']);
+                $view->regenerate_all = $galleryurl->copy()->add(['actionID' => 'deleteCache'])->link(['class' => 'widget']);
                 if ($conf['faces']['driver'] && $conf['faces']['driver'] !== 'user' && $this->_view->gallery->hasFeature('faces')) {
                     $view->faces_url = Horde::url('faces/gallery.php')->add(
-                        array_merge($date, array('gallery' => $id, 'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)))
+                        array_merge($date, ['gallery' => $id, 'page' => (!empty($this->_view->_params['page']) ? $this->_view->_params['page'] : 0)])
                     )
-                            ->link(array('class' => 'widget'));
+                            ->link(['class' => 'widget']);
                 }
             }
             if ($this->_view->gallery->hasFeature('stacks')) {
-                $view->gendefault_url = $galleryurl->copy()->add(array('actionID' => 'generateDefault', 'url' => Horde::signUrl($selfurl)))->link(array('class' => 'widget'));
+                $view->gendefault_url = $galleryurl->copy()->add(['actionID' => 'generateDefault', 'url' => Horde::signUrl($selfurl)])->link(['class' => 'widget']);
             }
         }
 
-        if ($registry->getAuth() &&
-            $this->_view->gallery->get('owner') == $registry->getAuth()) {
+        if ($registry->getAuth()
+            && $this->_view->gallery->get('owner') == $registry->getAuth()) {
 
             $url = new Horde_Url('#');
-            $view->perms_link = $url->link(array('class' => 'popup widget', 'onclick' => Horde::popupJs(Horde::url('perms.php'), array('params' => array('cid' => $this->_view->gallery->id), 'urlencode' => true)) . 'return false;'));
+            $view->perms_link = $url->link(['class' => 'popup widget', 'onclick' => Horde::popupJs(Horde::url('perms.php'), ['params' => ['cid' => $this->_view->gallery->id], 'urlencode' => true]) . 'return false;']);
 
-        } elseif (!empty($conf['report_content']['driver']) &&
-                  (($conf['report_content']['allow'] == 'authenticated' && $registry->isAuthenticated()) ||
-                  $conf['report_content']['allow'] == 'all')) {
+        } elseif (!empty($conf['report_content']['driver'])
+                  && (($conf['report_content']['allow'] == 'authenticated' && $registry->isAuthenticated())
+                  || $conf['report_content']['allow'] == 'all')) {
 
-            $view->report_url = Horde::url('report.php')->add('gallery', $id)->link(array('class' => 'widget'));
+            $view->report_url = Horde::url('report.php')->add('gallery', $id)->link(['class' => 'widget']);
         }
 
         if ($this->_view->gallery->hasPermission($registry->getAuth(), Horde_Perms::DELETE)) {
             $view->have_delete = true;
-            $view->deleteall_url = $galleryurl->copy()->add('actionID', 'empty')->link(array('class' => 'widget'));
-            $view->deletegallery_url = $galleryurl->copy()->add('actionID', 'delete')->link(array('class' => 'widget'));
+            $view->deleteall_url = $galleryurl->copy()->add('actionID', 'empty')->link(['class' => 'widget']);
+            $view->deletegallery_url = $galleryurl->copy()->add('actionID', 'delete')->link(['class' => 'widget']);
         }
     }
 }

@@ -1,4 +1,6 @@
 <?php
+use Horde\Util\Util;
+
 /**
  * Main template for rendering gallery property page
  * Expects the following properties to be set:
@@ -11,12 +13,12 @@
  */
 ?>
 <form method="post" name="gallery" action="<?php echo Horde::selfUrl() ?>" >
-<?php Horde_Util::pformInput() ?>
+<?php Util::pformInput() ?>
 <input type="hidden" name="actionID" value="save" />
 <?php if ($this->action == 'addchild'): ?>
   <input type="hidden" name="parent" value="<?php echo $this->properties['parent'] ?>" />
 <?php elseif ($this->action != 'add'): ?>
-  <input type="hidden" name="gallery" value="<?php echo isset($this->properties['id']) ? $this->properties['id'] : '' ?>" />
+  <input type="hidden" name="gallery" value="<?php echo $this->properties['id'] ?? '' ?>" />
 <?php endif; ?>
 <input type="hidden" name="url" value="<?php echo $this->url->setRaw(false)->toString() ?>" />
 <h1 class="header">
@@ -31,10 +33,10 @@
   <select name="gallery_parent" id="gallery_parent">
    <option value=""><?php echo _("Top Level Gallery") ?></option>
    <?php echo Ansel::selectGalleries(
-       array(
-         'selected' => $this->properties['parent'],
-         'perm' => Horde_Perms::EDIT,
-         'ignore' => $this->properties['id']))?>
+       [
+           'selected' => $this->properties['parent'],
+           'perm' => Horde_Perms::EDIT,
+           'ignore' => $this->properties['id']])?>
   </select>
  </td>
 </tr>
@@ -52,7 +54,12 @@
 
 <!-- Display Name -->
 <tr>
-  <td class="rightAlign"><?php echo Horde::img('required.png') ?><strong><?php echo _("Gallery Display Name") ?></strong>&nbsp;</td>
+  <td class="rightAlign"><?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo Horde::img('required.png') ?><strong><?php echo _("Gallery Display Name") ?></strong>&nbsp;</td>
   <td>
     <input name="gallery_name" id="gallery_name" type="text" value="<?php echo $this->h($this->properties['name']) ?>" size="50" maxlength="100" />
   </td>
@@ -140,7 +147,7 @@
   <td class="horde-form-buttons">
    <input type="submit" id="gallery_submit" name="gallery_submit" class="horde-default" value="<?php echo _("Save Gallery") ?>" />&nbsp;
    <input type="reset" class="horde-reset" value="<?php echo _("Undo Changes") ?>"  />&nbsp;
-   <?php echo $this->contentTag('a', _("Cancel"), array('href' => $this->url->toString(), 'class' => 'horde-cancel')) ?>
+   <?php echo $this->contentTag('a', _("Cancel"), ['href' => $this->url->toString(), 'class' => 'horde-cancel']) ?>
   </td>
 </tr>
 </table>

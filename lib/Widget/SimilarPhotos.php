@@ -16,7 +16,7 @@ class Ansel_Widget_SimilarPhotos extends Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_supported_views = array('Image');
+    protected $_supported_views = ['Image'];
 
     /**
      * Constructor
@@ -56,8 +56,8 @@ class Ansel_Widget_SimilarPhotos extends Ansel_Widget_Base
         $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
 
         $html = '';
-        $args = array('typeId' => 'image',
-                      'userId' => $this->_view->gallery->get('owner'));
+        $args = ['typeId' => 'image',
+            'userId' => $this->_view->gallery->get('owner')];
 
         $results = $GLOBALS['injector']->getInstance('Ansel_Tagger')->listRelatedImages($this->_view->resource);
         if (count($results)) {
@@ -69,13 +69,13 @@ class Ansel_Widget_SimilarPhotos extends Ansel_Widget_Base
                     if ($rGal->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::READ)) {
                         $html .= Ansel::getUrlFor(
                             'view',
-                            array('image' => $img->id,
-                                       'view' => 'Image',
-                                       'gallery' => abs($img->gallery),
-                                       'slug' => $rGal->get('slug')),
+                            ['image' => $img->id,
+                                'view' => 'Image',
+                                'gallery' => abs($img->gallery),
+                                'slug' => $rGal->get('slug')],
                             true
-                        )->link(array('title' =>  sprintf(_("%s from %s"), $img->filename, $rGal->get('name'))))
-                            . '<img src="'. Ansel::getImageUrl($img->id, 'mini', true) . '" alt="' . htmlspecialchars($img->filename) . '" /></a>';
+                        )->link(['title' =>  sprintf(_("%s from %s"), $img->filename, $rGal->get('name'))])
+                            . '<img src="' . Ansel::getImageUrl($img->id, 'mini', true) . '" alt="' . htmlspecialchars($img->filename) . '" /></a>';
                     }
                 } catch (Ansel_Exception $e) {
                     Horde::log($e->getMessage(), 'ERR');

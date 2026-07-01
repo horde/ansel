@@ -3,7 +3,7 @@
 /**
  * Defines the AJAX actions used in Ansel.
  *
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -15,7 +15,7 @@
  */
 class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
 {
-    protected $_external = array('embed');
+    protected $_external = ['embed'];
 
     /**
      * Obtain a gallery
@@ -50,7 +50,7 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
             case 'twitter':
                 $url = Ansel::getUrlFor(
                     'view',
-                    array('view' => 'Gallery', 'gallery' => $gallery->id),
+                    ['view' => 'Gallery', 'gallery' => $gallery->id],
                     true
                 );
 
@@ -100,7 +100,7 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         }
 
         return preg_match('/^[a-zA-Z0-9_-]*$/', $slug)
-            ? (bool)$GLOBALS['injector']->getInstance('Ansel_Storage')->galleryExists(null, $slug)
+            ? (bool) $GLOBALS['injector']->getInstance('Ansel_Storage')->galleryExists(null, $slug)
             : false;
     }
 
@@ -124,17 +124,17 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         $result = new stdClass();
         $result->response = 0;
 
-        if (empty($img) ||
-            ($type == 'location' && empty($location)) ||
-            ((empty($type) || $type == 'all') &&
-             ($type == 'all' && empty($lat)))) {
+        if (empty($img)
+            || ($type == 'location' && empty($location))
+            || ((empty($type) || $type == 'all')
+             && ($type == 'all' && empty($lat)))) {
             return new Horde_Core_Ajax_Response_Prototypejs($result);
         }
 
         // Get the image and gallery to check perms
         try {
             $ansel_storage = $injector->getInstance('Ansel_Storage');
-            $image = $ansel_storage->getImage((int)$img);
+            $image = $ansel_storage->getImage((int) $img);
             $gallery = $ansel_storage->getGallery($image->gallery);
         } catch (Ansel_Exception $e) {
             return new Horde_Core_Ajax_Response_Prototypejs($result);
@@ -162,9 +162,9 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
                 $image->geotag('', '', '');
                 // Now get the "add geotag" stuff
                 $addurl = Horde::url('map_edit.php')->add('image', $img);
-                $addLink = $addurl->link(array(
-                    'onclick' => Horde::popupJs(Horde::url('map_edit.php'), array('params' => array('image' => $img), 'urlencode' => true, 'width' => '750', 'height' => '600')) . 'return false;'
-                ));
+                $addLink = $addurl->link([
+                    'onclick' => Horde::popupJs(Horde::url('map_edit.php'), ['params' => ['image' => $img], 'urlencode' => true, 'width' => '750', 'height' => '600']) . 'return false;',
+                ]);
                 $imgs = $ansel_storage->getRecentImagesGeodata($registry->getAuth());
                 if (count($imgs) > 0) {
                     $imgsrc = '<div class="ansel_location_sameas">';
@@ -172,10 +172,10 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
                         $title = empty($data['image_location'])
                             ? Ansel::point2Deg($data['image_latitude'], true) . ' ' . Ansel::point2Deg($data['image_longitude'])
                             : $data['image_location'];
-                        $imgsrc .= $addurl->link(array(
+                        $imgsrc .= $addurl->link([
                             'title' => $title,
-                            'onclick' => "Ansel.widgets.geotag.setLocation('" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "');return false"
-                        )) . '<img src="' . Ansel::getImageUrl($id, 'mini', true) . '" alt="[image]" /></a>';
+                            'onclick' => "Ansel.widgets.geotag.setLocation('" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "');return false",
+                        ]) . '<img src="' . Ansel::getImageUrl($id, 'mini', true) . '" alt="[image]" /></a>';
                     }
 
                     $imgsrc .= '</div>';
@@ -321,12 +321,12 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
         }
 
         $tagger = $injector->getInstance('Ansel_Tagger');
-        $tagger->untag($resource->id, (int)$tags, $type);
+        $tagger->untag($resource->id, (int) $tags, $type);
         $currentTags = $tagger->getTags($resource->id, $type);
         if (count($currentTags)) {
             $newTags = $tagger->getTagInfo(array_keys($currentTags));
         } else {
-            $newTags = array();
+            $newTags = [];
         }
         $links = Ansel::getTagLinks($newTags, 'add');
         foreach ($newTags as &$tag_info) {
@@ -345,7 +345,12 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
 
         foreach ($tags as $taginfo) {
             $tag_id = $taginfo['tag_id'];
-            $html .= '<li>' . $links[$tag_id]->link(array('title' => sprintf(ngettext("%d photo", "%d photos", $taginfo['count']), $taginfo['count']))) . htmlspecialchars($taginfo['tag_name']) . '</a>' . ($hasEdit ? '<a href="#" onclick="removeTag(' . $tag_id . ');">' . Horde::img('delete-small.png', _("Remove Tag")) . '</a>' : '') . '</li>';
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= '<li>' . $links[$tag_id]->link(['title' => sprintf(ngettext("%d photo", "%d photos", $taginfo['count']), $taginfo['count'])]) . htmlspecialchars($taginfo['tag_name']) . '</a>' . ($hasEdit ? '<a href="#" onclick="removeTag(' . $tag_id . ');">' . Horde::img('delete-small.png', _("Remove Tag")) . '</a>' : '') . '</li>';
         }
 
         return $html . '</ul>';
@@ -367,7 +372,7 @@ class Ansel_Ajax_Application_Handler extends Horde_Core_Ajax_Application_Handler
             throw new Ansel_Exception(sprintf("Class definition for %s not found.", $class));
         }
 
-        $params = array();
+        $params = [];
         foreach ($this->vars as $key => $value) {
             $params[$key] = $value;
         }

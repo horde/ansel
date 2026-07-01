@@ -5,7 +5,7 @@ use Horde\Util\Variables;
 /**
  * Imple for performing Ajax discovery and editing of image faces.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author  Duck <duck@obala.net>
  * @author  Michael J. Rubinsky <mrubinsk@horde.org>
@@ -19,9 +19,9 @@ class Ansel_Ajax_Imple_EditFaces extends Horde_Core_Ajax_Imple
     {
         if ($init) {
             $this->_jsOnDoAction(
-                '$("faces_widget_content").update(' .
-                     Horde_Serialize::serialize(_("Loading..."), Horde_Serialize::JSON) .
-                 ')'
+                '$("faces_widget_content").update('
+                     . Horde_Serialize::serialize(_("Loading..."), Horde_Serialize::JSON)
+                 . ')'
             );
             $this->_jsOnComplete(
                 '$("faces_widget_content").update(e.memo)'
@@ -30,9 +30,9 @@ class Ansel_Ajax_Imple_EditFaces extends Horde_Core_Ajax_Imple
             $GLOBALS['page_output']->addScriptFile('editfaces.js');
         }
 
-        return array(
-            'image_id' => $this->_params['image_id']
-        );
+        return [
+            'image_id' => $this->_params['image_id'],
+        ];
     }
 
     /**

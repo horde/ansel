@@ -1,4 +1,5 @@
 <?php
+
 use Horde\Injector\Injector;
 
 /**
@@ -13,7 +14,12 @@ class Ansel_Factory_Styles extends Horde_Core_Factory_Injector
 {
     public function create(Horde_Injector|Injector $injector)
     {
-        /* Brings in the $styles array in this scope only */
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::loadConfiguration()
+         * @deprecated Use $registry->loadConfigFile() instead
+         * @see Horde_Deprecated::loadConfiguration()
+         */
+/* Brings in the $styles array in this scope only */
         $styles = Horde::loadConfiguration('styles.php', 'styles', 'ansel');
 
         /* No prettythumbs allowed at all by admin choice */

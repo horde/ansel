@@ -4,7 +4,7 @@
  * Ansel_Widget:: class wraps the display of widgets to be displayed in various
  * Ansel_Views.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -21,7 +21,7 @@ abstract class Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Reference to the Ansel_View we are attaching to
@@ -59,7 +59,7 @@ abstract class Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_supported_views = array('Image', 'Gallery');
+    protected $_supported_views = ['Image', 'Gallery'];
 
     /**
      * Constructor
@@ -120,7 +120,7 @@ abstract class Ansel_Widget_Base
      */
     protected function _htmlBegin()
     {
-        $html = '<div class="anselWidget" style="background-color:' . $this->_style->background .   ';">';
+        $html = '<div class="anselWidget" style="background-color:' . $this->_style->background . ';">';
         $html .= '<h2 class="header tagTitle">' . $this->_title . '</h2>';
         return $html;
     }

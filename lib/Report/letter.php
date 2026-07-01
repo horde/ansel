@@ -11,11 +11,11 @@ class Ansel_Report_letter extends Ansel_Report
     /**
      * Report
      */
-    public function report($message, $users = array())
+    public function report($message, $users = [])
     {
         if (!empty($users)) {
             // We are sending a report to to the gallery owner
-            $admins = array($users);
+            $admins = [$users];
         } elseif (empty($GLOBALS['conf']['report_content']['users'])) {
             $admins = $this->getAdmins();
             if (empty($admins)) {
@@ -31,9 +31,9 @@ class Ansel_Report_letter extends Ansel_Report
         return $GLOBALS['registry']->callByPackage(
             'letter',
             'sendMessage',
-            array($admins,
-                                           array('title' => $title,
-                                                 'content' => $message))
+            [$admins,
+                ['title' => $title,
+                    'content' => $message]]
         );
     }
 }

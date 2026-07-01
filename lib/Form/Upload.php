@@ -28,7 +28,7 @@ class Ansel_Form_Upload extends Horde_Form
         }
         $postsize = $this->_get_size($postsize);
 
-        $this->setButtons(array(_("Upload"), _("Cancel")));
+        $this->setButtons([_("Upload"), _("Cancel")]);
         $this->addHidden('', 'gallery', 'text', false);
         $this->addHidden('', 'page', 'text', false);
 
@@ -41,13 +41,13 @@ class Ansel_Form_Upload extends Horde_Form
                 'file',
                 false,
                 false,
-                _("Maximum photo size:") . ' '  . $filesize,
-                array(false)
+                _("Maximum photo size:") . ' ' . $filesize,
+                [false]
             );
             $upload->setHelp('upload');
         }
         $this->addVariable(_("Make this the default photo for this gallery?"), 'image0_default', 'boolean', false);
-        $this->addVariable(_("Caption"), 'image0_desc', 'longtext', false, false, null, array('4', '40'));
+        $this->addVariable(_("Caption"), 'image0_desc', 'longtext', false, false, null, ['4', '40']);
         $this->addVariable(_("Tags"), 'image0_tags', 'text', false, false, _("Separate tags with commas."));
 
         $this->setSection('multi_file', _("Multiple Photos"));
@@ -65,7 +65,7 @@ class Ansel_Form_Upload extends Horde_Form
         for ($i = 1; $i <= $conf['image']['num_uploads']; $i++) {
             $this->addHidden('', 'image' . $i, 'text', false);
             if (!strlen($vars->get('image' . $i))) {
-                $upload = $this->addVariable(sprintf(_("File %s"), $i), 'file' . $i, 'file', false, false, null, array(false));
+                $upload = $this->addVariable(sprintf(_("File %s"), $i), 'file' . $i, 'file', false, false, null, [false]);
                 $upload->setHelp('upload');
             }
         }
@@ -90,7 +90,7 @@ class Ansel_Form_Upload extends Horde_Form
      */
     protected function _get_size($size)
     {
-        $bytes = array('B', 'KB', 'MB', 'GB', 'TB');
+        $bytes = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         foreach ($bytes as $val) {
             if ($size > 1024) {
@@ -100,7 +100,7 @@ class Ansel_Form_Upload extends Horde_Form
             }
         }
 
-        return round($size, 2) . ' '  . $val;
+        return round($size, 2) . ' ' . $val;
     }
 
 }

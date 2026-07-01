@@ -3,7 +3,7 @@
 /**
  * Move tags from ansel to content storage.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -22,10 +22,10 @@ class AnselUpgradeCategoriesToTags extends Horde_Db_Migration_Base
             throw new Horde_Exception('The Content_Tagger class could not be found. Make sure the Content application is installed.');
         }
         $type_mgr = $GLOBALS['injector']->getInstance('Content_Types_Manager');
-        $types = $type_mgr->ensureTypes(array('gallery', 'image'));
-        $this->_type_ids = array(
-            'gallery' => (int)$types[0],
-            'image' => (int)$types[1]);
+        $types = $type_mgr->ensureTypes(['gallery', 'image']);
+        $this->_type_ids = [
+            'gallery' => (int) $types[0],
+            'image' => (int) $types[1]];
         $this->_tagger = $GLOBALS['injector']->getInstance('Content_Tagger');
         $this->_shares = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Share')->create('ansel');
 
@@ -39,7 +39,7 @@ class AnselUpgradeCategoriesToTags extends Horde_Db_Migration_Base
             foreach ($rows as $row) {
                 $this->_tagger->tag(
                     $row['share_owner'],
-                    array('object' => (string)$row['share_id'], 'type' => $this->_type_ids['gallery']),
+                    ['object' => (string) $row['share_id'], 'type' => $this->_type_ids['gallery']],
                     $row['attribute_category']
                 );
             }

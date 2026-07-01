@@ -3,7 +3,7 @@
 /**
  * The Ansel_View_Abstract:: Parent class for the various Ansel_View classes
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -14,7 +14,7 @@
  */
 abstract class Ansel_View_Base
 {
-    protected $_params = array();
+    protected $_params = [];
 
     /**
      * Const'r
@@ -72,7 +72,7 @@ abstract class Ansel_View_Base
      *                         when clicking on breadcrumb links, for example.
      * </pre>
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->_params = $params;
     }
@@ -146,12 +146,12 @@ abstract class Ansel_View_Base
         /* Set any date info we might have */
         if (!empty($this->_params['year'])) {
             $date = Ansel::getDateParameter(
-                array('year' => $this->_params['year'],
-                      'month' => $this->_params['month'],
-                      'day' => $this->_params['day'])
+                ['year' => $this->_params['year'],
+                    'month' => $this->_params['month'],
+                    'day' => $this->_params['day']]
             );
         } else {
-            $date = array();
+            $date = [];
         }
         $gallery->setDate($date);
 
@@ -178,21 +178,21 @@ abstract class Ansel_View_Base
       *
       * @return string  A serialized JSON array.
       */
-    public static function json(Ansel_Gallery $gallery, $params = array())
+    public static function json(Ansel_Gallery $gallery, $params = [])
     {
         global $conf, $prefs;
 
-        $default = array(
+        $default = [
             'full' => false,
             'from' => 0,
             'count' => 0,
             'image_view' => 'screen',
             'view_links' => false,
-            'perpage' => $prefs->getValue('tilesperpage', $conf['thumbnail']['perpage'])
-        );
+            'perpage' => $prefs->getValue('tilesperpage', $conf['thumbnail']['perpage']),
+        ];
 
         $params = array_merge($default, $params);
-        $json = array();
+        $json = [];
         $curimage = 0;
         $curpage =  0;
         if (empty($params['images'])) {
@@ -209,28 +209,28 @@ abstract class Ansel_View_Base
                 $curimage = 0;
             }
 
-            $data = array(
-                (string)Ansel::getImageUrl($image->id, $params['image_view'], $params['full'], $style),
+            $data = [
+                (string) Ansel::getImageUrl($image->id, $params['image_view'], $params['full'], $style),
                 htmlspecialchars($image->filename),
-                $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($image->caption, 'text2html', array('parselevel' => Horde_Text_Filter_Text2html::MICRO_LINKURL)),
+                $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter($image->caption, 'text2html', ['parselevel' => Horde_Text_Filter_Text2html::MICRO_LINKURL]),
                 $image->id,
-                $curpage
-            );
+                $curpage,
+            ];
             if ($params['view_links']) {
-                $data[] = (string)Ansel::getUrlFor(
+                $data[] = (string) Ansel::getUrlFor(
                     'view',
-                    array('gallery' => $gallery->id,
-                          'slug' => $gallery->get('slug'),
-                          'image' => $image->id,
-                          'view' => 'Image',
-                          'page' => $curpage),
+                    ['gallery' => $gallery->id,
+                        'slug' => $gallery->get('slug'),
+                        'image' => $image->id,
+                        'view' => 'Image',
+                        'page' => $curpage],
                     true
                 );
-                $data[] = (string)Ansel::getUrlFor(
+                $data[] = (string) Ansel::getUrlFor(
                     'view',
-                    array('gallery' => $image->gallery,
-                          'slug' => $gallery->get('slug'),
-                          'view' => 'Gallery'),
+                    ['gallery' => $image->gallery,
+                        'slug' => $gallery->get('slug'),
+                        'view' => 'Gallery'],
                     true
                 );
             }

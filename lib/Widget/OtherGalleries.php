@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
@@ -11,7 +11,7 @@
  * thumbnails and links to other galleries owned by the same user as the
  * currently viewed image/gallery.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
@@ -54,10 +54,10 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
         $view->toggle_url = Horde::selfUrl(true, true)
             ->add('actionID', 'show_othergalleries')
             ->link(
-                array(
-                'id' => 'othergalleries-toggle',
-                'class' => ($GLOBALS['prefs']->getValue('show_othergalleries') ? 'hide' : 'show')
-            )
+                [
+                    'id' => 'othergalleries-toggle',
+                    'class' => ($GLOBALS['prefs']->getValue('show_othergalleries') ? 'hide' : 'show'),
+                ]
             );
         $this->_getOtherGalleries($view);
 
@@ -76,12 +76,12 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
         // Set up the tree
         $tree = $GLOBALS['injector']
             ->getInstance('Horde_Core_Factory_Tree')
-            ->create('otherAnselGalleries_' . md5($owner), 'Javascript', array('class' => 'anselWidgets'));
+            ->create('otherAnselGalleries_' . md5($owner), 'Javascript', ['class' => 'anselWidgets']);
 
         try {
             $galleries = $GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
-                ->listGalleries(array('attributes' => $owner));
+                ->listGalleries(['attributes' => $owner]);
         } catch (Ansel_Exception $e) {
             Horde::log($e, 'ERR');
             return;
@@ -96,26 +96,26 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
                 $parent = array_pop($parents);
             }
 
-            $img = (string)Ansel::getImageUrl(
+            $img = (string) Ansel::getImageUrl(
                 $gallery->getKeyImage(Ansel::getStyleDefinition('ansel_default')),
                 'mini',
                 true
             );
             $link = Ansel::getUrlFor(
                 'view',
-                array('gallery' => $gallery->id,
-                      'slug' => $gallery->get('slug'),
-                      'view' => 'Gallery'),
+                ['gallery' => $gallery->id,
+                    'slug' => $gallery->get('slug'),
+                    'view' => 'Gallery'],
                 true
             );
 
-            $tree->addNode(array(
+            $tree->addNode([
                 'id' => $gallery->id,
                 'parent' => $parent,
                 'label' => $gallery->get('name'),
                 'expanded' => $gallery->id == $this->_view->gallery->id,
-                'params' => array('icon' => $img, 'url' => $link)
-            ));
+                'params' => ['icon' => $img, 'url' => $link],
+            ]);
         }
 
         Horde::startBuffer();
@@ -127,7 +127,7 @@ class Ansel_Widget_OtherGalleries extends Ansel_Widget_Base
             ->getInstance('Horde_Core_Factory_Imple')
             ->create(
                 'Ansel_Ajax_Imple_ToggleOtherGalleries',
-                array('id' => 'othergalleries-toggle')
+                ['id' => 'othergalleries-toggle']
             );
 
     }

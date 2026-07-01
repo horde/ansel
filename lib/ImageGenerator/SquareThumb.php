@@ -3,7 +3,7 @@
 /**
  * ImageGenerator to create a square thumbnail.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -40,9 +40,9 @@ class Ansel_ImageGenerator_SquareThumb extends Ansel_ImageGenerator
 
         // Use smartcrop algorithm if we have it, otherwise a plain center crop.
         if (Ansel::isAvailable('SmartCrop') && $GLOBALS['conf']['image']['smartcrop']) {
-            $this->_image->addEffect('SmartCrop', array('width' => $size, 'height' => $size));
+            $this->_image->addEffect('SmartCrop', ['width' => $size, 'height' => $size]);
         } else {
-            $this->_image->addEffect('CenterCrop', array('width' => $size, 'height' => $size));
+            $this->_image->addEffect('CenterCrop', ['width' => $size, 'height' => $size]);
         }
         $this->_image->applyEffects();
 
@@ -50,9 +50,9 @@ class Ansel_ImageGenerator_SquareThumb extends Ansel_ImageGenerator
             try {
                 $this->_image->addEffect(
                     'Unsharpmask',
-                    array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                               'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                               'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                    ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                        'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                        'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                 );
                 $this->_image->applyEffects();
             } catch (Horde_Image_Exception $e) {

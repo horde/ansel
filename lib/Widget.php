@@ -4,7 +4,7 @@
  * Ansel_Widget:: class wraps the display of widgets to be displayed in various
  * Ansel_Views.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -25,7 +25,7 @@ class Ansel_Widget
      * @return Ansel_Widget object
      * @throws Ansel_Exception
      */
-    public static function factory($driver, $params = array())
+    public static function factory($driver, $params = [])
     {
         $driver = basename($driver);
         $class = 'Ansel_Widget_' . $driver;

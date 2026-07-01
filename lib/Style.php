@@ -39,19 +39,19 @@ class Ansel_Style
     /**
      * Work around issue with arrays and __get
      */
-    public $widgets = array();
+    public $widgets = [];
 
     public function __construct($properties)
     {
-        $widgets = !empty($properties['widgets']) ? $properties['widgets'] : array();
+        $widgets = !empty($properties['widgets']) ? $properties['widgets'] : [];
         unset($properties['widgets']);
         $properties['widgets'] = null;
-        $this->widgets = array_merge(array('Actions' => array()), $widgets);
+        $this->widgets = array_merge(['Actions' => []], $widgets);
 
         $this->_properties = array_merge(
-            array(
+            [
                 'gallery_view' => 'Gallery',
-                'background' => 'none'),
+                'background' => 'none'],
             $properties
         );
     }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -43,7 +43,7 @@ class Ansel_Form_Image extends Horde_Form
             false,
             false,
             null,
-            array('4', '40')
+            ['4', '40']
         );
 
         $this->addVariable(
@@ -53,7 +53,7 @@ class Ansel_Form_Image extends Horde_Form
             true,
             false,
             null,
-            array('start_year' => 1900)
+            ['start_year' => 1900]
         );
 
         $this->addVariable(_("Tags"), 'image_tags', 'text', false);
@@ -65,8 +65,8 @@ class Ansel_Form_Image extends Horde_Form
             'file',
             false,
             false,
-            _("Maximum photo size:") . ' '  . $filesize,
-            array(false)
+            _("Maximum photo size:") . ' ' . $filesize,
+            [false]
         );
         $upload->setHelp('upload');
     }
@@ -76,7 +76,7 @@ class Ansel_Form_Image extends Horde_Form
      */
     protected function _get_size($size)
     {
-        $bytes = array('B', 'KB', 'MB', 'GB', 'TB');
+        $bytes = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         foreach ($bytes as $val) {
             if ($size > 1024) {
@@ -86,7 +86,7 @@ class Ansel_Form_Image extends Horde_Form
             }
         }
 
-        return round($size, 2) . ' '  . $val;
+        return round($size, 2) . ' ' . $val;
     }
 
 }

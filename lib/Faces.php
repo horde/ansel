@@ -3,7 +3,7 @@
 /**
  * Face recognition class
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -70,12 +70,12 @@ class Ansel_Faces
                 $GLOBALS['injector']
                     ->getInstance('Horde_Core_Factory_Vfs')
                     ->create('images')
-                    ->deleteFile($path, (int)$face . $ext);
+                    ->deleteFile($path, (int) $face . $ext);
             } catch (Horde_Vfs_Exception $e) {
             }
             try {
                 $GLOBALS['ansel_db']->delete('DELETE FROM ansel_faces WHERE'
-                    . ' face_id = ' . (int)$face);
+                    . ' face_id = ' . (int) $face);
                 $GLOBALS['ansel_db']->update('UPDATE ansel_images SET '
                     . 'image_faces = image_faces - 1 WHERE image_id = '
                     . $image->id . ' AND image_faces > 0 ');
@@ -123,9 +123,9 @@ class Ansel_Faces
     {
         return Ansel::getUrlFor(
             'view',
-            array('view' => 'Image',
-                  'gallery' => $face['gallery_id'],
-                  'image' => $face['image_id'])
+            ['view' => 'Image',
+                'gallery' => $face['gallery_id'],
+                'image' => $face['image_id']]
         );
     }
 
@@ -154,10 +154,10 @@ class Ansel_Faces
 
         $img_view_url = Ansel::getUrlFor(
             'view',
-            array('gallery' => $face['gallery_id'],
-                  'view' => 'Image',
-                  'image' => $face['image_id'],
-                  'havesearch' => false)
+            ['gallery' => $face['gallery_id'],
+                'view' => 'Image',
+                'image' => $face['image_id'],
+                'havesearch' => false]
         );
 
         // Build the actual html
@@ -168,7 +168,7 @@ class Ansel_Faces
 
         // Display the face name or a link to claim the face.
         if (empty($face['face_name']) && $GLOBALS['conf']['report_content']['driver']) {
-            $html .= Horde::url('faces/claim.php')->add('face', $face_id)->link(array('title' => _("Do you know someone in this photo?"))) . _("Claim") . '</a>';
+            $html .= Horde::url('faces/claim.php')->add('face', $face_id)->link(['title' => _("Do you know someone in this photo?")]) . _("Claim") . '</a>';
         }
 
         // Link for searching for similar faces.

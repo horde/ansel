@@ -23,9 +23,9 @@ class Ansel_ImageGenerator_Screen extends Ansel_ImageGenerator
             try {
                 $this->_image->addEffect(
                     'Unsharpmask',
-                    array('radius' => $GLOBALS['conf']['screen']['radius'],
-                                               'threshold' => $GLOBALS['conf']['screen']['threshold'],
-                                               'amount' => $GLOBALS['conf']['screen']['amount'])
+                    ['radius' => $GLOBALS['conf']['screen']['radius'],
+                        'threshold' => $GLOBALS['conf']['screen']['threshold'],
+                        'amount' => $GLOBALS['conf']['screen']['amount']]
                 );
                 $this->_image->applyEffects();
             } catch (Horde_Image $e) {

@@ -7,20 +7,17 @@ list: ansel
 type: application
 homepage: https://www.horde.org/apps/ansel
 authors:
-  -
-    name: Michael J Rubinsky
+  - name: Michael J Rubinsky
     user: mrubinsk
     email: mrubinsk@horde.org
     active: true
     role: lead
-  -
-    name: Jan Schneider
+  - name: Jan Schneider
     user: jan
     email: jan@horde.org
     active: true
     role: lead
-  -
-    name: Chuck Hagenbuch
+  - name: Chuck Hagenbuch
     user: chuck
     email: chuck@horde.org
     active: false
@@ -80,3 +77,4 @@ autoload:
   psr-4:
     Horde\Ansel\: /src
 vendor: horde
+keywords:

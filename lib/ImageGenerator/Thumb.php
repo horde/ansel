@@ -29,9 +29,9 @@ class Ansel_ImageGenerator_Thumb extends Ansel_ImageGenerator
             try {
                 $this->_image->addEffect(
                     'Unsharpmask',
-                    array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                               'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                               'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                    ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                        'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                        'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                 );
                 $this->_image->applyEffects();
             } catch (Horde_Image_Exception $e) {

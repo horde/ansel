@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
  * Ansel_Tile_Gallery:: class wraps display of thumbnail 'tiles' displayed
  * for a gallery on the Ansel_View_Gallery view.
@@ -29,9 +31,9 @@ class Ansel_Tile_Gallery
      */
     public static function getTile(
         Ansel_Gallery $gallery,
-        Ansel_Style $style = null,
+        ?Ansel_Style $style = null,
         $mini = false,
-        array $params = array()
+        array $params = []
     ) {
         global $prefs, $registry, $injector;
 
@@ -40,11 +42,11 @@ class Ansel_Tile_Gallery
         $view->addTemplatePath(ANSEL_TEMPLATES . '/tile');
         $view->gallery = $gallery;
 
-        $view_type = Horde_Util::getFormData('view', 'Gallery');
+        $view_type = Util::getFormData('view', 'Gallery');
         $haveSearch = ($view_type == 'Results') ? 1 : 0;
-        if (($view_type == 'Results' || $view_type == 'List') ||
-            (basename($_SERVER['PHP_SELF']) == 'index.php' &&
-             $prefs->getValue('defaultview') == 'galleries')) {
+        if (($view_type == 'Results' || $view_type == 'List')
+            || (basename($_SERVER['PHP_SELF']) == 'index.php'
+             && $prefs->getValue('defaultview') == 'galleries')) {
             $showOwner = true;
         } else {
             $showOwner = false;
@@ -58,13 +60,13 @@ class Ansel_Tile_Gallery
         // If the gallery has subgalleries, and no images, use one of the
         // subgalleries' stack image. hasSubGalleries already takes
         // permissions into account.
-        if ($gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) &&
-            !$gallery->countImages() && $gallery->hasSubGalleries()) {
+        if ($gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+            && !$gallery->countImages() && $gallery->hasSubGalleries()) {
 
             try {
                 $galleries = $injector
                     ->getInstance('Ansel_Storage')
-                    ->listGalleries(array('parent' => $gallery->id, 'all_levels' => false, 'perm' => Horde_Perms::READ));
+                    ->listGalleries(['parent' => $gallery->id, 'all_levels' => false, 'perm' => Horde_Perms::READ]);
 
                 foreach ($galleries as $sgallery) {
                     if ($default_img = $sgallery->getKeyImage($style)) {
@@ -79,8 +81,8 @@ class Ansel_Tile_Gallery
             } catch (Ansel_Exception $e) {
             }
 
-        } elseif ($gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) &&
-                  $gallery->countImages()) {
+        } elseif ($gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+                  && $gallery->countImages()) {
 
             $thumbstyle = $mini ? 'mini' : 'thumb';
             if ($gallery->hasPasswd()) {
@@ -105,17 +107,17 @@ class Ansel_Tile_Gallery
         if (!isset($params['gallery_view_url'])) {
             $view->view_link = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'gallery' => $gallery->id,
                     'view' => 'Gallery',
                     'havesearch' => $haveSearch,
-                    'slug' => $gallery->get('slug'))
+                    'slug' => $gallery->get('slug')]
             );
         } else {
             $view->view_link = new Horde_Url(
                 str_replace(
-                    array('%g', '%s'),
-                    array($gallery->id, $gallery->get('slug')),
+                    ['%g', '%s'],
+                    [$gallery->id, $gallery->get('slug')],
                     urldecode($params['gallery_view_url'])
                 )
             );
@@ -123,21 +125,21 @@ class Ansel_Tile_Gallery
 
         if ($gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT) && !$mini) {
             $view->properties_link = Horde::url('gallery.php', true)->add(
-                array('gallery' => $gallery->id,
-                      'actionID' => 'modify',
-                      'havesearch' => $haveSearch,
-                      'url' => Horde::signUrl(Horde::selfUrl(true, false, true)))
+                ['gallery' => $gallery->id,
+                    'actionID' => 'modify',
+                    'havesearch' => $haveSearch,
+                    'url' => Horde::signUrl(Horde::selfUrl(true, false, true))]
             );
         }
 
-        if ($showOwner && !$mini &&
-            $registry->getAuth() != $gallery->get('owner')) {
+        if ($showOwner && !$mini
+            && $registry->getAuth() != $gallery->get('owner')) {
             $view->owner_link = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'view' => 'List',
                     'owner' => $gallery->get('owner'),
-                    'groupby' => 'owner'),
+                    'groupby' => 'owner'],
                 true
             );
             $view->owner_string = $gallery->getIdentity()->getValue('fullname');

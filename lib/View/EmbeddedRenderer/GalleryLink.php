@@ -3,7 +3,7 @@
 /**
  * Ansel_View_EmbeddedRenderer_GalleryLink
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -46,7 +46,7 @@ class Ansel_View_EmbeddedRenderer_GalleryLink extends Ansel_View_Base
 
         // Determine the style/thumnailsize etc...
         $thumbsize = empty($this->_params['thumbsize']) ? 'thumb' : $this->_params['thumbsize'];
-        $images = array();
+        $images = [];
         foreach ($galleries as $id) {
             try {
                 if ($haveSlugs) {
@@ -74,10 +74,10 @@ class Ansel_View_EmbeddedRenderer_GalleryLink extends Ansel_View_Base
         global $page_output;
         $page_output->addThemeStylesheet('jsembed.css');
         Horde::startBuffer();
-        $page_output->includeStylesheetFiles(array(
+        $page_output->includeStylesheetFiles([
             'nobase' => true,
-            'nohorde' => true
-        ), true);
+            'nohorde' => true,
+        ], true);
         $css = Horde::endBuffer();
 
         // Some paths
@@ -89,30 +89,30 @@ class Ansel_View_EmbeddedRenderer_GalleryLink extends Ansel_View_Base
         // Start building the javascript - we use the same parameters as with
         //the mini gallery view so we can use the same javascript to display it
         $html = <<<EOT
-            //<![CDATA[
-            // Old fashioned way to play nice with Safari 2 (Adding script inline with the
-            // DOM won't work).  Need two seperate files output here since the incldued
-            // files don't seem to be parsed until after the entire page is loaded, so we
-            // can't include prototype on the same page it's needed.
+                        //<![CDATA[
+                        // Old fashioned way to play nice with Safari 2 (Adding script inline with the
+                        // DOM won't work).  Need two seperate files output here since the incldued
+                        // files don't seem to be parsed until after the entire page is loaded, so we
+                        // can't include prototype on the same page it's needed.
 
-            if (typeof anseljson == 'undefined') {
-                if (typeof Prototype == 'undefined') {
-                    document.write('<script type="text/javascript" src="$pturl"></script>');
-                }
-                anselnodes = new Array();
-                anseljson = new Object();
-                document.write('$css');
-                document.write('<script type="text/javascript" src="$jsurl"></script>');
-            }
-            anselnodes[anselnodes.length] = '$node';
-            anseljson['$node'] = new Object();
-            anseljson['$node']['data'] = $json;
-            anseljson['$node']['perpage'] = 0;
-            anseljson['$node']['page'] = 0;
-            anseljson['$node']['hideLinks'] = false;
-            anseljson['$node']['linkToGallery'] = true;
-            //]]>
-EOT;
+                        if (typeof anseljson == 'undefined') {
+                            if (typeof Prototype == 'undefined') {
+                                document.write('<script type="text/javascript" src="$pturl"></script>');
+                            }
+                            anselnodes = new Array();
+                            anseljson = new Object();
+                            document.write('$css');
+                            document.write('<script type="text/javascript" src="$jsurl"></script>');
+                        }
+                        anselnodes[anselnodes.length] = '$node';
+                        anseljson['$node'] = new Object();
+                        anseljson['$node']['data'] = $json;
+                        anseljson['$node']['perpage'] = 0;
+                        anseljson['$node']['page'] = 0;
+                        anseljson['$node']['hideLinks'] = false;
+                        anseljson['$node']['linkToGallery'] = true;
+                        //]]>
+            EOT;
 
         return $html;
     }

@@ -31,9 +31,9 @@ class Ansel_Tile_DateGallery
      */
     public function getTile(
         Ansel_Gallery_Decorator_Date $dgallery,
-        Ansel_Style $style = null,
+        ?Ansel_Style $style = null,
         $mini = false,
-        array $params = array()
+        array $params = []
     ) {
         $view = $GLOBALS['injector']->createInstance('Horde_View');
         $view->addTemplatePath(ANSEL_TEMPLATES . '/tile');
@@ -57,20 +57,20 @@ class Ansel_Tile_DateGallery
         if (empty($date_array['month'])) {
             // unit == year
             $view->caption = $full_date->format('Y');
-            $next_date = array('year' => (int)$view->caption);
+            $next_date = ['year' => (int) $view->caption];
         } elseif (empty($date_array['day'])) {
             // unit == month
             $view->caption = $full_date->format('MMMM yyyy', new IcuFormatter(), $GLOBALS['language']);
-            $next_date = array(
+            $next_date = [
                 'year' => date('Y', $full_date->timestamp()),
-                'month' => date('n', $full_date->timestamp()));
+                'month' => date('n', $full_date->timestamp())];
         } else {
             // unit == day
-            $view->caption = \Horde\Date\Format::formatDate($full_date->timestamp(), $date_format);
-            $next_date = array(
+            $view->caption = Horde\Date\Format::formatDate($full_date->timestamp(), $date_format);
+            $next_date = [
                 'year' => date('Y', $full_date->timestamp()),
                 'month' => date('n', $full_date->timestamp()),
-                'day' => date('j', $full_date->timestamp()));
+                'day' => date('j', $full_date->timestamp())];
         }
 
         // Check permissions on the gallery and get appropriate tile image
@@ -97,16 +97,16 @@ class Ansel_Tile_DateGallery
             } else {
                 $gstyle = $params['style'];
             }
-            $params = array(
+            $params = [
                 'gallery' => $dgallery->id,
                 'view' => 'Gallery',
-                'slug' => $dgallery->get('slug'));
+                'slug' => $dgallery->get('slug')];
             $view->view_link = Ansel::getUrlFor('view', array_merge($params, $next_date));
         } else {
             $view->view_link = new Horde_Url(
                 str_replace(
-                    array('%g', '%s'),
-                    array($dgallery->id, $dgallery->get('slug')),
+                    ['%g', '%s'],
+                    [$dgallery->id, $dgallery->get('slug')],
                     urldecode($params['gallery_view_url'])
                 )
             );

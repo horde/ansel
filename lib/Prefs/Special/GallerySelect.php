@@ -3,7 +3,7 @@
 /**
  * Special prefs handling for the 'default_gallerystyle_select' preference.
  *
- * Copyright 2012-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2012-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -17,17 +17,15 @@ class Ansel_Prefs_Special_GallerySelect implements Horde_Core_Prefs_Ui_Special
 {
     /**
      */
-    public function init(Horde_Core_Prefs_Ui $ui)
-    {
-    }
+    public function init(Horde_Core_Prefs_Ui $ui) {}
 
     /**
      */
     public function display(Horde_Core_Prefs_Ui $ui)
     {
-        return _("Default style for galleries") .
-            Ansel::getStyleSelect('default_gallerystyle_select', $GLOBALS['prefs']->getValue('default_gallerystyle')) .
-            '<br />';
+        return _("Default style for galleries")
+            . Ansel::getStyleSelect('default_gallerystyle_select', $GLOBALS['prefs']->getValue('default_gallerystyle'))
+            . '<br />';
     }
 
     /**

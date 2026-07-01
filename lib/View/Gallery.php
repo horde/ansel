@@ -36,7 +36,7 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
      *
      * @see Ansel_View_Base::__construct
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -54,25 +54,25 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
                 throw new Ansel_Exception('Locked galleries are not viewable via the api.');
             }
             $date = Ansel::getDateParameter(
-                array('year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
-                      'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+                ['year' => $this->_params['year'] ?? 0,
+                    'month' => $this->_params['month'] ?? 0,
+                    'day' => $this->_params['day'] ?? 0]
             );
 
             $galleryurl = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array(
+                    [
                         'gallery' => $this->gallery->id,
                         'slug' => empty($params['slug']) ? '' : $params['slug'],
                         'page' => empty($params['page']) ? 0 : $params['page'],
-                        'view' => 'Gallery'),
+                        'view' => 'Gallery'],
                     $date
                 ),
                 true
             );
 
-            $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl));
+            $params = ['gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl)];
             Horde::url('disclaimer.php')->add($params)->setRaw(true)->redirect();
             exit;
         }
@@ -82,24 +82,24 @@ class Ansel_View_Gallery extends Ansel_View_Ansel
                 throw new Ansel_Exception(_("Locked galleries are not viewable via the api."));
             }
             $date = Ansel::getDateParameter(
-                array('year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
-                      'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                      'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+                ['year' => $this->_params['year'] ?? 0,
+                    'month' => $this->_params['month'] ?? 0,
+                    'day' => $this->_params['day'] ?? 0]
             );
 
             $galleryurl = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array(
+                    [
                         'gallery' => $this->gallery->id,
                         'slug' => empty($params['slug']) ? '' : $params['slug'],
                         'page' => empty($params['page']) ? 0 : $params['page'],
-                        'view' => 'Gallery'),
+                        'view' => 'Gallery'],
                     $date
                 ),
                 true
             );
-            $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl));
+            $params = ['gallery' => $this->gallery->id, 'url' => Horde::signUrl($galleryurl)];
             Horde::url('protect.php')->add($params)->setRaw(true)->redirect();
         }
 

@@ -3,7 +3,7 @@
 /**
  * Display most recent image comments for galleries.
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -21,12 +21,12 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
 
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
-        $this->enabled = ($GLOBALS['registry']->images->hasComments() &&
-                          $GLOBALS['registry']->hasMethod('forums/getThreadsBatch'));
+        $this->enabled = ($GLOBALS['registry']->images->hasComments()
+                          && $GLOBALS['registry']->hasMethod('forums/getThreadsBatch'));
         $this->_name = _("Recent Photo Comments");
     }
 
@@ -36,22 +36,22 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
      */
     protected function _params()
     {
-        $params = array(
-            'gallery' => array(
+        $params = [
+            'gallery' => [
                 'name' => _("Gallery"),
                 'type' => 'enum',
                 'default' => '__random',
-                'values' => array('all' => 'All')
-            )
-        );
+                'values' => ['all' => 'All'],
+            ],
+        ];
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-        if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
-            ($storage->countGalleries(
+        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+            || ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
-                array('perm' => Horde_Perms::READ)
+                ['perm' => Horde_Perms::READ]
             ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
-            foreach ($storage->listGalleries(array('perm' => Horde_Perms::READ)) as $gal) {
+            foreach ($storage->listGalleries(['perm' => Horde_Perms::READ]) as $gal) {
                 $params['gallery']['values'][$gal->id] = $gal->get('name');
             }
         }
@@ -67,7 +67,7 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             try {
                 $gallery = $this->_getGallery();
             } catch (Ansel_Exception $e) {
-                return Ansel::getUrlFor('view', array('view' => 'List'), true)->link() . _("Gallery") . '</a>';
+                return Ansel::getUrlFor('view', ['view' => 'List'], true)->link() . _("Gallery") . '</a>';
             }
             // Build the gallery name.
             if (isset($this->_params['gallery'])) {
@@ -75,13 +75,13 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             }
             $viewurl = Ansel::getUrlFor(
                 'view',
-                array('gallery' => $gallery->id,
-                                              'view' => 'Gallery',
-                                              'slug' => $gallery->get('slug')),
+                ['gallery' => $gallery->id,
+                    'view' => 'Gallery',
+                    'slug' => $gallery->get('slug')],
                 true
             );
         } else {
-            $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
+            $viewurl = Ansel::getUrlFor('view', ['view' => 'List'], true);
             $name = _("All Galleries");
         }
 
@@ -95,8 +95,8 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
         global $registry;
 
         if ($this->_params['gallery'] == 'all') {
-            $threads = $registry->call('forums/list', array(0, 'ansel'));
-            $image_ids = array();
+            $threads = $registry->call('forums/list', [0, 'ansel']);
+            $image_ids = [];
             foreach ($threads as $thread) {
                 $image_ids[] = $thread['forum_name'];
             }
@@ -106,11 +106,11 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             } catch (Ansel_Exception $e) {
                 return $e->getMessage();
             }
-            $results = array();
+            $results = [];
             $image_ids = $gallery->listImages();
         }
-        $results = array();
-        $threads = $registry->call('forums/getThreadsBatch', array($image_ids, 'message_timestamp', 1, false, 'ansel', null, 0, 10));
+        $results = [];
+        $threads = $registry->call('forums/getThreadsBatch', [$image_ids, 'message_timestamp', 1, false, 'ansel', null, 0, 10]);
         foreach ($threads as $image_id => $messages) {
             foreach ($messages as $message) {
                 $message['image_id'] = $image_id;
@@ -130,9 +130,9 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
                 $image = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImage($comment['image_id']);
                 $url = Ansel::getUrlFor(
                     'view',
-                    array('view' => 'Image',
-                                              'gallery' => abs($image->gallery),
-                                              'image' => $comment['image_id']),
+                    ['view' => 'Image',
+                        'gallery' => abs($image->gallery),
+                        'image' => $comment['image_id']],
                     true
                 );
                 $caption = substr($image->caption, 0, 30);
@@ -140,10 +140,10 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
                     $caption .= '...';
                 }
                 $html .= '<tr><td>'
-                    . \Horde\Date\Format::formatDate($comment['message_timestamp'], '%x')
+                    . Horde\Date\Format::formatDate($comment['message_timestamp'], '%x')
                     . '</td><td class="nowrap">'
-                    . $url->link(array('onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
-                                       'onmouseover' => 'previewImage(event, ' . $comment['image_id'] . ');'))
+                    . $url->link(['onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
+                        'onmouseover' => 'previewImage(event, ' . $comment['image_id'] . ');'])
                     . ($image->caption == '' ? $image->filename : $caption)
                     . '</a></td><td class="nowrap">'
                     . $comment['message_subject'] . '</td><td class="nowrap">'
@@ -169,8 +169,8 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
         }
 
         // Get the gallery object and cache it.
-        if (isset($this->_params['gallery']) &&
-            $this->_params['gallery'] != '__random') {
+        if (isset($this->_params['gallery'])
+            && $this->_params['gallery'] != '__random') {
             $this->_gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($this->_params['gallery']);
         } else {
             $this->_gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getRandomGallery();

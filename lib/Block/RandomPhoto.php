@@ -3,7 +3,7 @@
 /**
  * Display a random photo in a block.
  *
- * Copyright 2003-2007 Duck <duck@obla.net>
+ * Copyright 2003-2026 Duck <duck@obla.net>
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,7 +19,7 @@ class Ansel_Block_RandomPhoto extends Horde_Core_Block
 
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
@@ -39,18 +39,23 @@ class Ansel_Block_RandomPhoto extends Horde_Core_Block
             return '';
         }
         $imageId = $imagelist[0];
-        $viewurl = Ansel::getUrlFor('view', array('gallery' => $gallery->id,
-                                                  'slug' => $gallery->get('slug'),
-                                                  'image' => $imageId,
-                                                  'view' => 'Image'), true);
+        $viewurl = Ansel::getUrlFor('view', ['gallery' => $gallery->id,
+            'slug' => $gallery->get('slug'),
+            'image' => $imageId,
+            'view' => 'Image'], true);
 
         if ($gallery->isOldEnough() && !$gallery->hasPasswd()) {
             $img = '<img src="' . Ansel::getImageUrl($imageId, 'thumb', true, Ansel::getStyleDefinition('ansel_default')) . '" alt="[random photo]" />';
         } else {
-            $img = Horde::img('thumb-error.png');
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$img = Horde::img('thumb-error.png');
         }
 
-        return $viewurl->link(array('title' => _("View Photo"))) . $img . '</a>';
+        return $viewurl->link(['title' => _("View Photo")]) . $img . '</a>';
     }
 
 }

@@ -3,7 +3,7 @@
 /**
  * Ansel_View_EmbeddedRenderer_Slideshow
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -22,7 +22,7 @@ class Ansel_View_EmbeddedRenderer_Slideshow extends Ansel_View_Gallery
      *
      * @return Ansel_View_EmbeddedRenderer  The renderer object.
      */
-    public function __construct($params = array())
+    public function __construct($params = [])
     {
         parent::__construct($params);
     }
@@ -32,9 +32,6 @@ class Ansel_View_EmbeddedRenderer_Slideshow extends Ansel_View_Gallery
      *
      * @return string  A string containing valid javascript.
      */
-    public function html()
-    {
-
-    }
+    public function html() {}
 
 }

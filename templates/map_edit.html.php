@@ -18,7 +18,7 @@
         ? Ansel::point2Deg($data['image_latitude'], true) . ' ' . Ansel::point2Deg($data['image_longitude'])
         : $data['image_location'];
        $url = new Horde_Url('#');
-       echo $url->link(array('title' => $title, 'id' => 'geo_' . $id)) ?>
+       echo $url->link(['title' => $title, 'id' => 'geo_' . $id]) ?>
         <img src="<?php echo Ansel::getImageUrl($id, 'mini', true) ?>" alt="[thumbnail]" /></a>
    <?php endif; ?>
  <?php endforeach; ?>

@@ -11,6 +11,4 @@ namespace Horde\Ansel;
  * @package  Ansel
  * @author   Ralf Lang <ralf.lang@ralf-lang.de>
  */
-class Router
-{
-}
+class Router {}

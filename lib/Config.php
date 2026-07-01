@@ -6,7 +6,7 @@
  */
 class Ansel_Config
 {
-    protected $_config = array();
+    protected $_config = [];
 
     /**
      * Const'r - set the default scope to ansel.

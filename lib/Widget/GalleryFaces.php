@@ -4,7 +4,7 @@
  * Horde_Widget_GalleryFaces:: class to display a widget containing mini
  * thumbnails of faces in the gallery.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author Duck <duck@obala.net>
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
@@ -18,7 +18,7 @@ class Ansel_Widget_GalleryFaces extends Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_supported_views = array('Gallery');
+    protected $_supported_views = ['Gallery'];
 
     /**
      * Constructor
@@ -69,8 +69,8 @@ class Ansel_Widget_GalleryFaces extends Ansel_Widget_Base
         if ($this->_view->gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
             $link_text = (empty($images) ? _("Find faces") : _("Edit faces"));
             $html .= Horde::url('faces/gallery.php')->add('gallery', $this->_view->gallery->id)->link(
-                array('id' => 'edit_faces',
-                               'class' => 'widget')
+                ['id' => 'edit_faces',
+                    'class' => 'widget']
             )
                   . $link_text . '</a>';
         }

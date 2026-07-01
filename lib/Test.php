@@ -3,13 +3,14 @@
 /**
  * This class provides the Ansel configuration for the test script.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
  *
  * @author  Michael Slusarz <slusarz@horde.org>
  * @package Ansel
+ * @coversNothing
  */
 class Ansel_Test extends Horde_Test
 {
@@ -18,57 +19,55 @@ class Ansel_Test extends Horde_Test
      *
      * @var array
      */
-    protected $_moduleList = array(
-        'facedetect' => array(
+    protected $_moduleList = [
+        'facedetect' => [
             'descrip' => 'Facedetect Face Detection Library',
             'required' => false,
-            'error' => 'Ansel can make use of the Facedetect PHP extension for automatically detecting human faces in images.'
-        ),
-        'libpuzzle' => array(
+            'error' => 'Ansel can make use of the Facedetect PHP extension for automatically detecting human faces in images.',
+        ],
+        'libpuzzle' => [
             'descrip' => 'Puzzle Library',
             'required' => false,
-            'error' => 'Ansel can make use of the libpuzzle PHP extension for finding similar images based on image content.'
-        ),
-        'zip' => array(
+            'error' => 'Ansel can make use of the libpuzzle PHP extension for finding similar images based on image content.',
+        ],
+        'zip' => [
             'descrip' => 'Zip Support',
             'required' => false,
-            'error' => 'Ansel can make use of PHP\'s Zip extension for more efficiently processing uploaded ZIP files.'
-        )
-    );
+            'error' => 'Ansel can make use of PHP\'s Zip extension for more efficiently processing uploaded ZIP files.',
+        ],
+    ];
 
     /**
      * PHP settings list.
      *
      * @var array
      */
-    protected $_settingsList = array();
+    protected $_settingsList = [];
 
     /**
      * PEAR modules list.
      *
      * @var array
      */
-    protected $_pearList = array();
+    protected $_pearList = [];
 
     /**
      * Inter-Horde application dependencies.
      *
      * @var array
      */
-    protected $_appList = array(
-        'agora' => array(
+    protected $_appList = [
+        'agora' => [
             'error' => 'Agora provides the ability for users to comment on images.',
-            'version' => '1.0'
-        )
-    );
+            'version' => '1.0',
+        ],
+    ];
 
     /**
      * Any application specific tests that need to be done.
      *
      * @return string  HTML output.
      */
-    public function appTests()
-    {
-    }
+    public function appTests() {}
 
 }

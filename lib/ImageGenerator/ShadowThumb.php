@@ -8,7 +8,7 @@
  */
 class Ansel_ImageGenerator_ShadowThumb extends Ansel_ImageGenerator
 {
-    public $need = array('DropShadow');
+    public $need = ['DropShadow'];
 
     public function __construct($params)
     {
@@ -39,21 +39,21 @@ class Ansel_ImageGenerator_ShadowThumb extends Ansel_ImageGenerator
             }
 
             try {
-                $this->_image->addEffect('Border', array('bordercolor' => '#333', 'borderwidth' => 1));
+                $this->_image->addEffect('Border', ['bordercolor' => '#333', 'borderwidth' => 1]);
                 $this->_image->addEffect(
                     'DropShadow',
-                    array('background' => $styleDef->background,
-                                               'padding' => 5,
-                                               'distance' => 8,
-                                               'fade' => 2)
+                    ['background' => $styleDef->background,
+                        'padding' => 5,
+                        'distance' => 8,
+                        'fade' => 2]
                 );
 
                 if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
                     $this->_image->addEffect(
                         'Unsharpmask',
-                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                                   'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                        ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                            'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                            'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                     );
                     $this->_image->applyEffects();
                 }

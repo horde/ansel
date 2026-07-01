@@ -1,7 +1,9 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -15,7 +17,7 @@
  * The Ansel_ActionHandler:: class centralizes the handling of various image
  * and gallery actions.
  *
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -38,18 +40,18 @@ class Ansel_ActionHandler
         global $notification, $registry;
 
         if ($actionID == 'downloadzip') {
-            $gallery_id = Horde_Util::getFormData('gallery');
-            $image_id = Horde_Util::getFormData('image');
+            $gallery_id = Util::getFormData('gallery');
+            $image_id = Util::getFormData('image');
             $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
 
             // Explicitly list images to include
             if ($image_id) {
                 if (!is_array($image_id)) {
-                    $image_id = array($image_id);
+                    $image_id = [$image_id];
                 } else {
                     $image_id = array_keys($image_id);
                 }
-                $image_ids = array();
+                $image_ids = [];
                 foreach ($image_id as $image) {
 
                     $img = $ansel_storage->getImage($image);
@@ -57,8 +59,8 @@ class Ansel_ActionHandler
                 }
                 foreach ($galleries as $gid => $images) {
                     $gallery = $ansel_storage->getGallery($gid);
-                    if (!$registry->getAuth() || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) |
-                        $gallery->hasPasswd() || !$gallery->isOldEnough()) {
+                    if (!$registry->getAuth() || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+                        | $gallery->hasPasswd() || !$gallery->isOldEnough()) {
 
                         continue;
                     }
@@ -67,9 +69,9 @@ class Ansel_ActionHandler
             } elseif ($gallery_id) {
                 // Or just download enitre gallery.
                 $gallery = $ansel_storage->getGallery($gallery_id);
-                if (!$registry->getAuth() ||
-                    !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) ||
-                    $gallery->hasPasswd() || !$gallery->isOldEnough()) {
+                if (!$registry->getAuth()
+                    || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+                    || $gallery->hasPasswd() || !$gallery->isOldEnough()) {
 
                     $notification->push(
                         _("Access denied downloading photos from this gallery."),
@@ -109,13 +111,13 @@ class Ansel_ActionHandler
 
         switch ($actionID) {
             case 'delete':
-                $image_id = Horde_Util::getFormData('image');
-                $gallery_id = Horde_Util::getFormData('gallery');
+                $image_id = Util::getFormData('image');
+                $gallery_id = Util::getFormData('gallery');
                 $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
                 if (is_array($image_id)) {
                     $images = array_keys($image_id);
                 } else {
-                    $images = array($image_id);
+                    $images = [$image_id];
                 }
                 foreach ($images as $image) {
                     $img = $ansel_storage->getImage($image);
@@ -142,19 +144,19 @@ class Ansel_ActionHandler
                 return true;
 
             case 'move':
-                $image_id = Horde_Util::getFormData('image');
-                $newGallery = Horde_Util::getFormData('new_gallery');
+                $image_id = Util::getFormData('image');
+                $newGallery = Util::getFormData('new_gallery');
                 $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
                 if (is_array($image_id)) {
                     $images = array_keys($image_id);
                 } else {
-                    $images = array($image_id);
+                    $images = [$image_id];
                 }
                 if ($images && $newGallery) {
                     try {
                         $newGallery = $ansel_storage->getGallery($newGallery);
                         // Group by gallery first, then process in bulk by gallery.
-                        $galleries = array();
+                        $galleries = [];
                         foreach ($images as $image) {
                             $img = $ansel_storage->getImage($image);
                             $galleries[$img->gallery][] = $image;
@@ -187,20 +189,20 @@ class Ansel_ActionHandler
                 return true;
 
             case 'copy':
-                $image_id = Horde_Util::getFormData('image');
-                $newGallery = Horde_Util::getFormData('new_gallery');
+                $image_id = Util::getFormData('image');
+                $newGallery = Util::getFormData('new_gallery');
                 $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
                 if (is_array($image_id)) {
                     $images = array_keys($image_id);
                 } else {
-                    $images = array($image_id);
+                    $images = [$image_id];
                 }
 
                 if ($images && $newGallery) {
                     try {
                         // Group by gallery first, then process in bulk by gallery.
                         $newGallery = $ansel_storage->getGallery($newGallery);
-                        $galleries = array();
+                        $galleries = [];
                         foreach ($images as $image) {
                             $img = $ansel_storage->getImage($image);
                             $galleries[$img->gallery][] = $image;
@@ -233,11 +235,11 @@ class Ansel_ActionHandler
                 return true;
 
             case 'downloadzip':
-                $gallery_id = Horde_Util::getFormData('gallery');
-                $image_id = Horde_Util::getFormData('image');
+                $gallery_id = Util::getFormData('gallery');
+                $image_id = Util::getFormData('image');
                 $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
                 if (!is_array($image_id)) {
-                    $image_id = array($image_id);
+                    $image_id = [$image_id];
                 } else {
                     $image_id = array_keys($image_id);
                 }
@@ -245,9 +247,9 @@ class Ansel_ActionHandler
                 // All from same gallery.
                 if ($gallery_id) {
                     $gallery = $ansel_storage->getGallery($gallery_id);
-                    if (!$registry->getAuth() ||
-                        !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) ||
-                        $gallery->hasPasswd() || !$gallery->isOldEnough()) {
+                    if (!$registry->getAuth()
+                        || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+                        || $gallery->hasPasswd() || !$gallery->isOldEnough()) {
 
                         $notification->push(
                             _("Access denied downloading photos from this gallery."),
@@ -257,15 +259,15 @@ class Ansel_ActionHandler
                     }
                     $image_ids = $image_id;
                 } else {
-                    $image_ids = array();
+                    $image_ids = [];
                     foreach ($image_id as $image) {
                         $img = $ansel_storage->getImage($image);
                         $galleries[$img->gallery][] = $image;
                     }
                     foreach ($galleries as $gid => $images) {
                         $gallery = $ansel_storage->getGallery($gid);
-                        if (!$registry->getAuth() || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ) |
-                            $gallery->hasPasswd() || !$gallery->isOldEnough()) {
+                        if (!$registry->getAuth() || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)
+                            | $gallery->hasPasswd() || !$gallery->isOldEnough()) {
 
                             continue;
                         }
@@ -296,14 +298,14 @@ class Ansel_ActionHandler
         global $notification, $page_output, $registry;
 
         $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-        $gallery_id = Horde_Util::getFormData('gallery');
-        $image_id = Horde_Util::getFormData('image');
+        $gallery_id = Util::getFormData('gallery');
+        $image_id = Util::getFormData('image');
         $date = Ansel::getDateParameter();
-        $page = Horde_Util::getFormData('page', 0);
-        $watermark_font = Horde_Util::getFormData('font');
-        $watermark_halign = Horde_Util::getFormData('whalign');
-        $watermark_valign = Horde_Util::getFormData('wvalign');
-        $watermark = Horde_Util::getFormData('watermark', $GLOBALS['prefs']->getValue('watermark_text'));
+        $page = Util::getFormData('page', 0);
+        $watermark_font = Util::getFormData('font');
+        $watermark_halign = Util::getFormData('whalign');
+        $watermark_valign = Util::getFormData('wvalign');
+        $watermark = Util::getFormData('watermark', $GLOBALS['prefs']->getValue('watermark_text'));
 
         // Get the gallery object and style information.
         try {
@@ -313,17 +315,17 @@ class Ansel_ActionHandler
                 sprintf(_("Gallery %s not found."), $gallery_id),
                 'horde.error'
             );
-            Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
+            Ansel::getUrlFor('view', ['view' => 'List'], true)->redirect();
             exit;
         }
         switch ($actionID) {
             case 'modify':
                 try {
                     $image = $ansel_storage->getImage($image_id);
-                    $ret = Horde_Util::getFormData('ret', 'gallery');
+                    $ret = Util::getFormData('ret', 'gallery');
                 } catch (Ansel_Exception $e) {
                     $notification->push(_("Photo not found."), 'horde.error');
-                    Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
+                    Ansel::getUrlFor('view', ['view' => 'List'], true)->redirect();
                     exit;
                 }
                 $title = sprintf(_("Edit properties :: %s"), $image->filename);
@@ -345,9 +347,9 @@ class Ansel_ActionHandler
                 $vars->set('image_originalDate', $image->originalDate);
                 $vars->set('image_uploaded', $image->uploaded);
 
-                $page_output->header(array(
-                    'title' => $title
-                ));
+                $page_output->header([
+                    'title' => $title,
+                ]);
                 $form->renderActive(
                     $renderer,
                     $vars,
@@ -370,12 +372,12 @@ class Ansel_ActionHandler
                     Ansel::getUrlFor(
                         'view',
                         array_merge(
-                            array(
+                            [
                                 'gallery' => $gallery_id,
                                 'slug' => $gallery->get('slug'),
                                 'view' => 'Gallery',
-                                'page' => $page
-                            ),
+                                'page' => $page,
+                            ],
                             $date
                         ),
                         true
@@ -411,7 +413,7 @@ class Ansel_ActionHandler
                     $image->caption = $vars->get('image_desc');
                     $image->setTags(explode(',', $vars->get('image_tags')));
                     $newDate = new Horde_Date($vars->get('image_originalDate'));
-                    $image->originalDate = (int)$newDate->timestamp();
+                    $image->originalDate = (int) $newDate->timestamp();
                     if (!empty($data)) {
                         try {
                             $image->replace($data);
@@ -466,11 +468,11 @@ class Ansel_ActionHandler
                     $imageurl = Ansel::getUrlFor(
                         'view',
                         array_merge(
-                            array(
+                            [
                                 'gallery' => $gallery_id,
                                 'image' => $image_id,
                                 'view' => 'Image',
-                                'page' => $page),
+                                'page' => $page],
                             $date
                         ),
                         true
@@ -478,16 +480,16 @@ class Ansel_ActionHandler
                     if ($actionID == 'save') {
                         $imageurl->redirect();
                     } elseif ($actionID == 'saveclose') {
-                        $page_output->addInlineScript(array(
+                        $page_output->addInlineScript([
                             'window.opener.location.href = window.opener.location.href;',
-                            'window.close();'
-                        ));
+                            'window.close();',
+                        ]);
                         $page_output->outputInlineScript();
                     } else {
-                        $page_output->addInlineScript(array(
+                        $page_output->addInlineScript([
                             'window.opener.location.href = "' . $imageurl . '";',
-                            'window.close();'
-                        ));
+                            'window.close();',
+                        ]);
                         $page_output->outputInlineScript();
                     }
                     exit;
@@ -500,22 +502,22 @@ class Ansel_ActionHandler
                 $imageGenerator_url = Ansel::getUrlFor(
                     'view',
                     array_merge(
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'image' => $image_id,
                             'view' => 'Image',
-                            'page' => $page),
+                            'page' => $page],
                         $date
                     ),
                     true
                 );
                 $imageurl = Horde::url('image.php')->add(
                     array_merge(
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'slug' => $gallery->get('slug'),
                             'image' => $image_id,
-                            'page' => $page),
+                            'page' => $page],
                         $date
                     )
                 );
@@ -523,11 +525,11 @@ class Ansel_ActionHandler
                 $galleryurl = Ansel::getUrlFor(
                     'view',
                     array_merge(
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'page' => $page,
                             'view' => 'Gallery',
-                            'slug' => $gallery->get('slug')),
+                            'slug' => $gallery->get('slug')],
                         $date
                     )
                 );
@@ -571,7 +573,7 @@ class Ansel_ActionHandler
                     $page_output->addScriptFile('scriptaculous/dragdrop.js', 'horde');
                     $page_output->addScriptFile('scriptaculous/slider.js', 'horde');
                     $page_output->addScriptFile('resizeimage.js');
-                    $js = array(
+                    $js = [
                         'window.Ansel = window.Ansel || {}',
                         'Ansel.image_geometry = ' . Horde_Serialize::serialize($geometry, Horde_Serialize::JSON),
                         "Ansel.slider = new Control.Slider(
@@ -586,15 +588,15 @@ class Ansel_ActionHandler
                             onChange: function(e) { resizeImage(e * Ansel.image_geometry['width']); },
                             onSlide: function(e) { resizeImage(e * Ansel.image_geometry['width']); }
                         }
-                    );"
+                    );",
 
-                    );
+                    ];
                     $page_output->addInlineScript($js, true);
                 }
-                $page_output->header(array(
-                    'title' => $title
-                ));
-                $notification->notify(array('listeners' => 'status'));
+                $page_output->header([
+                    'title' => $title,
+                ]);
+                $notification->notify(['listeners' => 'status']);
                 if ($actionID == 'cropedit') {
                     require ANSEL_TEMPLATES . '/image/crop_image.inc';
                 } elseif ($actionID == 'resizeedit') {
@@ -614,15 +616,15 @@ class Ansel_ActionHandler
                     }
 
                     // Set up array of possible substitutions.
-                    $watermark_array = array(
+                    $watermark_array = [
                         '%N' => $name,
-                        '%L' => $registry->getAuth());
+                        '%L' => $registry->getAuth()];
                     $watermark = str_replace(
                         array_keys($watermark_array),
                         array_values($watermark_array),
                         $watermark
                     );
-                    $watermark = \Horde\Date\Format::formatDate(time(), $watermark);
+                    $watermark = Horde\Date\Format::formatDate(time(), $watermark);
                 }
                 if (!$gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
                     $notification->push(
@@ -633,12 +635,12 @@ class Ansel_ActionHandler
                     Ansel::getUrlFor(
                         'view',
                         array_merge(
-                            array(
+                            [
                                 'gallery' => $gallery_id,
                                 'image' => $image_id,
                                 'view' => 'Image',
                                 'page' => $page,
-                                'slug' => $gallery->get('slug')),
+                                'slug' => $gallery->get('slug')],
                             $date
                         ),
                         true
@@ -656,11 +658,11 @@ class Ansel_ActionHandler
                     $image->updateData($image->raw('screen'), 'screen');
                     Horde::url('image.php', true)->add(
                         array_merge(
-                            array(
+                            [
                                 'gallery' => $gallery_id,
                                 'image' => $image_id,
                                 'actionID' => 'editimage',
-                                'page' => $page),
+                                'page' => $page],
                             $date
                         )
                     )->redirect();
@@ -686,7 +688,7 @@ class Ansel_ActionHandler
                         $image = $ansel_storage->getImage($image_id);
                     } catch (Ansel_Exception $e) {
                         $notification->push($e->getMessage(), 'horde.error');
-                        Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
+                        Ansel::getUrlFor('view', ['view' => 'List'], true)->redirect();
                         exit;
                     }
 
@@ -736,8 +738,8 @@ class Ansel_ActionHandler
 
                         case 'crop':
                             $image->load('full');
-                            $params = Horde_Util::getFormData('params');
-                            list($x1, $y1, $x2, $y2) = explode('.', $params);
+                            $params = Util::getFormData('params');
+                            [$x1, $y1, $x2, $y2] = explode('.', $params);
                             try {
                                 $image->crop($x1, $y1, $x2, $y2);
                             } catch (Ansel_Exception $e) {
@@ -748,8 +750,8 @@ class Ansel_ActionHandler
                             break;
                         case 'resize':
                             $image->load('full');
-                            $width = Horde_Util::getFormData('width');
-                            $height = Horde_Util::getFormData('height');
+                            $width = Util::getFormData('width');
+                            $height = Util::getFormData('height');
                             try {
                                 $image->resize($width, $height, true);
                             } catch (Ansel_Exception $e) {
@@ -766,11 +768,11 @@ class Ansel_ActionHandler
 
                 Horde::url('image.php', true)->add(
                     array_merge(
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'image' => $image_id,
                             'actionID' => 'editimage',
-                            'page' => $page),
+                            'page' => $page],
                         $date
                     )
                 )->redirect();
@@ -782,7 +784,7 @@ class Ansel_ActionHandler
                     $image = $ansel_storage->getImage($image_id);
                 } catch (Ansel_Exception $e) {
                     $notification->push($image->getMessage(), 'horde.error');
-                    Ansel::getUrlFor('view', array('view' => 'List'), true)->redirect();
+                    Ansel::getUrlFor('view', ['view' => 'List'], true)->redirect();
                     exit;
                 }
                 $vars = Horde_Variables::getDefaultVariables();
@@ -790,9 +792,9 @@ class Ansel_ActionHandler
                 $form = new Ansel_Form_Watermark($vars, _("Watermark"));
                 $renderer = new Horde_Form_Renderer();
 
-                $page_output->header(array(
-                    'title' => $title
-                ));
+                $page_output->header([
+                    'title' => $title,
+                ]);
                 $form->renderActive($renderer, $vars, Horde::url('image.php'), 'post');
                 $page_output->footer();
                 exit;
@@ -800,7 +802,7 @@ class Ansel_ActionHandler
             case 'previewcustomwatermark':
                 $imageurl = Horde::url('image.php', true)->add(
                     array_merge(
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'image' => $image_id,
                             'page' => $page,
@@ -808,15 +810,15 @@ class Ansel_ActionHandler
                             'font' => $watermark_font,
                             'whalign' => $watermark_halign,
                             'wvalign' => $watermark_valign,
-                            'actionID' => 'previewwatermark'),
+                            'actionID' => 'previewwatermark'],
                         $date
                     )
                 );
 
-                $page_output->addInlineScript(array(
+                $page_output->addInlineScript([
                     'window.opener.location.href = "' . $imageurl . '";',
-                    'window.close();'
-                ));
+                    'window.close();',
+                ]);
                 $page_output->outputInlineScript();
                 exit;
 
@@ -836,9 +838,9 @@ class Ansel_ActionHandler
                     $image->filename
                 );
 
-                $page_output->header(array(
-                    'title' => $title
-                ));
+                $page_output->header([
+                    'title' => $title,
+                ]);
                 require ANSEL_TEMPLATES . '/image/preview_image.inc';
                 $page_output->footer();
                 exit;
@@ -846,7 +848,7 @@ class Ansel_ActionHandler
             case 'imagerotate90':
             case 'imagerotate180':
             case 'imagerotate270':
-                $view = Horde_Util::getFormData('view');
+                $view = Util::getFormData('view');
                 $angle = intval(substr($actionID, 11));
                 $image = $ansel_storage->getImage($image_id);
                 $image->rotate($view, $angle);
@@ -854,28 +856,28 @@ class Ansel_ActionHandler
                 exit;
 
             case 'imageflip':
-                $view = Horde_Util::getFormData('view');
+                $view = Util::getFormData('view');
                 $image = $ansel_storage->getImage($image_id);
                 $image->flip($view);
                 $image->display($view);
                 exit;
 
             case 'imagemirror':
-                $view = Horde_Util::getFormData('view');
+                $view = Util::getFormData('view');
                 $image = $ansel_storage->getImage($image_id);
                 $image->mirror($view);
                 $image->display($view);
                 exit;
 
             case 'imagegrayscale':
-                $view = Horde_Util::getFormData('view');
+                $view = Util::getFormData('view');
                 $image = $ansel_storage->getImage($image_id);
                 $image->grayscale($view);
                 $image->display($view);
                 exit;
 
             case 'imagewatermark':
-                $view = Horde_Util::getFormData('view');
+                $view = Util::getFormData('view');
                 $image = $ansel_storage->getImage($image_id);
                 $image->watermark(
                     $view,
@@ -895,17 +897,17 @@ class Ansel_ActionHandler
                     );
                     Ansel::getUrlFor(
                         'view',
-                        array(
+                        [
                             'gallery' => $gallery_id,
                             'image' => $image_id,
                             'view' => 'Image',
-                            'page' => $page)
+                            'page' => $page]
                     )->redirect();
                 } else {
-                    $x1 = (int)Horde_Util::getFormData('x1');
-                    $y1 = (int)Horde_Util::getFormData('y1');
-                    $x2 = (int)Horde_Util::getFormData('x2');
-                    $y2 = (int)Horde_Util::getFormData('y2');
+                    $x1 = (int) Util::getFormData('x1');
+                    $y1 = (int) Util::getFormData('y1');
+                    $x2 = (int) Util::getFormData('x2');
+                    $y2 = (int) Util::getFormData('y2');
                     $title = _("Crop");
                     $action = substr($actionID, 7);
                     $image = $ansel_storage->getImage($image_id);
@@ -916,9 +918,9 @@ class Ansel_ActionHandler
                     );
                     $params = $x1 . '.' . $y1 . '.' . $x2 . '.' . $y2;
 
-                    $page_output->header(array(
-                        'title' => $title
-                    ));
+                    $page_output->header([
+                        'title' => $title,
+                    ]);
                     require ANSEL_TEMPLATES . '/image/preview_cropimage.inc';
                     $page_output->footer();
                 }
@@ -926,8 +928,8 @@ class Ansel_ActionHandler
 
             case 'imagecrop':
                 if ($gallery->hasPermission($registry->getAuth(), Horde_Perms::EDIT)) {
-                    $params = Horde_Util::getFormData('params');
-                    list($x1, $y1, $x2, $y2) = explode('.', $params);
+                    $params = Util::getFormData('params');
+                    [$x1, $y1, $x2, $y2] = explode('.', $params);
                     $image = $ansel_storage->getImage($image_id);
                     $image->load('full');
                     $image->crop($x1, $y1, $x2, $y2);
@@ -955,20 +957,20 @@ class Ansel_ActionHandler
             case 'save':
             case 'modify':
                 $view = new Ansel_View_GalleryProperties(
-                    array(
+                    [
                         'actionID' => $actionID,
-                        'url' => new Horde_Url(Horde_Util::getFormData('url')),
-                        'gallery' => Horde_Util::getFormData('gallery'))
+                        'url' => new Horde_Url(Util::getFormData('url')),
+                        'gallery' => Util::getFormData('gallery')]
                 );
                 $view->run();
                 exit;
 
             case 'downloadzip':
-                $galleryId = Horde_Util::getFormData('gallery');
+                $galleryId = Util::getFormData('gallery');
                 try {
                     $gallery = $ansel_storage->getGallery($galleryId);
-                    if (!$registry->getAuth() ||
-                        !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)) {
+                    if (!$registry->getAuth()
+                        || !$gallery->hasPermission($registry->getAuth(), Horde_Perms::READ)) {
 
                         $notification->push(_("Access denied downloading photos from this gallery."), 'horde.error');
                         Horde::url('view.php?view=List', true)->redirect();
@@ -985,12 +987,12 @@ class Ansel_ActionHandler
             case 'delete':
             case 'empty':
                 // Print the confirmation screen.
-                $galleryId = Horde_Util::getFormData('gallery');
+                $galleryId = Util::getFormData('gallery');
                 if ($galleryId) {
                     try {
                         $gallery = $ansel_storage->getGallery($galleryId);
                         $page_output->header();
-                        $notification->notify(array('listeners' => 'status'));
+                        $notification->notify(['listeners' => 'status']);
                         require ANSEL_TEMPLATES . '/gallery/delete_confirmation.inc';
                         $page_output->footer();
                         exit;
@@ -1000,17 +1002,17 @@ class Ansel_ActionHandler
                 }
 
                 // Return to the gallery list.
-                Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
+                Horde::url(Ansel::getUrlFor('view', ['view' => 'List'], true))->redirect();
                 exit;
             case 'do_delete':
             case 'do_empty':
                 $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-                $galleryId = Horde_Util::getPost('gallery');
+                $galleryId = Util::getPost('gallery');
                 try {
                     $gallery = $ansel_storage->getGallery($galleryId);
                 } catch (Ansel_Exception $e) {
                     $notification->push($e->getMessage(), 'horde.error');
-                    Ansel::getUrlFor('default_view', array())->redirect();
+                    Ansel::getUrlFor('default_view', [])->redirect();
                     exit;
                 }
                 switch ($actionID) {
@@ -1042,7 +1044,7 @@ class Ansel_ActionHandler
                         }
 
                         // Return to the default view.
-                        Ansel::getUrlFor('default_view', array())->redirect();
+                        Ansel::getUrlFor('default_view', [])->redirect();
                         exit;
 
                     case 'do_empty':
@@ -1063,20 +1065,20 @@ class Ansel_ActionHandler
                         }
                         Ansel::getUrlFor(
                             'view',
-                            array(
+                            [
                                 'view' => 'Gallery',
                                 'gallery' => $galleryId,
-                                'slug' => $gallery->get('slug')),
+                                'slug' => $gallery->get('slug')],
                             true
                         )->redirect();
                         exit;
                     default:
                         Ansel::getUrlFor(
                             'view',
-                            array(
-                               'view' => 'Gallery',
-                               'gallery' => $galleryId,
-                               'slug' => $gallery->get('slug')),
+                            [
+                                'view' => 'Gallery',
+                                'gallery' => $galleryId,
+                                'slug' => $gallery->get('slug')],
                             true
                         )->redirect();
                         exit;
@@ -1084,7 +1086,7 @@ class Ansel_ActionHandler
 
             case 'generateDefault':
                 // Re-generate the default pretty gallery image.
-                $galleryId = Horde_Util::getFormData('gallery');
+                $galleryId = Util::getFormData('gallery');
                 try {
                     $gallery = $ansel_storage->getGallery($galleryId);
                     $gallery->clearStacks();
@@ -1099,7 +1101,7 @@ class Ansel_ActionHandler
 
             case 'generateThumbs':
                 // Re-generate all of this gallery's prettythumbs.
-                $galleryId = Horde_Util::getFormData('gallery');
+                $galleryId = Util::getFormData('gallery');
                 try {
                     $gallery = $ansel_storage->getGallery($galleryId);
                 } catch (Ansel_Exception $e) {
@@ -1114,7 +1116,7 @@ class Ansel_ActionHandler
 
             case 'deleteCache':
                 // Delete all cached image views.
-                $galleryId = Horde_Util::getFormData('gallery');
+                $galleryId = Util::getFormData('gallery');
                 try {
                     $gallery = $ansel_storage->getGallery($galleryId);
                 } catch (Ansel_Exception $e) {

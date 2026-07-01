@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2003-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -89,7 +89,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
      *
      * @var array
      */
-    protected $_urls = array();
+    protected $_urls = [];
 
     /**
      * Const'r
@@ -97,7 +97,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
      * @param array  Parameters for the view.
      * @throws Ansel_Exception
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -115,26 +115,26 @@ class Ansel_View_Image extends Ansel_View_Ansel
                 throw new Ansel_Exception('Locked galleries are not viewable via the api.');
             }
             $date = Ansel::getDateParameter(
-                array(
-                'year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
-                'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+                [
+                    'year' => $this->_params['year'] ?? 0,
+                    'month' => $this->_params['month'] ?? 0,
+                    'day' => $this->_params['day'] ?? 0]
             );
 
             $url = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array('gallery' => $this->gallery->id,
-                          'slug' => empty($params['slug']) ? '' : $params['slug'],
-                          'page' => empty($params['page']) ? 0 : $params['page'],
-                          'view' => 'Image',
-                          'image' => $this->resource->id),
+                    ['gallery' => $this->gallery->id,
+                        'slug' => empty($params['slug']) ? '' : $params['slug'],
+                        'page' => empty($params['page']) ? 0 : $params['page'],
+                        'view' => 'Image',
+                        'image' => $this->resource->id],
                     $date
                 ),
                 true
             );
 
-            $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($url));
+            $params = ['gallery' => $this->gallery->id, 'url' => Horde::signUrl($url)];
             Horde::url('disclaimer.php')->add($params)->setRaw(true)->redirect();
             exit;
         }
@@ -145,26 +145,26 @@ class Ansel_View_Image extends Ansel_View_Ansel
                 throw new Ansel_Exception(_("Locked galleries are not viewable via the api."));
             }
             $date = Ansel::getDateParameter(
-                array(
-                'year' => isset($this->_params['year']) ? $this->_params['year'] : 0,
-                'month' => isset($this->_params['month']) ? $this->_params['month'] : 0,
-                'day' => isset($this->_params['day']) ? $this->_params['day'] : 0)
+                [
+                    'year' => $this->_params['year'] ?? 0,
+                    'month' => $this->_params['month'] ?? 0,
+                    'day' => $this->_params['day'] ?? 0]
             );
 
             $url = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array('gallery' => $this->gallery->id,
-                          'slug' => empty($params['slug']) ? '' : $params['slug'],
-                          'page' => empty($params['page']) ? 0 : $params['page'],
-                          'view' => 'Image',
-                          'image' => $this->resource->id),
+                    ['gallery' => $this->gallery->id,
+                        'slug' => empty($params['slug']) ? '' : $params['slug'],
+                        'page' => empty($params['page']) ? 0 : $params['page'],
+                        'view' => 'Image',
+                        'image' => $this->resource->id],
                     $date
                 ),
                 true
             );
 
-            $params = array('gallery' => $this->gallery->id, 'url' => Horde::signUrl($url));
+            $params = ['gallery' => $this->gallery->id, 'url' => Horde::signUrl($url)];
             Horde::url('protect.php')->add($params)->setRaw(true)->redirect();
         }
 
@@ -215,12 +215,12 @@ class Ansel_View_Image extends Ansel_View_Ansel
     {
         global $conf;
 
-        $this->_page = isset($this->_params['page']) ? $this->_params['page'] : 0;
+        $this->_page = $this->_params['page'] ?? 0;
         $this->_slug = $this->gallery->get('slug');
         $this->_date = $this->gallery->getDate();
-        $this->_style = (empty($this->_params['style']) ?
-             $this->gallery->getStyle() :
-             Ansel::getStyleDefinition($this->_params['style']));
+        $this->_style = (empty($this->_params['style'])
+             ? $this->gallery->getStyle()
+             : Ansel::getStyleDefinition($this->_params['style']));
 
         // Make sure the screen view is loaded and get the geometry
         try {
@@ -239,9 +239,9 @@ class Ansel_View_Image extends Ansel_View_Ansel
             // Build the various urls
             $imageActionUrl = Horde::url('image.php')->add(
                 array_merge(
-                    array('gallery' => $this->gallery->id,
-                                  'image' => $this->resource->id,
-                                  'page' => $this->_page),
+                    ['gallery' => $this->gallery->id,
+                        'image' => $this->resource->id,
+                        'page' => $this->_page],
                     $this->_date
                 )
             );
@@ -249,15 +249,15 @@ class Ansel_View_Image extends Ansel_View_Ansel
             if ($this->gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
                 $this->_urls['prop_popup'] = Horde::popupJs(
                     $imageActionUrl,
-                    array('urlencode' => true,
-                          'height' => 360,
-                          'width' => 500,
-                          'params' => array(
-                              'actionID' => 'modify',
-                              'ret' => 'image',
-                              'gallery' => $this->gallery->id,
-                              'image' => $this->resource->id,
-                              'page' => $this->_page))
+                    ['urlencode' => true,
+                        'height' => 360,
+                        'width' => 500,
+                        'params' => [
+                            'actionID' => 'modify',
+                            'ret' => 'image',
+                            'gallery' => $this->gallery->id,
+                            'image' => $this->resource->id,
+                            'page' => $this->_page]]
                 );
                 $this->_urls['edit'] = $imageActionUrl->copy()->add('actionID', 'editimage');
             }
@@ -268,8 +268,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
             if (!empty($conf['ecard']['enable'])) {
                 $this->_urls['ecard'] = Horde::url('img/ecard.php')->add(
                     array_merge(
-                        array('gallery' => $this->gallery->id,
-                                      'image' => $this->resource->id),
+                        ['gallery' => $this->gallery->id,
+                            'image' => $this->resource->id],
                         $this->_date
                     )
                 );
@@ -278,14 +278,14 @@ class Ansel_View_Image extends Ansel_View_Ansel
             if ($this->gallery->canDownload()) {
                 $this->_urls['download'] = Horde::url('img/download.php', true)->add('image', $this->resource->id);
             }
-            if ((!$GLOBALS['registry']->getAuth() || $this->gallery->get('owner') != $GLOBALS['registry']->getAuth()) &&
-                !empty($GLOBALS['conf']['report_content']['driver']) &&
-                (($conf['report_content']['allow'] == 'authenticated' && $GLOBALS['registry']->isAuthenticated()) ||
-                 $conf['report_content']['allow'] == 'all')) {
+            if ((!$GLOBALS['registry']->getAuth() || $this->gallery->get('owner') != $GLOBALS['registry']->getAuth())
+                && !empty($GLOBALS['conf']['report_content']['driver'])
+                && (($conf['report_content']['allow'] == 'authenticated' && $GLOBALS['registry']->isAuthenticated())
+                 || $conf['report_content']['allow'] == 'all')) {
 
                 $this->_urls['report'] = Horde::url('report.php')->add(
-                    array('gallery' =>  $this->gallery->id,
-                          'image' => $this->resource->id)
+                    ['gallery' =>  $this->gallery->id,
+                        'image' => $this->resource->id]
                 );
             }
         }
@@ -293,8 +293,8 @@ class Ansel_View_Image extends Ansel_View_Ansel
         // Check for an explicit gallery view url to use
         if (!empty($this->_params['gallery_view_url'])) {
             $this->_urls['gallery'] = new Horde_Url(str_replace(
-                array('%g', '%s'),
-                array($this->gallery->id, $this->_slug),
+                ['%g', '%s'],
+                [$this->gallery->id, $this->_slug],
                 urldecode($this->_params['gallery_view_url'])
             ));
             $this->_urls['gallery']->add($this->_date);
@@ -302,11 +302,11 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $this->_urls['gallery'] = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array(
+                    [
                         'gallery' => $this->gallery->id,
                         'slug' => $this->_slug,
                         'page' => $this->_page,
-                        'view' => 'Gallery'),
+                        'view' => 'Gallery'],
                     $this->_date
                 ),
                 true
@@ -326,12 +326,12 @@ class Ansel_View_Image extends Ansel_View_Ansel
         $this->_urls['self'] = Ansel::getUrlFor(
             'view',
             array_merge(
-                array(
+                [
                     'gallery' => $this->gallery->id,
                     'slug' => $this->_slug,
                     'image' => $this->resource->id,
                     'view' => 'Image',
-                    'page' => $this->_page),
+                    'page' => $this->_page],
                 $this->_date
             )
         );
@@ -349,7 +349,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
         $view->filename = $this->resource->filename;
         $view->caption = $GLOBALS['injector']
             ->getInstance('Horde_Core_Factory_TextFilter')
-            ->filter($this->resource->caption, 'text2html', array('parselevel' => Horde_Text_Filter_Text2html::MICRO));
+            ->filter($this->resource->caption, 'text2html', ['parselevel' => Horde_Text_Filter_Text2html::MICRO]);
         $view->view = $this;
         $view->geometry = $this->_geometry;
         $view->background = $this->_style->background;
@@ -400,17 +400,17 @@ class Ansel_View_Image extends Ansel_View_Ansel
         // Previous image link
         if (!empty($this->_params['image_view_url'])) {
             $view->prev_url = str_replace(
-                array('%i', '%g', '%s'),
-                array($prev, $this->gallery->id, $this->_slug),
+                ['%i', '%g', '%s'],
+                [$prev, $this->gallery->id, $this->_slug],
                 urldecode($this->_params['image_view_url'])
             );
         } else {
             $view->prev_url = Ansel::getUrlFor('view', array_merge(
-                array('gallery' => $this->gallery->id,
-                      'slug' => $this->_slug,
-                      'image' => $prev,
-                      'view' => 'Image',
-                      'page' => $page_prev),
+                ['gallery' => $this->gallery->id,
+                    'slug' => $this->_slug,
+                    'image' => $prev,
+                    'view' => 'Image',
+                    'page' => $page_prev],
                 $this->_date
             ));
         }
@@ -419,20 +419,20 @@ class Ansel_View_Image extends Ansel_View_Ansel
         // Next image link
         if (!empty($this->_params['image_view_url'])) {
             $view->next_url = str_replace(
-                array('%i', '%g', '%s'),
-                array($prev, $this->gallery->id, $this->_slug),
+                ['%i', '%g', '%s'],
+                [$prev, $this->gallery->id, $this->_slug],
                 urldecode($this->_params['image_view_url'])
             );
         } else {
             $view->next_url = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array(
+                    [
                         'gallery' => $this->gallery->id,
                         'slug' => $this->_slug,
                         'image' => $next,
                         'view' => 'Image',
-                        'page' => $page_next),
+                        'page' => $page_next],
                     $this->_date
                 )
             );
@@ -442,16 +442,16 @@ class Ansel_View_Image extends Ansel_View_Ansel
         // Slideshow link
         if (!empty($this->_params['slideshow_link'])) {
             $this->_urls['slideshow'] = str_replace(
-                array('%i', '%g'),
-                array($this->resource->id, $this->gallery->id),
+                ['%i', '%g'],
+                [$this->resource->id, $this->gallery->id],
                 urldecode($this->_params['slideshow_link'])
             );
         } else {
             $this->_urls['slideshow'] = Horde::url('view.php')->add(
                 array_merge(
-                    array('gallery' => $this->gallery->id,
-                                  'image' => $this->resource->id,
-                                  'view' => 'Slideshow'),
+                    ['gallery' => $this->gallery->id,
+                        'image' => $this->resource->id,
+                        'view' => 'Slideshow'],
                     $this->_date
                 )
             );
@@ -459,30 +459,30 @@ class Ansel_View_Image extends Ansel_View_Ansel
 
         // These items don't work when viewing through the api
         if (empty($this->_params['api'])) {
-            $this->addWidget(Ansel_Widget::factory('Tags', array('view' => 'image')));
+            $this->addWidget(Ansel_Widget::factory('Tags', ['view' => 'image']));
             $this->addWidget(Ansel_Widget::factory('SimilarPhotos'));
-            $this->addWidget(Ansel_Widget::factory('Geotag', array('images' => array($this->resource->id))));
+            $this->addWidget(Ansel_Widget::factory('Geotag', ['images' => [$this->resource->id]]));
             if ($conf['faces']['driver']) {
-                $this->addWidget(Ansel_Widget::factory('ImageFaces', array('selfUrl' => Horde::signUrl($this->_urls['self']))));
+                $this->addWidget(Ansel_Widget::factory('ImageFaces', ['selfUrl' => Horde::signUrl($this->_urls['self'])]));
             }
-            $this->addWidget(Ansel_Widget::factory('Links', array()));
+            $this->addWidget(Ansel_Widget::factory('Links', []));
 
             // In line caption editing
             if ($this->gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
                 $GLOBALS['injector']->getInstance('Horde_Core_Factory_Imple')->create(
                     'Ansel_Ajax_Imple_EditCaption',
-                    array(
+                    [
                         'width' => $this->_geometry['width'],
                         'id' => 'anselcaption',
-                        'dataid' => $this->resource->id
-                    )
+                        'dataid' => $this->resource->id,
+                    ]
                 );
             }
         }
 
         // Output the js if we are calling via the api
         if (!empty($this->_params['api'])) {
-            foreach (array('prototype.js', 'stripe.js', 'scriptaculous/effects.js') as $val) {
+            foreach (['prototype.js', 'stripe.js', 'scriptaculous/effects.js'] as $val) {
                 $tmp = new Horde_Script_File_JsDir($val, 'horde');
                 Horde::startBuffer();
                 echo $tmp->tag_full;
@@ -492,16 +492,16 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $html = '';
         }
 
-        $js = array();
+        $js = [];
         if (empty($this->_params['hide_slideshow'])) {
             $js[] = '$$(\'.ssPlay\').each(function(n) { n.show(); });';
         }
-        $js = array_merge($js, array(
-          'AnselImageView.nextImgSrc = "' . $nextImgSrc . '"',
-          'AnselImageView.prevImgSrc = "' . $prevImgSrc . '"',
-          'AnselImageView.urls = { "imgsrc": "' . $this->_urls['imgsrc'] . '" }',
-          'AnselImageView.onload()'
-        ));
+        $js = array_merge($js, [
+            'AnselImageView.nextImgSrc = "' . $nextImgSrc . '"',
+            'AnselImageView.prevImgSrc = "' . $prevImgSrc . '"',
+            'AnselImageView.urls = { "imgsrc": "' . $this->_urls['imgsrc'] . '" }',
+            'AnselImageView.onload()',
+        ]);
         $page_output->addInlineScript($js);
 
         // Pass the urls now that we have them all.
@@ -534,14 +534,14 @@ class Ansel_View_Image extends Ansel_View_Ansel
     {
         global $conf, $registry;
 
-        if (($conf['comments']['allow'] == 'all' ||
-            ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth())) &&
-            $registry->hasMethod('forums/doComments')) {
+        if (($conf['comments']['allow'] == 'all'
+            || ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth()))
+            && $registry->hasMethod('forums/doComments')) {
 
             if (!empty($this->_params['comment_url'])) {
                 $this->_params['comment_url'] = str_replace(
-                    array('%i', '%g', '%s'),
-                    array($imageId, $galleryId, $gallerySlug),
+                    ['%i', '%g', '%s'],
+                    [$imageId, $galleryId, $gallerySlug],
                     urldecode($this->_params['comment_url'])
                 );
             }

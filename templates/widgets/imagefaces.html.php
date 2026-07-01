@@ -1,8 +1,8 @@
 <?php echo $this->render('begin'); ?>
 
 <?php if ($this->hasEdit): ?>
-    <?php echo $this->contentTag('a', (empty($this->images) ? _("Find faces") : _("Edit faces")), array('href' => $this->editUrl, 'id' => 'edit_faces', 'class' => 'widget')); ?>
-  | <?php echo $this->contentTag('a', _("Manual face selection"), array('href' => $this->manualUrl, 'class' => 'widget')) ?>
+    <?php echo $this->contentTag('a', (empty($this->images) ? _("Find faces") : _("Edit faces")), ['href' => $this->editUrl, 'id' => 'edit_faces', 'class' => 'widget']); ?>
+  | <?php echo $this->contentTag('a', _("Manual face selection"), ['href' => $this->manualUrl, 'class' => 'widget']) ?>
 <?php endif; ?>
 
 <!-- Main Widget Content Area -->

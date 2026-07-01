@@ -27,7 +27,7 @@ class Ansel_View_Slideshow extends Ansel_View_Image
         $GLOBALS['page_output']->addScriptFile('views/common.js');
 
         $imageIndex = $this->_revList[$this->resource->id];
-        $js = 'SlideController.initialize(' . self::json($this->gallery, array('view_links' => true)) . ','
+        $js = 'SlideController.initialize(' . self::json($this->gallery, ['view_links' => true]) . ','
             . $imageIndex . ', "' . $registry->get('webroot') . '", ' . $this->gallery->id . ', "");';
         $GLOBALS['page_output']->addInlineScript($js, true);
 

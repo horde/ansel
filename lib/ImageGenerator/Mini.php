@@ -3,7 +3,7 @@
 /**
  * ImageGenerator to create the mini view.
  *
- * Copyright 2001-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2001-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -20,10 +20,10 @@ class Ansel_ImageGenerator_Mini extends Ansel_ImageGenerator
     protected function _create()
     {
         if ($GLOBALS['conf']['image']['squaremini']) {
-            $generator = Ansel_ImageGenerator::factory('SquareThumb', array('width' => min(50, $this->_dimensions['width']),
-                                                                            'height' => min(50, $this->_dimensions['height']),
-                                                                            'image' => $this->_image,
-                                                                            'style' => $this->_params['style']));
+            $generator = Ansel_ImageGenerator::factory('SquareThumb', ['width' => min(50, $this->_dimensions['width']),
+                'height' => min(50, $this->_dimensions['height']),
+                'image' => $this->_image,
+                'style' => $this->_params['style']]);
             return $generator->create();
         } else {
             $this->_image->resize(
@@ -35,9 +35,9 @@ class Ansel_ImageGenerator_Mini extends Ansel_ImageGenerator
                 try {
                     $this->_image->addEffect(
                         'Unsharpmask',
-                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                                   'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                        ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                            'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                            'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                     );
                     $this->_image->applyEffects();
                 } catch (Horde_Image_Exception $e) {

@@ -8,7 +8,5 @@ class AnselFixBlobLength extends Horde_Db_Migration_Base
         $this->changeColumn('ansel_faces_index', 'index_part', 'binary');
     }
 
-    public function down()
-    {
-    }
+    public function down() {}
 }

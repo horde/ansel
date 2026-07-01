@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -13,7 +13,7 @@
  * Ansel_Widget_Geotag:: class to wrap the display of a Google map showing
  * images with geolocation data.
  *
- * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -28,9 +28,9 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
      *
      * @var array
      */
-    protected $_params = array(
+    protected $_params = [
         'default_zoom' => 15,
-        'max_auto_zoom' => 15);
+        'max_auto_zoom' => 15];
 
     /**
      * Attach widget to supplied view.
@@ -68,7 +68,12 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             return '';
         }
 
-        // Setup map and javascript includes
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::initMap()
+         * @deprecated Use Horde_Core_HordeMap::init() instead
+         * @see Horde_Deprecated::initMap()
+         */
+// Setup map and javascript includes
         Horde::initMap();
         $page_output->addScriptFile('map.js');
         $page_output->addScriptFile('popup.js', 'horde');
@@ -86,7 +91,7 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             ->setRaw(true);
         $geotagUrl->url .= 'imageSaveGeotag';
 
-        $permsEdit = (int)$this->_view->gallery->hasPermission(
+        $permsEdit = (int) $this->_view->gallery->hasPermission(
             $GLOBALS['registry']->getAuth(),
             Horde_Perms::EDIT
         );
@@ -103,18 +108,18 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
 
         // Add extra information to the JSON data to be sent:
         foreach ($geodata as $id => $data) {
-            $geodata[$id]['icon'] = (string)Ansel::getImageUrl(
+            $geodata[$id]['icon'] = (string) Ansel::getImageUrl(
                 $geodata[$id]['image_id'],
                 'mini',
                 true
             );
             $geodata[$id]['markerOnly'] = ($viewType == 'Image');
-            $geodata[$id]['link'] = (string)Ansel::getUrlFor(
+            $geodata[$id]['link'] = (string) Ansel::getUrlFor(
                 'view',
-                array(
-                     'view' => 'Image',
-                     'gallery' => $this->_view->gallery->id,
-                     'image' => $geodata[$id]['image_id']),
+                [
+                    'view' => 'Image',
+                    'gallery' => $this->_view->gallery->id,
+                    'image' => $geodata[$id]['image_id']],
                 true
             );
         }
@@ -128,17 +133,17 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             $others = $this->_getGalleryImagesWithGeodata();
             foreach ($others as $id => $data) {
                 if ($id != $image_id) {
-                    $others[$id]['icon'] = (string)Ansel::getImageUrl(
+                    $others[$id]['icon'] = (string) Ansel::getImageUrl(
                         $others[$id]['image_id'],
                         'mini',
                         true
                     );
-                    $others[$id]['link'] = (string)Ansel::getUrlFor(
+                    $others[$id]['link'] = (string) Ansel::getUrlFor(
                         'view',
-                        array(
-                                'view' => 'Image',
-                                'gallery' => $this->_view->gallery->id,
-                                'image' => $others[$id]['image_id']),
+                        [
+                            'view' => 'Image',
+                            'gallery' => $this->_view->gallery->id,
+                            'image' => $others[$id]['image_id']],
                         true
                     );
                 } else {
@@ -156,11 +161,11 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             );
 
             $view->addLink = $addurl->link(
-                array('onclick' => Horde::popupJs(
+                ['onclick' => Horde::popupJs(
                     Horde::url('map_edit.php'),
-                    array('params' => array('image' => $this->_params['images'][0]), 'urlencode' => true, 'width' => '750', 'height' => '600')
+                    ['params' => ['image' => $this->_params['images'][0]], 'urlencode' => true, 'width' => '750', 'height' => '600']
                 )
-                . 'return false;')
+                . 'return false;']
             );
 
             $view->imgs = $ansel_storage
@@ -179,10 +184,10 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
                         );
                     }
                     $data['add_link'] = $addurl->link(
-                        array(
-                        'title' => $data['title'],
-                        'onclick' => "Ansel.widgets.geotag.setLocation(" . $id . ",'" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "'); return false"
-                        )
+                        [
+                            'title' => $data['title'],
+                            'onclick' => "Ansel.widgets.geotag.setLocation(" . $id . ",'" . $data['image_latitude'] . "', '" . $data['image_longitude'] . "'); return false",
+                        ]
                     );
                 }
             }
@@ -190,7 +195,7 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
 
         // Build the javascript to handle the map on the gallery/image views.
         $json = Horde_Serialize::serialize(array_values($geodata), Horde_Serialize::JSON);
-        $js_params = array(
+        $js_params = [
             'smallMap' => 'ansel_map_small',
             'mainMap' => 'ansel_map',
             'viewType' => $viewType,
@@ -204,12 +209,12 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             'updateEndpoint' => strval($geotagUrl),
             'layerUpdateEndpoint' => strval($layerUrl),
             'layerUpdatePref' => 'current_maplayer',
-            'geocoder' => $GLOBALS['conf']['maps']['geocoder']
-        );
-        $js = array(
+            'geocoder' => $GLOBALS['conf']['maps']['geocoder'],
+        ];
+        $js = [
             'Ansel.widgets = Ansel.widgets || {};',
-            'Ansel.widgets.geotag = new AnselGeoTagWidget(' . $json . ',' . Horde_Serialize::serialize($js_params, Horde_Serialize::JSON) . ');'
-        );
+            'Ansel.widgets.geotag = new AnselGeoTagWidget(' . $json . ',' . Horde_Serialize::serialize($js_params, Horde_Serialize::JSON) . ');',
+        ];
         $page_output->addInlineScript($js, true);
         if (count($geodata)) {
             $page_output->addInlineScript('Ansel.widgets.geotag.doMap();', true);
@@ -226,7 +231,7 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
     {
         return $GLOBALS['injector']
             ->getInstance('Ansel_Storage')
-            ->getImagesGeodata(array(), $this->_view->gallery->id);
+            ->getImagesGeodata([], $this->_view->gallery->id);
     }
 
 }

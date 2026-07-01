@@ -3,7 +3,7 @@
 /**
  * Create Ansel base tables (as of Ansel 1.1.1).
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -20,32 +20,32 @@ class AnselUpgradeUnsignedints extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->changeColumn('ansel_images', 'image_id', 'integer', array('null' => false, 'autoincrement' => true, 'unsigned' => true));
-        $this->changeColumn('ansel_images', 'gallery_id', 'bigint', array('null' => false));
-        $this->changeColumn('ansel_images', 'image_uploaded_date', 'integer', array('null' => false, 'unsigned' => true));
-        $this->changeColumn('ansel_images', 'image_original_date', 'integer', array('null' => false, 'unsigned' => true));
-        $this->changeColumn('ansel_images', 'image_sort', 'integer', array('null' => false, 'unsigned' => true));
-        $this->changeColumn('ansel_images', 'image_faces', 'integer', array('null' => false, 'default' => 0, 'unsigned' => true));
-        $this->changeColumn('ansel_images', 'image_geotag_date', 'integer', array('unsigned' => true));
+        $this->changeColumn('ansel_images', 'image_id', 'integer', ['null' => false, 'autoincrement' => true, 'unsigned' => true]);
+        $this->changeColumn('ansel_images', 'gallery_id', 'bigint', ['null' => false]);
+        $this->changeColumn('ansel_images', 'image_uploaded_date', 'integer', ['null' => false, 'unsigned' => true]);
+        $this->changeColumn('ansel_images', 'image_original_date', 'integer', ['null' => false, 'unsigned' => true]);
+        $this->changeColumn('ansel_images', 'image_sort', 'integer', ['null' => false, 'unsigned' => true]);
+        $this->changeColumn('ansel_images', 'image_faces', 'integer', ['null' => false, 'default' => 0, 'unsigned' => true]);
+        $this->changeColumn('ansel_images', 'image_geotag_date', 'integer', ['unsigned' => true]);
 
-        $this->changeColumn('ansel_image_attributes', 'image_id', 'integer', array('null' => false, 'unsigned' => true));
+        $this->changeColumn('ansel_image_attributes', 'image_id', 'integer', ['null' => false, 'unsigned' => true]);
 
-        $this->changeColumn('ansel_faces', 'face_id', 'integer', array('null' => false, 'autoincrement' => true, 'unsigned' => true));
-        $this->changeColumn('ansel_faces', 'image_id', 'integer', array('null' => false, 'unsigned' => true));
-        $this->changeColumn('ansel_faces', 'gallery_id', 'bigint', array('null' => false));
+        $this->changeColumn('ansel_faces', 'face_id', 'integer', ['null' => false, 'autoincrement' => true, 'unsigned' => true]);
+        $this->changeColumn('ansel_faces', 'image_id', 'integer', ['null' => false, 'unsigned' => true]);
+        $this->changeColumn('ansel_faces', 'gallery_id', 'bigint', ['null' => false]);
 
-        $this->changeColumn('ansel_faces_index', 'face_id', 'integer', array('null' => false, 'unsigned' => true));
-        $this->changeColumn('ansel_faces_index', 'index_position', 'integer', array('null' => false, 'unsigned' => true));
+        $this->changeColumn('ansel_faces_index', 'face_id', 'integer', ['null' => false, 'unsigned' => true]);
+        $this->changeColumn('ansel_faces_index', 'index_position', 'integer', ['null' => false, 'unsigned' => true]);
 
-        $this->changeColumn('ansel_shares', 'share_id', 'bigint', array('null' => false, 'autoincrement' => true));
-        $this->changeColumn('ansel_shares', 'attribute_last_modified', 'integer', array('unsigned' => true));
-        $this->changeColumn('ansel_shares', 'attribute_date_created', 'integer', array('unsigned' => true));
-        $this->changeColumn('ansel_shares', 'attribute_images', 'integer', array('null' => false, 'default' => 0, 'unsigned' => true));
-        $this->changeColumn('ansel_shares', 'attribute_faces', 'integer', array('null' => false, 'default' => 0, 'unsigned' => true));
+        $this->changeColumn('ansel_shares', 'share_id', 'bigint', ['null' => false, 'autoincrement' => true]);
+        $this->changeColumn('ansel_shares', 'attribute_last_modified', 'integer', ['unsigned' => true]);
+        $this->changeColumn('ansel_shares', 'attribute_date_created', 'integer', ['unsigned' => true]);
+        $this->changeColumn('ansel_shares', 'attribute_images', 'integer', ['null' => false, 'default' => 0, 'unsigned' => true]);
+        $this->changeColumn('ansel_shares', 'attribute_faces', 'integer', ['null' => false, 'default' => 0, 'unsigned' => true]);
 
-        $this->changeColumn('ansel_shares_groups', 'group_uid', 'integer', array('null' => false, 'unsigned' => true));
+        $this->changeColumn('ansel_shares_groups', 'group_uid', 'integer', ['null' => false, 'unsigned' => true]);
 
-        $this->changeColumn('ansel_images_geolocation', 'image_id', 'integer', array('null' => false, 'unsigned' => true));
+        $this->changeColumn('ansel_images_geolocation', 'image_id', 'integer', ['null' => false, 'unsigned' => true]);
     }
 
     /**

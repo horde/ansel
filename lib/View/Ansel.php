@@ -2,7 +2,7 @@
 
 /**
  * Abstract Ansel_View class for Ansel UI specific views.
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -32,7 +32,7 @@ abstract class Ansel_View_Ansel extends Ansel_View_Base
      *
      * @var array
      */
-    protected $_widgets = array();
+    protected $_widgets = [];
 
     /**
      * Add an Ansel_Widget to be displayed in this view.

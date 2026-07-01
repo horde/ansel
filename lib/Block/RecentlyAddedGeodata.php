@@ -3,7 +3,7 @@
 /**
  * Display most recently geotagged images.
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -14,7 +14,7 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
 {
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
         $this->_name = _("Recently Geotagged Photos");
@@ -24,18 +24,18 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
      */
     protected function _params()
     {
-        return array(
-            'limit' => array(
+        return [
+            'limit' => [
                 'name' => _("Maximum number of photos"),
                 'type' => 'int',
-                'default' => 10
-            ),
-            'height' => array(
+                'default' => 10,
+            ],
+            'height' => [
                 'name' => _("Height of map (width automatically adjusts to block)"),
                 'type' => 'int',
-                'default' => 250
-            ),
-        );
+                'default' => 250,
+            ],
+        ];
     }
 
     /**
@@ -44,7 +44,12 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
     {
         global $page_output, $registry, $injector, $prefs;
 
-        Horde::initMap();
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::initMap()
+         * @deprecated Use Horde_Core_HordeMap::init() instead
+         * @see Horde_Deprecated::initMap()
+         */
+Horde::initMap();
         $page_output->addScriptFile('map.js');
         $page_output->addScriptFile('blocks/geotag.js');
 
@@ -71,12 +76,12 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
             // Generate the image view url
             $url = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'view' => 'Image',
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
                     'image' => $id,
-                    'gallery_view' => $style->gallery_view),
+                    'gallery_view' => $style->gallery_view],
                 true
             );
             $images[$key]['icon'] = strval(Ansel::getImageUrl($images[$key]['image_id'], 'mini', true));
@@ -91,14 +96,14 @@ class Ansel_Block_RecentlyAddedGeodata extends Horde_Core_Block
         // And the current defaultLayer, if any.
         $defaultLayer = $prefs->getValue('current_maplayer');
 
-        $opts = array(
+        $opts = [
             'layerUpdateEndpoint' => strval($layerUrl),
             'layerUpdatePref' => 'current_maplayer',
-            'defaultBaseLayer' => $defaultLayer);
+            'defaultBaseLayer' => $defaultLayer];
         $json = Horde_Serialize::serialize(array_values($images), Horde_Serialize::JSON);
-        $js = array(
+        $js = [
             'var opts = ' . Horde_Serialize::serialize($opts, Horde_Serialize::JSON),
-            'new AnselBlockGeoTag(' . $json . ', opts);');
+            'new AnselBlockGeoTag(' . $json . ', opts);'];
         $page_output->addInlineScript($js, true);
 
         return '<div id="ansel_map" style="height:' . $this->_params['height'] . 'px;"></div>';

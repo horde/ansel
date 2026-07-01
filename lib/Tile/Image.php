@@ -30,14 +30,14 @@ class Ansel_Tile_Image
      */
     public static function getTile(
         Ansel_Image $image,
-        Ansel_Style $style = null,
+        ?Ansel_Style $style = null,
         $mini = false,
-        array $params = array()
+        array $params = []
     ) {
         global $conf, $registry, $injector;
 
-        $page = isset($params['page']) ? $params['page'] : 0;
-        $view_type = isset($params['view']) ? $params['view'] : 'Gallery';
+        $page = $params['page'] ?? 0;
+        $view_type = $params['view'] ?? 'Gallery';
 
         $view = $injector->createInstance('Horde_View');
         $view->addTemplatePath(ANSEL_TEMPLATES . '/tile');
@@ -70,10 +70,10 @@ class Ansel_Tile_Image
         // URL for image properties/actions
         $view->image_url = Horde::url('image.php')->add(
             array_merge(
-                array('gallery' => $image->gallery,
-                     'page' => $page,
-                     'image' => $image->id,
-                     'havesearch' => $haveSearch),
+                ['gallery' => $image->gallery,
+                    'page' => $page,
+                    'image' => $image->id,
+                    'havesearch' => $haveSearch],
                 $date
             )
         );
@@ -83,12 +83,12 @@ class Ansel_Tile_Image
         // always point to the image view page, we set $img_view_url to link to
         // the image view
         $view->img_view_url = Ansel::getUrlFor('view', array_merge(
-            array('gallery' => $image->gallery,
-                  'slug' => $view->parent->get('slug'),
-                  'page' => $page,
-                  'view' => 'Image',
-                  'image' => $image->id,
-                  'havesearch' => $haveSearch),
+            ['gallery' => $image->gallery,
+                'slug' => $view->parent->get('slug'),
+                'page' => $page,
+                'view' => 'Image',
+                'image' => $image->id,
+                'havesearch' => $haveSearch],
             $date
         ));
 
@@ -99,8 +99,8 @@ class Ansel_Tile_Image
         } else {
             $view->view_url = new Horde_Url(
                 str_replace(
-                    array('%i', '%g', '%s'),
-                    array($image->id, $image->gallery, $view->parent->get('slug')),
+                    ['%i', '%g', '%s'],
+                    [$image->id, $image->gallery, $view->parent->get('slug')],
                     urldecode($params['image_view_url'])
                 )
             );
@@ -115,11 +115,11 @@ class Ansel_Tile_Image
             $view->gallery_url = Ansel::getUrlFor(
                 'view',
                 array_merge(
-                    array(
+                    [
                         'gallery' => $view->parent->id,
                         'slug' => $view->parent->get('slug'),
                         'view' => 'Gallery',
-                        'havesearch' => $haveSearch),
+                        'havesearch' => $haveSearch],
                     $date
                 )
             );
@@ -128,7 +128,7 @@ class Ansel_Tile_Image
         $view->thumb_url = Ansel::getImageUrl($image->id, $thumbstyle, true, $style);
         $view->option_select = $view->parent->hasPermission($registry->getAuth(), Horde_Perms::DELETE);
         $view->option_edit = $view->parent->hasPermission($registry->getAuth(), Horde_Perms::EDIT);
-        $view->imgAttributes = (!empty($params['image_view_attributes']) ? $params['image_view_attributes'] : array());
+        $view->imgAttributes = (!empty($params['image_view_attributes']) ? $params['image_view_attributes'] : []);
         $view->option_comments = ($conf['comments']['allow'] == 'all' || ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth())) && empty($params['hide_comments']);
 
         $view->imgOnClick = (!empty($params['image_onclick'])
@@ -140,11 +140,11 @@ class Ansel_Tile_Image
             ->filter(
                 $image->caption,
                 'text2html',
-                array('parselevel' => Horde_Text_Filter_Text2html::MICRO)
+                ['parselevel' => Horde_Text_Filter_Text2html::MICRO]
             );
 
-        if (!empty($params['image_view_title']) &&
-            !empty($image->_data[$params['image_view_title']])) {
+        if (!empty($params['image_view_title'])
+            && !empty($image->_data[$params['image_view_title']])) {
             $title = $image->_data[$params['image_view_title']];
         } else {
             $title = $image->filename;
@@ -156,10 +156,10 @@ class Ansel_Tile_Image
                 $geometry = $image->getDimensions($thumbstyle);
                 $injector->createInstance('Horde_Core_Factory_Imple')->create(
                     'Ansel_Ajax_Imple_EditCaption',
-                    array(
+                    [
                         'dataid' => $image->id,
                         'id' => $image->id . 'caption',
-                        'width' => $geometry['width'])
+                        'width' => $geometry['width']]
                 );
             } catch (Ansel_Exception $e) {
             }

@@ -8,7 +8,7 @@
  */
 class Ansel_ImageGenerator_RoundedThumb extends Ansel_ImageGenerator
 {
-    public $need = array('RoundCorners', 'DropShadow');
+    public $need = ['RoundCorners', 'DropShadow'];
 
     public function __construct($params)
     {
@@ -40,19 +40,19 @@ class Ansel_ImageGenerator_RoundedThumb extends Ansel_ImageGenerator
 
             try {
                 /* Apply the effects - continue on error, but be sure to log */
-                $this->_image->addEffect('RoundCorners', array('border' => 2,
-                                                               'bordercolor' => '#333'));
+                $this->_image->addEffect('RoundCorners', ['border' => 2,
+                    'bordercolor' => '#333']);
 
-                $this->_image->addEffect('DropShadow', array('background' => $styleDef->background,
-                                                             'padding' => 5,
-                                                             'distance' => 5,
-                                                             'fade' => 3));
+                $this->_image->addEffect('DropShadow', ['background' => $styleDef->background,
+                    'padding' => 5,
+                    'distance' => 5,
+                    'fade' => 3]);
                 if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
                     $this->_image->addEffect(
                         'Unsharpmask',
-                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                                   'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                        ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                            'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                            'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                     );
                 }
 

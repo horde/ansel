@@ -1,9 +1,11 @@
 <div id="galleryHeader" class="header">
-  <?php if ($this->numTiles): ?>
+  <?php use Horde\Util\Util;
+
+if ($this->numTiles): ?>
     <span class="rightFloat">
       <?php echo ($this->numTiles > $this->perpage
-        ? sprintf(_("%d to %d of %d Items"), $this->pagestart, $this->pageend, $this->numTiles)
-        : sprintf(ngettext("%d Item", "%d Items", $this->numTiles), $this->numTiles)) ?>
+          ? sprintf(_("%d to %d of %d Items"), $this->pagestart, $this->pageend, $this->numTiles)
+          : sprintf(ngettext("%d Item", "%d Items", $this->numTiles), $this->numTiles)) ?>
     </span>
   <?php endif; ?>
   <?php echo Ansel::getBreadCrumbs($this->gallery) ?>
@@ -17,7 +19,7 @@
   <td style="vertical-align:top;width:<?php echo ($this->view->countWidgets() ? "75%" : "100%") ?>;">
     <?php if (empty($this->view->api) && $this->option_select && $this->numTiles): ?>
       <form name="gallery" action="<?php echo Horde::selfUrl(true, true, true) ?>" method="get">
-      <?php echo Horde_Util::formInput() ?>
+      <?php echo Util::formInput() ?>
       <input type="hidden" name="actionID" value="" />
       <input type="hidden" name="gallery" value="<?php echo $this->gallery->id ?>" />
       <input type="hidden" name="page" value="<?php echo $this->page ?>" />
@@ -30,31 +32,31 @@
         <tr>
           <td>
             <span class="widget"><?php echo _("Select") ?>:</span>
-            <?php echo $this->contentTag('a', _("All"), array('title' => _("Select All"), 'id' => 'anselgallery_select_all')) ?>
-            <?php echo $this->contentTag('a', _("None"), array('title' => _("Select None"), 'id' => 'anselgallery_select_none')) ?>
+            <?php echo $this->contentTag('a', _("All"), ['title' => _("Select All"), 'id' => 'anselgallery_select_all']) ?>
+            <?php echo $this->contentTag('a', _("None"), ['title' => _("Select None"), 'id' => 'anselgallery_select_none']) ?>
           </td>
           <td class="rightAlign">
             <?php if ($this->option_delete || $this->option_move || $this->option_copy) {
                 echo _("Actions: ");
             } ?>
             <?php if ($GLOBALS['conf']['gallery']['downloadzip']): ?>
-              <?php echo $this->contentTag('a', _("Download selected photos"), array('class' => 'widget', 'id' => 'anselgallery_download')) ?> |
+              <?php echo $this->contentTag('a', _("Download selected photos"), ['class' => 'widget', 'id' => 'anselgallery_download']) ?> |
             <?php endif; ?>
             <?php if ($this->option_edit): ?>
-              <?php echo $this->contentTag('a', _("Edit Dates"), array('title' => _("Edit Dates"), 'class' => 'widget', 'id' => 'anselgallery_editdates')) ?> |
+              <?php echo $this->contentTag('a', _("Edit Dates"), ['title' => _("Edit Dates"), 'class' => 'widget', 'id' => 'anselgallery_editdates']) ?> |
             <?php endif; ?>
             <?php if ($this->option_delete): ?>
-              <?php echo $this->contentTag('a', _("Delete"), array('title' => _("Delete"), 'class' => 'widget', 'id' => 'anselgallery_delete')) ?>
+              <?php echo $this->contentTag('a', _("Delete"), ['title' => _("Delete"), 'class' => 'widget', 'id' => 'anselgallery_delete']) ?>
             <?php endif; ?>
             <?php if ($this->option_move): ?>
-              | <?php echo $this->contentTag('a', _("Move"), array('title' => _("Move"), 'class' => 'widget', 'id' => 'anselgallery_move')) ?>
+              | <?php echo $this->contentTag('a', _("Move"), ['title' => _("Move"), 'class' => 'widget', 'id' => 'anselgallery_move']) ?>
             <?php endif; ?>
             <?php if ($this->option_copy): ?>
-              | <?php echo $this->contentTag('a', _("Copy"), array('title' => _("Copy"), 'class' => 'widget', 'id' => 'anselgallery_copy')) ?>
+              | <?php echo $this->contentTag('a', _("Copy"), ['title' => _("Copy"), 'class' => 'widget', 'id' => 'anselgallery_copy']) ?>
             <?php endif; ?>
             <select name="new_gallery">
               <option value="-1"><?php echo _("Selected photos to") ?></option>
-              <?php echo Ansel::selectGalleries(array('perm' => Horde_Perms::EDIT)) ?>
+              <?php echo Ansel::selectGalleries(['perm' => Horde_Perms::EDIT]) ?>
             </select>
           </td>
         </tr>

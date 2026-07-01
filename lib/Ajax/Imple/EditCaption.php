@@ -5,7 +5,7 @@ use Horde\Util\Variables;
 /**
  * Imple for performing AJAX setting of image captions.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author  Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
@@ -42,8 +42,8 @@ class Ansel_Ajax_Imple_EditCaption extends Horde_Core_Ajax_Imple_InPlaceEditor
         return $GLOBALS['injector']->getInstance('Horde_Core_Factory_TextFilter')->filter(
             $image->caption,
             'text2html',
-            array('parselevel' => Horde_Text_Filter_Text2html::MICRO
-        )
+            ['parselevel' => Horde_Text_Filter_Text2html::MICRO,
+            ]
         );
     }
 

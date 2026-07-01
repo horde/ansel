@@ -1,10 +1,11 @@
 <?php
+
 use Horde\Injector\Injector;
 
 /**
  * Factory for Ansel_Storage.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * @author   Michael J. Rubinsky <mrubinsk@horde.org>
  * @category Horde
@@ -18,7 +19,7 @@ class Ansel_Factory_Storage extends Horde_Core_Factory_Injector
      *
      * @var array
      */
-    private $_instances = array();
+    private $_instances = [];
 
     /**
      * Return an Ansel_Storage instance scoped for the current Ansel scope.

@@ -3,7 +3,7 @@
 /**
  * Create Ansel base tables (as of Ansel 1.1.1).
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -31,9 +31,9 @@ class AnselUpgradeFixautoincrement extends Horde_Db_Migration_Base
      */
     public function down()
     {
-        $this->changeColumn('ansel_images', 'image_id', 'integer', array('null' => false, 'autoincrement' => true, 'unsigned' => true));
-        $this->changeColumn('ansel_faces', 'face_id', 'integer', array('null' => false, 'autoincrement' => true, 'unsigned' => true));
-        $this->changeColumn('ansel_shares', 'share_id', 'bigint', array('null' => false, 'autoincrement' => true));
+        $this->changeColumn('ansel_images', 'image_id', 'integer', ['null' => false, 'autoincrement' => true, 'unsigned' => true]);
+        $this->changeColumn('ansel_faces', 'face_id', 'integer', ['null' => false, 'autoincrement' => true, 'unsigned' => true]);
+        $this->changeColumn('ansel_shares', 'share_id', 'bigint', ['null' => false, 'autoincrement' => true]);
     }
 
 }

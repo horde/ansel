@@ -9,7 +9,7 @@
 /**
  * Ansel_TagBrowser:: class provides logic for dealing with tag browsing.
  *
- * Copyright 2011-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2011-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -38,15 +38,20 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
         $count = 0;
         foreach ($this->_tags as $tagname => $tagid) {
             $remove_url = Horde::url('view.php', true)->add(
-                array('view' => 'Results',
-                          'tag' => $tagname,
-                          'actionID' => 'remove')
+                ['view' => 'Results',
+                    'tag' => $tagname,
+                    'actionID' => 'remove']
             );
             if (!empty($this->_owner)) {
                 $remove_url->add('owner', $this->_owner);
             }
             $delete_label = sprintf(_("Remove %s from search"), htmlspecialchars($tagname));
-            $html .= '<li>' . htmlspecialchars($tagname) . $remove_url->link(array('title' => $delete_label)) . Horde::img('delete-small.png', $delete_label) . '</a></li>';
+            /**
+             * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+             * @deprecated Use Horde_Themes_Image::tag() instead
+             * @see Horde_Deprecated::img()
+             */
+$html .= '<li>' . htmlspecialchars($tagname) . $remove_url->link(['title' => $delete_label]) . Horde::img('delete-small.png', $delete_label) . '</a></li>';
         }
 
         return $html . '</ul>';
@@ -63,9 +68,9 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
             return 0;
         }
 
-        $count = array(
+        $count = [
             'galleries' => count($this->_results['galleries']),
-            'images' => count($this->_results['images']));
+            'images' => count($this->_results['images'])];
 
         $this->_totalCount = $count;
 
@@ -89,7 +94,7 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
         $gstart = $page * $perpage;
         $gresults = array_slice($this->_results['galleries'], $gstart, $perpage);
 
-        $galleries = array();
+        $galleries = [];
         foreach ($gresults as $gid) {
             try {
                 $galleries[] = $injector
@@ -106,12 +111,12 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
         if ($count > 0) {
             $iresults = array_slice($this->_results['images'], $istart, $count);
             try {
-                $images = count($iresults) ? array_values($injector->getInstance('Ansel_Storage')->getImages(array('ids' => $iresults))) : array();
+                $images = count($iresults) ? array_values($injector->getInstance('Ansel_Storage')->getImages(['ids' => $iresults])) : [];
             } catch (Horde_Exception_NotFound $e) {
                 throw new Ansel_Exception($e);
             }
-            if (($conf['comments']['allow'] == 'all' || ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth())) &&
-                $registry->hasMethod('forums/numMessagesBatch')) {
+            if (($conf['comments']['allow'] == 'all' || ($conf['comments']['allow'] == 'authenticated' && $registry->getAuth()))
+                && $registry->hasMethod('forums/numMessagesBatch')) {
 
                 $ids = array_keys($images);
                 try {
@@ -123,7 +128,7 @@ class Ansel_TagBrowser extends Horde_Core_TagBrowser
                 }
             }
         } else {
-            $images = array();
+            $images = [];
         }
 
         return array_merge($galleries, $images);

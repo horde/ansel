@@ -35,14 +35,14 @@ class Ansel_XPPublisher
     {
         $GLOBALS['browser']->downloadHeaders('install_registry.reg', 'application/octet-stream');
 
-        $lines = array(
+        $lines = [
             'Windows Registry Editor Version 5.00',
             '',
             '[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\PublishingWizard\PublishingWizard\Providers\\' . $appKey . ']',
             '"displayname"="' . $displayName . '"',
             '"description"="' . $description . '"',
             '"href"="' . $href . '"',
-            '"icon"="' . $icon . '"');
+            '"icon"="' . $icon . '"'];
         echo implode("\r\n", $lines) . "\r\n";
     }
 

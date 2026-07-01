@@ -3,7 +3,7 @@
 /**
  * Display most recently added images.
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -19,7 +19,7 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
 
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
         $this->_name = _("Recently Added Photos");
@@ -29,29 +29,29 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
      */
     protected function _params()
     {
-        $params = array(
-            'gallery' => array(
+        $params = [
+            'gallery' => [
                 'name' => _("Gallery"),
                 'type' => 'enum',
                 'default' => '__random',
-                'values' => array('all' => 'All')
-            ),
-            'limit' => array(
+                'values' => ['all' => 'All'],
+            ],
+            'limit' => [
                 'name' => _("Maximum number of photos"),
                 'type' => 'int',
-                'default' => 10
-            )
-        );
+                'default' => 10,
+            ],
+        ];
 
-        if (empty($GLOBALS['conf']['gallery']['listlimit']) ||
-            ($GLOBALS['injector']
+        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+            || ($GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
                 ->countGalleries(
                     $GLOBALS['registry']->getAuth(),
-                    array('perm' => Horde_Perms::READ)
+                    ['perm' => Horde_Perms::READ]
                 ) < $GLOBALS['conf']['gallery']['listlimit'])) {
 
-            foreach ($GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(array('perm' => Horde_Perms::READ)) as $gal) {
+            foreach ($GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(['perm' => Horde_Perms::READ]) as $gal) {
                 if (!$gal->hasPasswd() && $gal->isOldEnough()) {
                     $params['gallery']['values'][$gal->id] = $gal->get('name');
                 }
@@ -71,7 +71,7 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
             } catch (Exception $e) {
                 return Ansel::getUrlFor(
                     'view',
-                    array('view' => 'List'),
+                    ['view' => 'List'],
                     true
                 )
                 ->link() . _("Gallery") . '</a>';
@@ -81,15 +81,15 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
             $style = $gallery->getStyle();
             $viewurl = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
-                    'view' => 'Gallery'),
+                    'view' => 'Gallery'],
                 true
             );
             return sprintf(_("Recently Added Photos From %s"), $viewurl->link() . $name . '</a>');
         }
-        $viewurl = Ansel::getUrlFor('view', array('view' => 'List'), true);
+        $viewurl = Ansel::getUrlFor('view', ['view' => 'List'], true);
 
         return $this->getName();
     }
@@ -101,9 +101,9 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
         $GLOBALS['page_output']->addScriptFile('block.js');
 
         if ($this->_params['gallery'] == 'all') {
-            $galleries = array();
+            $galleries = [];
         } elseif (!is_array($this->_params['gallery'])) {
-            $galleries = array($this->_params['gallery']);
+            $galleries = [$this->_params['gallery']];
         } else {
             $galleries = $this->_params['gallery'];
         }
@@ -120,17 +120,17 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
             return $e->getMessage();
         }
         $preview_url = Horde::url('preview.php', true);
-        $header = array(_("Date"), _("Photo"), _("Gallery"));
+        $header = [_("Date"), _("Photo"), _("Gallery")];
 
         $html = <<<HEADER
-<table class="linedRow" cellspacing="0" style="width:100%">
- <thead><tr class="item nowrap">
-  <th class="item leftAlign">$header[0]</th>
-  <th class="item leftAlign">$header[1]</th>
-  <th class="item leftAlign">$header[2]</th>
-</tr></thead>
-<tbody>
-HEADER;
+            <table class="linedRow" cellspacing="0" style="width:100%">
+             <thead><tr class="item nowrap">
+              <th class="item leftAlign">$header[0]</th>
+              <th class="item leftAlign">$header[1]</th>
+              <th class="item leftAlign">$header[2]</th>
+            </tr></thead>
+            <tbody>
+            HEADER;
         foreach ($results as $image) {
             $gallery = $GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
@@ -144,10 +144,10 @@ HEADER;
 
             $galleryLink = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
-                    'view' => 'Gallery'),
+                    'view' => 'Gallery'],
                 true
             );
             $galleryLink = $galleryLink->link()
@@ -162,20 +162,20 @@ HEADER;
             /* Generate the image view url */
             $url = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'view' => 'Image',
                     'slug' => $gallery->get('slug'),
                     'gallery' => $gallery->id,
                     'image' => $image->id,
-                    'gallery_view' => $style->gallery_view)
+                    'gallery_view' => $style->gallery_view]
             );
 
-            $html .= '<tr><td>' . \Horde\Date\Format::formatDate($image->uploaded, '%x')
+            $html .= '<tr><td>' . Horde\Date\Format::formatDate($image->uploaded, '%x')
                 . '</td><td class="nowrap">'
                 . $url->link(
-                    array(
+                    [
                         'onmouseout' => '$("ansel_preview").hide();$("ansel_preview").update("");',
-                        'onmouseover' => 'Ansel.previewImage(event, ' . $image->id . ');')
+                        'onmouseover' => 'Ansel.previewImage(event, ' . $image->id . ');']
                 )
                 . htmlspecialchars(strlen($caption) ? $caption : $image->filename)
                 . '</a></td><td class="nowrap">' . $galleryLink . '</td></tr>';
@@ -196,8 +196,8 @@ HEADER;
         }
 
         /* Get the gallery object and cache it. */
-        if (isset($this->_params['gallery']) &&
-            $this->_params['gallery'] != '__random') {
+        if (isset($this->_params['gallery'])
+            && $this->_params['gallery'] != '__random') {
             $this->_gallery = $GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
                 ->getGallery($this->_params['gallery']);

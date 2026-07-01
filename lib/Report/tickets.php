@@ -15,12 +15,12 @@ class Ansel_Report_tickets extends Ansel_Report
     {
         $info = array_merge(
             $GLOBALS['conf']['report_content']['ticket_params'],
-            array('summary' => $this->getTitle(),
-                                    'comment' => $message,
-                                    'user_email' => $this->getUserEmail())
+            ['summary' => $this->getTitle(),
+                'comment' => $message,
+                'user_email' => $this->getUserEmail()]
         );
 
-        return $GLOBALS['registry']->call('tickets/addTicket', array($info));
+        return $GLOBALS['registry']->call('tickets/addTicket', [$info]);
     }
 
 }

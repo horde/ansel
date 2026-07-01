@@ -8,7 +8,7 @@
  */
 class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
 {
-    public $need = array('PolaroidImage');
+    public $need = ['PolaroidImage'];
 
     public function __construct($params)
     {
@@ -40,15 +40,15 @@ class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
             try {
                 $this->_image->addEffect(
                     'PolaroidImage',
-                    array('background' => $styleDef->background,
-                                               'padding' => 5)
+                    ['background' => $styleDef->background,
+                        'padding' => 5]
                 );
                 if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
                     $this->_image->addEffect(
                         'Unsharpmask',
-                        array('radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                                                   'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                                                   'amount' => $GLOBALS['conf']['thumbnail']['amount'])
+                        ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
+                            'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
+                            'amount' => $GLOBALS['conf']['thumbnail']['amount']]
                     );
                 }
                 $this->_image->applyEffects();

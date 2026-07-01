@@ -3,7 +3,7 @@
 /**
  * Display Tag Cloud
  *
- * Copyright 2007-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2007-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -14,7 +14,7 @@ class Ansel_Block_Cloud extends Horde_Core_Block
 {
     /**
      */
-    public function __construct($app, $params = array())
+    public function __construct($app, $params = [])
     {
         parent::__construct($app, $params);
 
@@ -25,13 +25,13 @@ class Ansel_Block_Cloud extends Horde_Core_Block
      */
     protected function _params()
     {
-        return array(
-            'count' => array(
+        return [
+            'count' => [
                 'name' => _("Number of tags to display"),
                 'type' => 'int',
-                'default' => 20
-            )
-        );
+                'default' => 20,
+            ],
+        ];
     }
 
     /**
@@ -43,8 +43,8 @@ class Ansel_Block_Cloud extends Horde_Core_Block
         if (count($tags)) {
             $cloud = new Horde_Core_Ui_TagCloud();
             foreach ($tags as $id => $tag) {
-                $link = Ansel::getUrlFor('view', array('view' => 'Results',
-                                                       'tag' => $tag['tag_name']));
+                $link = Ansel::getUrlFor('view', ['view' => 'Results',
+                    'tag' => $tag['tag_name']]);
                 $cloud->addElement($tag['tag_name'], $link, $tag['count']);
             }
             $html = $cloud->buildHTML();

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../lib/Style.php';
 /**
  * Upgrade to Ansel 2 style schema
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -24,27 +24,32 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
         // Create: ansel_hashes
         $t = $this->createTable(
             'ansel_hashes',
-            array('autoincrementKey' => false)
+            ['autoincrementKey' => false]
         );
-        $t->column('style_hash', 'string', array('limit' => 255));
-        $t->primaryKey(array('style_hash'));
+        $t->column('style_hash', 'string', ['limit' => 255]);
+        $t->primaryKey(['style_hash']);
         $t->end();
-        $styles = Horde::loadConfiguration('styles.php', 'styles', 'ansel');
+        /**
+         * ARCHITECTURE VIOLATION: Using deprecated Horde::loadConfiguration()
+         * @deprecated Use $registry->loadConfigFile() instead
+         * @see Horde_Deprecated::loadConfiguration()
+         */
+$styles = Horde::loadConfiguration('styles.php', 'styles', 'ansel');
 
         // Migrate existing data
         $sql = 'SELECT share_id, attribute_style FROM ansel_shares';
         $this->announce('Migrating gallery styles.', 'cli.message');
-        $defaults = array(
+        $defaults = [
             'thumbstyle' => 'Thumb',
             'background' => 'none',
             'gallery_view' => 'Gallery',
-            'widgets' => array(
-                 'Tags' => array('view' => 'gallery'),
-                 'OtherGalleries' => array(),
-                 'Geotag' => array(),
-                 'Links' => array(),
-                 'GalleryFaces' => array(),
-                 'OwnerFaces' => array()));
+            'widgets' => [
+                'Tags' => ['view' => 'gallery'],
+                'OtherGalleries' => [],
+                'Geotag' => [],
+                'Links' => [],
+                'GalleryFaces' => [],
+                'OwnerFaces' => []]];
 
         $rows = $this->_connection->select($sql);
         $update = 'UPDATE ansel_shares SET attribute_style = ? WHERE share_id = ?;';
@@ -66,7 +71,7 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
             $this->announce('Migrating share id: ' . $row['share_id'] . ' from: ' . $row['attribute_style'] . ' to: ' . $newStyle, 'cli.message');
 
             try {
-                $this->_connection->execute($update, array($newStyle, $row['share_id']));
+                $this->_connection->execute($update, [$newStyle, $row['share_id']]);
             } catch (Horde_Db_Exception $e) {
                 $this->announce('ERROR: ' . $e->getMessage());
             }
@@ -81,7 +86,7 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
     {
         $sql = "UPDATE ansel_shares set attribute_style = 'ansel_default'";
         $this->_connection->execute($sql);
-        $this->changeColumn('ansel_shares', 'attribute_style', 'string', array('limit' => 255));
+        $this->changeColumn('ansel_shares', 'attribute_style', 'string', ['limit' => 255]);
         $this->dropTable('ansel_hashes');
     }
 
@@ -92,11 +97,11 @@ class AnselUpgradeStyle extends Horde_Db_Migration_Base
      */
     private function _translate_generators($properties)
     {
-        $thumb_map = array(
+        $thumb_map = [
             'thumb' => 'Thumb',
             'prettythumb' => 'RoundedThumb',
             'shadowsharpthumb' => 'ShadowThumb',
-            'polaroidthumb' => 'PolaroidThumb');
+            'polaroidthumb' => 'PolaroidThumb'];
 
         // Make sure we didn't already translate
         if (!empty($thumb_map[$properties['thumbstyle']])) {

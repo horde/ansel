@@ -1,9 +1,11 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
  * Class to encapsulate the UI for adding/viewing/changing galleries.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -40,7 +42,7 @@ class Ansel_View_GalleryProperties
      *
      * @param array $params  Parameters for the view
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->_params = $params;
     }
@@ -74,7 +76,7 @@ class Ansel_View_GalleryProperties
     private function _loadDefaults()
     {
         /*Gallery properties */
-        $this->_properties = array(
+        $this->_properties = [
             'name' => '',
             'desc' => '',
             'tags' => '',
@@ -86,8 +88,8 @@ class Ansel_View_GalleryProperties
             'id' => null,
             'mode' => 'Normal',
             'passwd' => '',
-            'owner' => ''
-        );
+            'owner' => '',
+        ];
     }
 
     /**
@@ -98,10 +100,10 @@ class Ansel_View_GalleryProperties
     private function _output()
     {
         $view = $GLOBALS['injector']->createInstance('Horde_View');
-        $view->addTemplatePath(array(
+        $view->addTemplatePath([
             ANSEL_TEMPLATES . '/gallery',
             ANSEL_TEMPLATES . '/gallery/partial',
-            ANSEL_TEMPLATES . '/gallery/layout'));
+            ANSEL_TEMPLATES . '/gallery/layout']);
 
         $view->properties = $this->_properties;
         $view->title = $this->_title;
@@ -109,14 +111,14 @@ class Ansel_View_GalleryProperties
         $view->url = $this->_params['url'];
         $view->availableThumbs = $this->_thumbStyles();
         $view->galleryViews = $this->_galleryViewStyles();
-        $view->locked = array('download' => $GLOBALS['prefs']->isLocked('default_download'));
-        $view->isOwner = $GLOBALS['registry']->getAuth() &&
-                         $GLOBALS['registry']->getAuth() == $this->_properties['owner'];
+        $view->locked = ['download' => $GLOBALS['prefs']->isLocked('default_download')];
+        $view->isOwner = $GLOBALS['registry']->getAuth()
+                         && $GLOBALS['registry']->getAuth() == $this->_properties['owner'];
 
         $view->havePretty = $GLOBALS['conf']['image']['prettythumbs'];
         $view->ages = $GLOBALS['conf']['ages']['limits'];
 
-        $js = array('$("gallery_name").focus()');
+        $js = ['$("gallery_name").focus()'];
         if ($GLOBALS['conf']['image']['type'] != 'png') {
             $js[] = 'function checkStyleSelection()
                 {
@@ -142,12 +144,12 @@ class Ansel_View_GalleryProperties
         $page_output->addInlineScript($js, true);
         $page_output->addScriptFile('popup.js', 'horde');
         $page_output->addScriptFile('slugcheck.js');
-        $page_output->addInlineJsVars(array(
-            'AnselSlugCheck.text' => $this->_properties['slug']
-        ));
+        $page_output->addInlineJsVars([
+            'AnselSlugCheck.text' => $this->_properties['slug'],
+        ]);
 
         $page_output->header();
-        $GLOBALS['notification']->notify(array('listeners' => 'status'));
+        $GLOBALS['notification']->notify(['listeners' => 'status']);
         echo $view->render('properties');
         $page_output->footer();
     }
@@ -211,20 +213,20 @@ class Ansel_View_GalleryProperties
         try {
             $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($this->_params['gallery']);
             $parent = $gallery->getParent();
-            $this->_properties = array(
+            $this->_properties = [
                 'name' => $gallery->get('name'),
                 'desc' => $gallery->get('desc'),
                 'tags' => implode(',', $gallery->getTags()),
                 'slug' => $gallery->get('slug'),
-                'age' => (int)$gallery->get('age'),
+                'age' => (int) $gallery->get('age'),
                 'download' => $gallery->get('download'),
                 'mode' => $gallery->get('view_mode'),
                 'passwd' => $gallery->get('passwd'),
                 'parent' => !is_null($parent) ? $parent->id : $parent,
                 'id' => $gallery->id,
                 'owner' => $gallery->get('owner'),
-                'style' => $gallery->getStyle()
-            );
+                'style' => $gallery->getStyle(),
+            ];
             $this->_title = sprintf(_("Modifying: %s"), $this->_properties['name']);
         } catch (Ansel_Exception $e) {
             $title = _("Unknown Gallery");
@@ -240,9 +242,9 @@ class Ansel_View_GalleryProperties
     private function _runSave()
     {
         // Check general permissions.
-        if (!$GLOBALS['registry']->isAdmin() &&
-            ($GLOBALS['injector']->getInstance('Horde_Perms')->exists('ansel') &&
-             !$GLOBALS['injector']->getInstance('Horde_Perms')->hasPermission('ansel', $GLOBALS['registry']->getAuth(), Horde_Perms::EDIT))) {
+        if (!$GLOBALS['registry']->isAdmin()
+            && ($GLOBALS['injector']->getInstance('Horde_Perms')->exists('ansel')
+             && !$GLOBALS['injector']->getInstance('Horde_Perms')->hasPermission('ansel', $GLOBALS['registry']->getAuth(), Horde_Perms::EDIT))) {
 
             $GLOBALS['notification']->push(_("Access denied editing galleries."), 'horde.error');
             Horde::url('view.php?view=List', true)->redirect();
@@ -250,40 +252,40 @@ class Ansel_View_GalleryProperties
         }
 
         // Get the form values.
-        $galleryId = Horde_Util::getFormData('gallery');
-        $gallery_name = Horde_Util::getFormData('gallery_name');
-        $gallery_desc = Horde_Util::getFormData('gallery_desc');
-        $gallery_slug = Horde_Util::getFormData('gallery_slug');
-        $gallery_age = (int)Horde_Util::getFormData('gallery_age', 0);
-        $gallery_download = Horde_Util::getFormData('gallery_download');
-        $gallery_mode = Horde_Util::getFormData('view_mode', 'Normal');
-        $gallery_passwd = Horde_Util::getFormData('gallery_passwd');
-        $gallery_tags = Horde_Util::getFormData('gallery_tags');
-        $gallery_thumbstyle = Horde_Util::getFormData('gallery_style');
-        $gallery_parent = Horde_Util::getFormData('gallery_parent');
+        $galleryId = Util::getFormData('gallery');
+        $gallery_name = Util::getFormData('gallery_name');
+        $gallery_desc = Util::getFormData('gallery_desc');
+        $gallery_slug = Util::getFormData('gallery_slug');
+        $gallery_age = (int) Util::getFormData('gallery_age', 0);
+        $gallery_download = Util::getFormData('gallery_download');
+        $gallery_mode = Util::getFormData('view_mode', 'Normal');
+        $gallery_passwd = Util::getFormData('gallery_passwd');
+        $gallery_tags = Util::getFormData('gallery_tags');
+        $gallery_thumbstyle = Util::getFormData('gallery_style');
+        $gallery_parent = Util::getFormData('gallery_parent');
 
         // Style
-        $style = new Ansel_Style(array(
-            'thumbstyle' => Horde_Util::getFormData('thumbnail_style'),
-            'background' => Horde_Util::getFormData('background_color'),
-            'gallery_view' => Horde_Util::getFormData('gallery_view'),
+        $style = new Ansel_Style([
+            'thumbstyle' => Util::getFormData('thumbnail_style'),
+            'background' => Util::getFormData('background_color'),
+            'gallery_view' => Util::getFormData('gallery_view'),
             // temporary hack until widgets are also configurable.
-            'widgets' => array(
-                 'Tags' => array('view' => 'gallery'),
-                 'OtherGalleries' => array(),
-                 'Geotag' => array(),
-                 'Links' => array(),
-                 'GalleryFaces' => array(),
-                 'OwnerFaces' => array())
-        ));
+            'widgets' => [
+                'Tags' => ['view' => 'gallery'],
+                'OtherGalleries' => [],
+                'Geotag' => [],
+                'Links' => [],
+                'GalleryFaces' => [],
+                'OwnerFaces' => []],
+        ]);
 
         // Double check for an empty string instead of null
         if (empty($gallery_parent)) {
             $gallery_parent = null;
         }
 
-        if ($galleryId &&
-            ($exists = ($GLOBALS['injector']->getInstance('Ansel_Storage')->galleryExists($galleryId)) === true)) {
+        if ($galleryId
+            && ($exists = ($GLOBALS['injector']->getInstance('Ansel_Storage')->galleryExists($galleryId)) === true)) {
 
             // Modifying an existing gallery.
             $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($galleryId);
@@ -295,14 +297,14 @@ class Ansel_View_GalleryProperties
                     $gallery->set('name', $gallery_name);
                 }
                 $gallery->set('desc', $gallery_desc);
-                $gallery->setTags(!empty($gallery_tags) ? explode(',', $gallery_tags) : array());
+                $gallery->setTags(!empty($gallery_tags) ? explode(',', $gallery_tags) : []);
                 $gallery->set('style', $style);
                 $gallery->set('slug', $gallery_slug);
                 $gallery->set('age', $gallery_age);
                 $gallery->set('download', $gallery_download);
                 $gallery->set('view_mode', $gallery_mode);
-                if ($GLOBALS['registry']->getAuth() &&
-                    $gallery->get('owner') == $GLOBALS['registry']->getAuth()) {
+                if ($GLOBALS['registry']->getAuth()
+                    && $gallery->get('owner') == $GLOBALS['registry']->getAuth()) {
                     $gallery->set('passwd', $gallery_passwd);
                 }
 
@@ -323,7 +325,7 @@ class Ansel_View_GalleryProperties
                         $result = $gallery->setParent($new_parent);
                     } catch (Ansel_Exception $e) {
                         $GLOBALS['notification']->push($e->getMessage(), 'horde.error');
-                        Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
+                        Horde::url(Ansel::getUrlFor('view', ['view' => 'List'], true))->redirect();
                         exit;
                     }
                 }
@@ -341,7 +343,7 @@ class Ansel_View_GalleryProperties
                     $parent = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($gallery_parent);
                 } catch (Ansel_Exception $e) {
                     $GLOBALS['notification']->push($e->getMessage(), 'horde.error');
-                    Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
+                    Horde::url(Ansel::getUrlFor('view', ['view' => 'List'], true))->redirect();
                     exit;
                 }
                 if (!$parent->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
@@ -350,7 +352,7 @@ class Ansel_View_GalleryProperties
                         'horde.error'
                     );
 
-                    Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
+                    Horde::url(Ansel::getUrlFor('view', ['view' => 'List'], true))->redirect();
                     exit;
                 }
             }
@@ -370,16 +372,16 @@ class Ansel_View_GalleryProperties
 
             try {
                 $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->createGallery(
-                    array('name' => $gallery_name,
-                              'desc' => $gallery_desc,
-                              'tags' => explode(',', $gallery_tags),
-                              'style' => $style,
-                              'slug' => $gallery_slug,
-                              'age' => $gallery_age,
-                              'download' => $gallery_download,
-                              'view_mode' => $gallery_mode,
-                              'passwd' => $gallery_passwd,
-                              ),
+                    ['name' => $gallery_name,
+                        'desc' => $gallery_desc,
+                        'tags' => explode(',', $gallery_tags),
+                        'style' => $style,
+                        'slug' => $gallery_slug,
+                        'age' => $gallery_age,
+                        'download' => $gallery_download,
+                        'view_mode' => $gallery_mode,
+                        'passwd' => $gallery_passwd,
+                    ],
                     $perm,
                     $gallery_parent
                 );
@@ -397,15 +399,15 @@ class Ansel_View_GalleryProperties
                 );
                 Horde::log($error, 'ERR');
                 $GLOBALS['notification']->push($error, 'horde.error');
-                Horde::url(Ansel::getUrlFor('view', array('view' => 'List'), true))->redirect();
+                Horde::url(Ansel::getUrlFor('view', ['view' => 'List'], true))->redirect();
                 exit;
             }
         }
 
         // Make sure that the style hash is recorded, ignoring non-styled thumbs
         if ($style->thumbstyle != 'Thumb') {
-            $GLOBALS['injector']->
-                getInstance('Ansel_Storage')
+            $GLOBALS['injector']
+                ->getInstance('Ansel_Storage')
                 ->ensureHash($gallery->getStyle()->getHash('thumb'));
         }
 
@@ -415,7 +417,7 @@ class Ansel_View_GalleryProperties
         }
 
         // Return to the last view.
-        if (!($url = Horde::verifySignedUrl(Horde_Util::getFormData('url')))) {
+        if (!($url = Horde::verifySignedUrl(Util::getFormData('url')))) {
             if (empty($exists)) {
                 // Redirect to the images upload page for newly created
                 // galleries.
@@ -439,13 +441,13 @@ class Ansel_View_GalleryProperties
         // Iterate all available thumbstyles:
         $dir = ANSEL_BASE . '/lib/ImageGenerator';
         $files = scandir($dir);
-        $thumbs = array();
+        $thumbs = [];
         foreach ($files as $file) {
             if (substr($file, -9) == 'Thumb.php') {
                 try {
                     $generator = Ansel_ImageGenerator::factory(
                         substr($file, 0, -4),
-                        array('style' => Ansel::getStyleDefinition('ansel_default'))
+                        ['style' => Ansel::getStyleDefinition('ansel_default')]
                     );
                     $thumbs[substr($file, 0, -4)] = $generator->title;
                 } catch (Ansel_Exception $e) {
@@ -466,7 +468,7 @@ class Ansel_View_GalleryProperties
         // Iterate all available thumbstyles:
         $dir = ANSEL_BASE . '/lib/View/GalleryRenderer';
         $files = scandir($dir);
-        $views = array();
+        $views = [];
         foreach ($files as $file) {
             if ($file != 'Base.php' && strpos($file, '.') !== 0) {
                 $class = 'Ansel_View_GalleryRenderer_' . substr($file, 0, -4);

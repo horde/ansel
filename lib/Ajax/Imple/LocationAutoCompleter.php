@@ -3,7 +3,7 @@
 /**
  * Imple autocompleter for textual location data.
  *
- * Copyright 2009-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -21,10 +21,10 @@ class Ansel_Ajax_Imple_LocationAutoCompleter extends Horde_Core_Ajax_Imple_AutoC
     {
         global $injector, $session;
 
-        $opts = array(
+        $opts = [
             'onSelect' => 'function (v) {' . $this->_params['map'] . '.ll = Ansel.ajax.locationAutoCompleter.geocache[v]; return v;}',
-            'tokens' => array()
-        );
+            'tokens' => [],
+        ];
 
         /* Use ajax? */
         if (!$session->exists('ansel', 'ajax_locationac')) {
@@ -51,7 +51,7 @@ class Ansel_Ajax_Imple_LocationAutoCompleter extends Horde_Core_Ajax_Imple_AutoC
      */
     protected function _handleAutoCompleter($input)
     {
-        $locs = array();
+        $locs = [];
 
         try {
             $locs = $GLOBALS['injector']->getInstance('Ansel_Storage')->searchLocations($input);

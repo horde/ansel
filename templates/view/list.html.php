@@ -9,7 +9,12 @@
   </span>
 
   <?php if (!empty($this->breadcrumbs)): ?>
-    <?php echo $this->breadcrumbs ?> <?php echo $this->contentTag('a', Horde::img('reload.png', _("Refresh List")), array('href' => $this->refresh_link, 'title' =>  _("Refresh List"))) ?>
+    <?php echo $this->breadcrumbs ?> <?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo $this->contentTag('a', Horde::img('reload.png', _("Refresh List")), ['href' => $this->refresh_link, 'title' =>  _("Refresh List")]) ?>
   <?php endif; ?>
 </div>
 
@@ -18,16 +23,26 @@
 <div class="horde-content anselActions">
   <?php if ($this->groupby == 'none'): ?>
     <div class="rightFloat">
-      <?php echo _("Group By:") ?> <?php echo $this->contentTag('a', _("Owner"), array('href' => $this->groupbyUrl)); ?>
+      <?php echo _("Group By:") ?> <?php echo $this->contentTag('a', _("Owner"), ['href' => $this->groupbyUrl]); ?>
     </div>
   <?php endif; ?>
-  <?php echo _("Sort by:") ?> <?php echo $this->contentTag('a', _("Name"), array('href' => $this->refresh_link->copy()->add('sort', 'name'))) ?> |
-  <?php echo $this->contentTag('a', _("Date"), array('href' => $this->refresh_link->copy()->add('sort', 'last_modified'))) ?> |
-  <?php echo $this->contentTag('a', _("Owner"), array('href' => $this->refresh_link->copy()->add('sort', 'owner'))) ?>
+  <?php echo _("Sort by:") ?> <?php echo $this->contentTag('a', _("Name"), ['href' => $this->refresh_link->copy()->add('sort', 'name')]) ?> |
+  <?php echo $this->contentTag('a', _("Date"), ['href' => $this->refresh_link->copy()->add('sort', 'last_modified')]) ?> |
+  <?php echo $this->contentTag('a', _("Owner"), ['href' => $this->refresh_link->copy()->add('sort', 'owner')]) ?>
   <?php if ($this->sortDir): ?>
-    <?php echo $this->contentTag('a', Horde::img('za.png', _("Ascending")), array('href' => $this->refresh_link->copy()->add(array('sort' => $this->sortBy, 'sort_dir' => 0)))) ?>
+    <?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo $this->contentTag('a', Horde::img('za.png', _("Ascending")), ['href' => $this->refresh_link->copy()->add(['sort' => $this->sortBy, 'sort_dir' => 0])]) ?>
   <?php else: ?>
-    <?php echo $this->contentTag('a', Horde::img('az.png', _("Descending")), array('href' => $this->refresh_link->copy()->add(array('sort' => $this->sortBy, 'sort_dir' => 1)))) ?>
+    <?php /**
+ * ARCHITECTURE VIOLATION: Using deprecated Horde::img()
+ * @deprecated Use Horde_Themes_Image::tag() instead
+ * @see Horde_Deprecated::img()
+ */
+echo $this->contentTag('a', Horde::img('az.png', _("Descending")), ['href' => $this->refresh_link->copy()->add(['sort' => $this->sortBy, 'sort_dir' => 1])]) ?>
   <?php endif; ?>
 </div>
 <?php endif; ?>

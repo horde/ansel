@@ -1,9 +1,11 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
  * The Ansel_View_List:: provides a view for handling lists of galleries.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -62,7 +64,7 @@ class Ansel_View_List extends Ansel_View_Ansel
      *  pager_url    -  The url for the pager to use see Ansel_Gallery for
      *                  more information on the url parameters.
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         global $prefs, $notification, $registry;
 
@@ -73,16 +75,15 @@ class Ansel_View_List extends Ansel_View_Ansel
         // View
         $this->_view = $GLOBALS['injector']->createInstance('Horde_View');
         $this->_view->addTemplatePath(ANSEL_TEMPLATES . '/view');
-        $this->_view->sortBy = !empty($this->_params['sort']) ?
-           $this->_params['sort'] :
-           'name';
-        $this->_view->sortDir = isset($this->_params['sort_dir']) ?
-           $this->_params['sort_dir'] :
-           0;
+        $this->_view->sortBy = !empty($this->_params['sort'])
+           ? $this->_params['sort']
+           : 'name';
+        $this->_view->sortDir = $this->_params['sort_dir']
+           ?? 0;
 
         // Check for grouping.
         if (empty($this->_params['groupby'])) {
-            $this->_view->groupby = Horde_Util::getFormData(
+            $this->_view->groupby = Util::getFormData(
                 'groupby',
                 $prefs->getValue('groupby')
             );
@@ -93,18 +94,18 @@ class Ansel_View_List extends Ansel_View_Ansel
 
         // Listing a single user?
         if (empty($this->_params['owner'])) {
-            $this->_owner = Horde_Util::getFormData('owner');
+            $this->_owner = Util::getFormData('owner');
             $this->_owner = empty($this->_owner) ? null : $this->_owner;
         } else {
             $this->_owner = $this->_params['owner'];
         }
 
         // Special?
-        $this->_special = Horde_Util::getFormData('special');
+        $this->_special = Util::getFormData('special');
         if (!$this->_owner && !$this->_special && $this->_view->groupby != 'none') {
             Ansel::getUrlFor(
                 'group',
-                array('groupby' => $this->_view->groupby)
+                ['groupby' => $this->_view->groupby]
             )->redirect();
             exit;
         }
@@ -113,7 +114,7 @@ class Ansel_View_List extends Ansel_View_Ansel
         if (isset($this->_params['page'])) {
             $this->_page = $this->_params['page'];
         } else {
-            $this->_page = Horde_Util::getFormData('page', 0);
+            $this->_page = Util::getFormData('page', 0);
         }
 
         // If we are calling from the api, we can just pass a list of ids
@@ -128,20 +129,20 @@ class Ansel_View_List extends Ansel_View_Ansel
                 );
                 $this->_view->galleryList = $ansel_storage->getGalleries($getThese);
             } else {
-                $this->_view->galleryList = array();
+                $this->_view->galleryList = [];
             }
         } else {
             // Set list filter/title
-            $filter = array();
+            $filter = [];
             if (!is_null($this->_owner)) {
                 $filter['owner'] = $this->_owner;
             }
 
             $this->_view->numGalleries = $ansel_storage->countGalleries(
                 $registry->getAuth(),
-                array('attributes' => $filter,
-                      'all_levels' => false,
-                      'tags' => !empty($params['tags']) ? $params['tags'] : null)
+                ['attributes' => $filter,
+                    'all_levels' => false,
+                    'tags' => !empty($params['tags']) ? $params['tags'] : null]
             );
 
             if ($this->_view->numGalleries == 0 && empty($this->_params['api'])) {
@@ -152,16 +153,16 @@ class Ansel_View_List extends Ansel_View_Ansel
                     exit;
                 }
                 $notification->push(_("There are no photo galleries available."), 'horde.message');
-                $this->_view->galleryList = array();
+                $this->_view->galleryList = [];
             } else {
                 $this->_view->galleryList = $ansel_storage->listGalleries(
-                    array('attributes' => $filter,
-                          'all_levels' => false,
-                          'from' => $this->_page * $this->_view->gPerPage,
-                          'count' => $this->_view->gPerPage,
-                          'sort_by' => $this->_view->sortBy,
-                          'direction' => $this->_view->sortDir,
-                          'tags' => !empty($params['tags']) ? $params['tags'] : null)
+                    ['attributes' => $filter,
+                        'all_levels' => false,
+                        'from' => $this->_page * $this->_view->gPerPage,
+                        'count' => $this->_view->gPerPage,
+                        'sort_by' => $this->_view->sortBy,
+                        'direction' => $this->_view->sortDir,
+                        'tags' => !empty($params['tags']) ? $params['tags'] : null]
                 );
             }
         }
@@ -175,16 +176,16 @@ class Ansel_View_List extends Ansel_View_Ansel
     public function getTitle()
     {
         if ($this->_owner) {
-            if ($this->_owner == $GLOBALS['registry']->getAuth() &&
-                empty($this->_params['api'])) {
+            if ($this->_owner == $GLOBALS['registry']->getAuth()
+                && empty($this->_params['api'])) {
 
                 return  _("My Galleries");
             } elseif (!empty($GLOBALS['conf']['gallery']['customlabel'])) {
                 $uprefs = $GLOBALS['injector']
                   ->getInstance('Horde_Core_Factory_Prefs')
-                  ->create('ansel', array(
+                  ->create('ansel', [
                       'cache' => false,
-                      'owner' => $this->_owner));
+                      'owner' => $this->_owner]);
                 $fullname = $uprefs->getValue('grouptitle');
                 if (!$fullname) {
                     $identity = $GLOBALS['injector']
@@ -228,22 +229,22 @@ class Ansel_View_List extends Ansel_View_Ansel
             $override = false;
             $this->_pagerurl = Ansel::getUrlFor(
                 'view',
-                array(
-                 'owner' => $this->_owner,
-                 'special' => $this->_special,
-                 'groupby' => $this->_view->groupby,
-                 'view' => 'List')
+                [
+                    'owner' => $this->_owner,
+                    'special' => $this->_special,
+                    'groupby' => $this->_view->groupby,
+                    'view' => 'List']
             );
         }
-        $p_params = array('num' => $this->_view->numGalleries,
-                          'url' => $this->_pagerurl,
-                          'perpage' => $this->_view->gPerPage);
+        $p_params = ['num' => $this->_view->numGalleries,
+            'url' => $this->_pagerurl,
+            'perpage' => $this->_view->gPerPage];
 
         if ($override) {
             $p_params['url_callback'] = null;
         }
         $this->_pager = new Horde_Core_Ui_Pager('page', $vars, $p_params);
-        $preserve = array('sort_dir' => $this->_view->sortDir);
+        $preserve = ['sort_dir' => $this->_view->sortDir];
         if (!empty($this->_view->sortBy)) {
             $preserve['sort'] = $this->_view->sortBy;
         }
@@ -261,19 +262,19 @@ class Ansel_View_List extends Ansel_View_Ansel
             if ($this->_owner) {
                 $this->_view->refresh_link = Ansel::getUrlFor(
                     'view',
-                    array(
-                     'groupby' => $this->_view->groupby,
-                     'owner' => $this->_owner,
-                     'page' => $this->_page,
-                     'view' => 'List')
+                    [
+                        'groupby' => $this->_view->groupby,
+                        'owner' => $this->_owner,
+                        'page' => $this->_page,
+                        'view' => 'List']
                 );
             } else {
                 $this->_view->refresh_link = Ansel::getUrlFor(
                     'view',
-                    array(
-                    'view' => 'List',
-                    'groupby' => $this->_view->groupby,
-                    'page' => $this->_page)
+                    [
+                        'view' => 'List',
+                        'groupby' => $this->_view->groupby,
+                        'page' => $this->_page]
                 );
             }
 
@@ -287,7 +288,7 @@ class Ansel_View_List extends Ansel_View_Ansel
             // Final touches.
             if (empty($this->_params['api'])) {
                 $this->_view->breadcrumbs = Ansel::getBreadcrumbs();
-                $this->_view->groupbyUrl = strval(Ansel::getUrlFor('group', array('actionID' => 'groupby', 'groupby' => 'owner')));
+                $this->_view->groupbyUrl = strval(Ansel::getUrlFor('group', ['actionID' => 'groupby', 'groupby' => 'owner']));
             }
             $this->_view->pager = $this->_pager->render();
             $this->_view->style = $style;

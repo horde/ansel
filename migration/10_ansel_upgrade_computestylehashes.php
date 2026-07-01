@@ -3,7 +3,7 @@
 /**
  * Ensures that all known style definitions have a hash entry.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -63,10 +63,10 @@ class AnselUpgradeComputestylehashes extends Horde_Db_Migration_Base
     protected function _ensureHash($hash)
     {
         $query = 'SELECT COUNT(*) FROM ansel_hashes WHERE style_hash = ?';
-        $results = $this->_connection->selectValue($query, array($hash));
+        $results = $this->_connection->selectValue($query, [$hash]);
 
         if (!$results) {
-            $this->_connection->insert('INSERT INTO ansel_hashes (style_hash) VALUES(?)', array($hash));
+            $this->_connection->insert('INSERT INTO ansel_hashes (style_hash) VALUES(?)', [$hash]);
         }
     }
 }

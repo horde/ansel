@@ -3,9 +3,10 @@
 use Horde\Compress\CompressFactory;
 use Horde\Compress\Driver\Zip as CompressZip;
 use Horde\Compress\Exception as CompressException;
+use Horde\Util\Util;
 
 /**
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -16,7 +17,7 @@ use Horde\Compress\Exception as CompressException;
 /**
  * The Ansel_View_Upload:: class provides a view for handling image uploads.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -64,7 +65,7 @@ class Ansel_View_Upload
      * </pre>
      * @param <type> $params
      */
-    public function __construct(array $params = array())
+    public function __construct(array $params = [])
     {
         $this->_params = $params;
         $this->_gallery = $this->_params['gallery'];
@@ -110,48 +111,48 @@ class Ansel_View_Upload
             $multipart = 'false';
         }
         $js = <<< EOT
-        var uploader = new Horde_Uploader({
-            'target': "{$this->_params['target']}",
-            drop_target: "{$this->_params['drop_target']}",
-            swf_path: '{$jsuri}/plupload/plupload.flash.swf',
-            xap_path: '{$jsuri}/plupload/plupload.silverlight.xap',
-            container: 'anseluploader',
-            text: { start: '{$startText}',
-                    add: '{$addText}',
-                    header: '{$header}',
-                    returnButton: '{$returnText}',
-                    subheader: '{$subText}',
-                    size: '{$sizeError}',
-                    type: '{$typeError}'
-            },
-            container_class: 'uploaderContainer',
-            return_target: '{$this->_params['return_target']}',
-            multipart: {$multipart}
-        },
-        {
-            'uploadcomplete': function(up, files) {
-                $('uploadimages').hide();
-                Ansel.uploadedImages = files;
-                if (Ansel.conf.havetwitter) {
-                    $('twitter').toggleClassName('hidden');
-                }
-            }
-        });
-        uploader.init();
-        $('twitter').observe('click', function() {
-            HordeCore.doAction(
-                'uploadNotification',
-                {
-                    s: 'twitter',
-                    g: '{$this->_gallery->id}'
-                },
-                {
-                     callback: function(r) { $('twitter').hide(); }
+                    var uploader = new Horde_Uploader({
+                        'target': "{$this->_params['target']}",
+                        drop_target: "{$this->_params['drop_target']}",
+                        swf_path: '{$jsuri}/plupload/plupload.flash.swf',
+                        xap_path: '{$jsuri}/plupload/plupload.silverlight.xap',
+                        container: 'anseluploader',
+                        text: { start: '{$startText}',
+                                add: '{$addText}',
+                                header: '{$header}',
+                                returnButton: '{$returnText}',
+                                subheader: '{$subText}',
+                                size: '{$sizeError}',
+                                type: '{$typeError}'
+                        },
+                        container_class: 'uploaderContainer',
+                        return_target: '{$this->_params['return_target']}',
+                        multipart: {$multipart}
+                    },
+                    {
+                        'uploadcomplete': function(up, files) {
+                            $('uploadimages').hide();
+                            Ansel.uploadedImages = files;
+                            if (Ansel.conf.havetwitter) {
+                                $('twitter').toggleClassName('hidden');
+                            }
+                        }
+                    });
+                    uploader.init();
+                    $('twitter').observe('click', function() {
+                        HordeCore.doAction(
+                            'uploadNotification',
+                            {
+                                s: 'twitter',
+                                g: '{$this->_gallery->id}'
+                            },
+                            {
+                                 callback: function(r) { $('twitter').hide(); }
 
-                }
-            );
-        });
-EOT;
+                            }
+                        );
+                    });
+            EOT;
 
         $js .= $this->_doCarouselSetup();
         $page_output->addInlineScript($js, true);
@@ -180,7 +181,7 @@ EOT;
             $info = $form->getInfo($vars);
 
             // Remember the ids of the images we uploaded so we can autogen
-            $image_ids = array();
+            $image_ids = [];
             for ($i = 0; $i <= $conf['image']['num_uploads'] + 1; ++$i) {
                 if (empty($info['file' . $i]['file'])) {
                     continue;
@@ -207,13 +208,13 @@ EOT;
                 // Check for a compressed file.
                 if (in_array(
                     $info['file' . $i]['type'],
-                    array(
+                    [
                         'x-extension/zip',
                         'application/x-compressed',
                         'application/x-zip-compressed',
-                        'application/zip')
-                ) ||
-                    Horde_Mime_Magic::filenameToMime($info['file' . $i]['name']) == 'application/zip') {
+                        'application/zip']
+                )
+                    || Horde_Mime_Magic::filenameToMime($info['file' . $i]['name']) == 'application/zip') {
 
                     $this->_handleZip($info['file' . $i]['name']);
 
@@ -232,16 +233,16 @@ EOT;
                     }
 
                     // Add the image to the gallery
-                    $image_data = array(
+                    $image_data = [
                         'image_filename' => $info['file' . $i]['name'],
                         'image_caption' => $vars->get('image' . $i . '_desc'),
                         'image_type' => $info['file' . $i]['type'],
                         'data' => $data,
-                        'tags' => (isset($info['image' . $i . '_tags']) ? explode(',', $info['image' . $i . '_tags']) : array()));
+                        'tags' => (isset($info['image' . $i . '_tags']) ? explode(',', $info['image' . $i . '_tags']) : [])];
                     try {
                         $image_ids[] = $this->_gallery->addImage(
                             $image_data,
-                            (bool)$vars->get('image' . $i . '_default')
+                            (bool) $vars->get('image' . $i . '_default')
                         );
                         ++$uploaded;
                     } catch (Ansel_Exception $e) {
@@ -262,7 +263,12 @@ EOT;
 
                 // postupload hook if needed
                 try {
-                    Horde::callHook('postupload', array($image_ids), 'ansel');
+                    /**
+                     * ARCHITECTURE VIOLATION: Using deprecated Horde::callHook()
+                     * @deprecated Use $GLOBALS['injector']->getInstance('Horde_Core_Hooks')->callHook() instead
+                     * @see Horde_Deprecated::callHook()
+                     */
+Horde::callHook('postupload', [$image_ids], 'ansel');
                 } catch (Horde_Exception_HookNotSet $e) {
                 }
 
@@ -275,11 +281,11 @@ EOT;
                 // Return to the gallery view.
                 Ansel::getUrlFor(
                     'view',
-                    array(
+                    [
                         'gallery' => $this->_gallery->id,
                         'slug' => $this->_gallery->get('slug'),
                         'view' => 'Gallery',
-                        'page' => $page),
+                        'page' => $page],
                     true
                 )->redirect();
                 exit;
@@ -308,39 +314,39 @@ EOT;
             ->add('gallery', $this->_gallery->id);
 
         $js = <<<EOT
-           Ajax.Response.prototype._getHeaderJSON = function() {
-            var nbElements = {$this->_gallery->countImages()};
-            var from = this.request.parameters.from;
-            var to   = Math.min(nbElements, this.request.parameters.to);
-            return {html: this.responseText, from: from, to: to, more: to != nbElements};
-        }
+                       Ajax.Response.prototype._getHeaderJSON = function() {
+                        var nbElements = {$this->_gallery->countImages()};
+                        var from = this.request.parameters.from;
+                        var to   = Math.min(nbElements, this.request.parameters.to);
+                        return {html: this.responseText, from: from, to: to, more: to != nbElements};
+                    }
 
-        function runCarousel() {
-            updateCarouselSize();
-            carousel = new UI.Ajax.Carousel("horizontal_carousel", { url: "{$previewUrl->toString(true)}", elementSize: 115 })
-                .observe("request:started", function() {
-                    $('spinner').show().morph("opacity:0.8", {duration:0.5});
-                })
-                .observe("request:ended", function() {
-                    $('spinner').morph("opacity:0", {duration:0.5, afterFinish: function(obj) { obj.element.hide(); }});
-                });
-        }
-        function resized() {
-            updateCarouselSize();
-            if (carousel) {
-                carousel.updateSize();
-            }
-        }
-        function updateCarouselSize() {
-            var dim = $('anseluploader').getDimensions();
-            $("horizontal_carousel").style.width = dim.width + "px";
-            $$("#horizontal_carousel .container").first().style.width =  (dim.width - 50) + "px";
-        }
+                    function runCarousel() {
+                        updateCarouselSize();
+                        carousel = new UI.Ajax.Carousel("horizontal_carousel", { url: "{$previewUrl->toString(true)}", elementSize: 115 })
+                            .observe("request:started", function() {
+                                $('spinner').show().morph("opacity:0.8", {duration:0.5});
+                            })
+                            .observe("request:ended", function() {
+                                $('spinner').morph("opacity:0", {duration:0.5, afterFinish: function(obj) { obj.element.hide(); }});
+                            });
+                    }
+                    function resized() {
+                        updateCarouselSize();
+                        if (carousel) {
+                            carousel.updateSize();
+                        }
+                    }
+                    function updateCarouselSize() {
+                        var dim = $('anseluploader').getDimensions();
+                        $("horizontal_carousel").style.width = dim.width + "px";
+                        $$("#horizontal_carousel .container").first().style.width =  (dim.width - 50) + "px";
+                    }
 
-        Event.observe(window, 'resize', resized);
-        carousel = null;
-        runCarousel();
-EOT;
+                    Event.observe(window, 'resize', resized);
+                    carousel = null;
+                    runCarousel();
+            EOT;
 
         return $js;
     }
@@ -351,7 +357,7 @@ EOT;
      */
     protected function _handleFileUpload()
     {
-        if ($filename = Horde_Util::getFormData('name')) {
+        if ($filename = Util::getFormData('name')) {
             if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
                 $type = $_SERVER["HTTP_CONTENT_TYPE"];
             } elseif (isset($_SERVER["CONTENT_TYPE"])) {
@@ -359,7 +365,7 @@ EOT;
             }
 
             if (empty($type) || $type == 'application/octet-stream') {
-                $temp = Horde_Util::getTempFile('', true);
+                $temp = Util::getTempFile('', true);
                 $out = fopen($temp, 'w+');
                 if ($out) {
                     // Read binary input stream and append it to temp file
@@ -371,22 +377,22 @@ EOT;
                     } else {
                         fclose($out);
                         header('Content-Type: application/json');
-                        echo('{ "status" : "500", "file": "' . $temp. '", error" : { "message": "Failed to open input stream." } }');
+                        echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open input stream." } }');
                         exit;
                     }
                 } else {
                     header('Content-Type: application/json');
-                    echo('{ "status" : "500", "file": "' . $temp. '", error" : { "message": "Failed to open output stream." } }');
+                    echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open output stream." } }');
                     exit;
                 }
 
                 // Don't know type. Try to deduce it.
-                if (!($type = Horde_Mime_Magic::analyzeFile($temp, isset($GLOBALS['conf']['mime']['magic_db']) ? $GLOBALS['conf']['mime']['magic_db'] : null))) {
+                if (!($type = Horde_Mime_Magic::analyzeFile($temp, $GLOBALS['conf']['mime']['magic_db'] ?? null))) {
                     $type = Horde_Mime_Magic::filenameToMime($filename);
                 }
             } elseif (strpos($type, "multipart") !== false) {
                 // Handle multipart uploads
-                $temp = Horde_Util::getTempFile('', true);
+                $temp = Util::getTempFile('', true);
                 $out = fopen($temp, 'w+');
                 if ($out) {
                     $in = fopen($_FILES['file']['tmp_name'], 'rb');
@@ -397,12 +403,12 @@ EOT;
                     } else {
                         fclose($out);
                         header('Content-Type: application/json');
-                        echo('{ "status" : "500", "file": "' . $temp. '", error" : { "message": "Failed to open input stream." } }');
+                        echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open input stream." } }');
                         exit;
                     }
                 } else {
                     header('Content-Type: application/json');
-                    echo('{ "status" : "500", "file": "' . $temp. '", error" : { "message": "Failed to open output stream." } }');
+                    echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open output stream." } }');
                     exit;
                 }
             }
@@ -410,13 +416,13 @@ EOT;
             // Figure out what to do with the file
             if (in_array(
                 $type,
-                array(
-                        'x-extension/zip',
-                        'application/x-compressed',
-                        'application/x-zip-compressed',
-                        'application/zip')
-            ) ||
-                Horde_Mime_Magic::filenameToMime($temp) == 'application/zip') {
+                [
+                    'x-extension/zip',
+                    'application/x-compressed',
+                    'application/x-zip-compressed',
+                    'application/zip']
+            )
+                || Horde_Mime_Magic::filenameToMime($temp) == 'application/zip') {
 
                 // ZIP file
                 try {
@@ -436,14 +442,14 @@ EOT;
                 }
 
                 // Add the image to the gallery
-                $image_data = array(
+                $image_data = [
                     'image_filename' => $filename,
                     'image_type' => $type,
-                    'data' => stream_get_contents($out));
+                    'data' => stream_get_contents($out)];
 
                 fclose($out);
                 try {
-                    $image_ids = array($this->_gallery->addImage($image_data));
+                    $image_ids = [$this->_gallery->addImage($image_data)];
                 } catch (Ansel_Exception $e) {
                     header('Content-Type: application/json');
                     echo('{ "status" : "400", "error" : { "message": "Not a valid, supported image file." }, "id" : "id" }');
@@ -474,11 +480,11 @@ EOT;
     {
         /* Skip some known metadata files. */
         $len = strlen($filename);
-        if ($filename[$len - 1] == '/' ||
-            $filename == 'Thumbs.db' ||
-            strrpos($filename, '.DS_Store') === ($len - 9) ||
-            strrpos($filename, '.localized') === ($len - 10) ||
-            strpos($filename, '__MACOSX/') !== false) {
+        if ($filename[$len - 1] == '/'
+            || $filename == 'Thumbs.db'
+            || strrpos($filename, '.DS_Store') === ($len - 9)
+            || strrpos($filename, '.localized') === ($len - 10)
+            || strpos($filename, '__MACOSX/') !== false) {
 
             return true;
         }
@@ -496,10 +502,10 @@ EOT;
      */
     private function _handleZip($filename)
     {
-        $image_ids = array();
+        $image_ids = [];
 
         /* See if we can use the zip extension for reading the file. */
-        if (Horde_Util::extensionExists('zip')) {
+        if (Util::extensionExists('zip')) {
             $zip = new ZipArchive();
             if ($zip->open($filename) !== true) {
                 throw new Ansel_Exception(_("Could not open zip archive."));
@@ -521,10 +527,10 @@ EOT;
 
                 /* Save the image */
                 $image_id = $this->_gallery->addImage(
-                    array(
+                    [
                         'image_filename' => $zinfo['name'],
                         'image_caption' => '',
-                        'data' => $zdata)
+                        'data' => $zdata]
                 );
                 $image_ids[] = $image_id;
                 unset($zdata);
@@ -538,7 +544,7 @@ EOT;
             /* Get list of images */
             try {
                 $zip = (new CompressFactory())->create('zip');
-                $files = $zip->decompress($data, array('action' => CompressZip::ZIP_LIST));
+                $files = $zip->decompress($data, ['action' => CompressZip::ZIP_LIST]);
             } catch (CompressException $e) {
                 throw new Ansel_Exception($e);
             }
@@ -553,10 +559,10 @@ EOT;
                 try {
                     $result = $zip->decompress(
                         $data,
-                        array(
+                        [
                             'action' => CompressZip::ZIP_DATA,
                             'info' => $files,
-                            'key' => $key)
+                            'key' => $key]
                     );
                     $zdata = is_array($result) ? $result['data'] : $result;
                 } catch (CompressException $e) {
@@ -565,10 +571,10 @@ EOT;
 
                 /* Add the image */
                 $image_id = $this->_gallery->addImage(
-                    array(
+                    [
                         'image_filename' => $zinfo['name'],
                         'image_caption' => '',
-                        'data' => $zdata)
+                        'data' => $zdata]
                 );
                 $image_ids[] = $image_id;
                 unset($zdata);

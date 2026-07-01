@@ -1,12 +1,14 @@
 <?php
 
+use Horde\Util\Util;
+
 /**
  * Ansel application API.
  *
  * This file defines Horde's core API interface. Other core Horde libraries
  * can interact with Ansel through this API.
  *
- * Copyright 2004-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2004-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -34,9 +36,9 @@ class Ansel_Application extends Horde_Registry_Application
 {
     /**
      */
-    public $features = array(
-        'smartmobileView' => true
-    );
+    public $features = [
+        'smartmobileView' => true,
+    ];
 
     /**
      */
@@ -68,11 +70,11 @@ class Ansel_Application extends Horde_Registry_Application
             throw new Ansel_Exception('The Content_Tagger class could not be found. Make sure the registry entry for the Content system is present.');
         }
 
-        $factories = array(
+        $factories = [
             'Ansel_Styles' => 'Ansel_Factory_Styles',
             'Ansel_Faces' => 'Ansel_Factory_Faces',
             'Ansel_Storage' => 'Ansel_Factory_Storage',
-        );
+        ];
         foreach ($factories as $interface => $v) {
             $GLOBALS['injector']->bindFactory($interface, $v, 'create');
         }
@@ -89,11 +91,11 @@ class Ansel_Application extends Horde_Registry_Application
      */
     public function perms()
     {
-        return array(
-            'admin' => array(
-                'title' => _("Administrators")
-            )
-        );
+        return [
+            'admin' => [
+                'title' => _("Administrators"),
+            ],
+        ];
     }
 
     /**
@@ -110,17 +112,17 @@ class Ansel_Application extends Horde_Registry_Application
             null,
             null,
             null,
-            (($GLOBALS['prefs']->getValue('defaultview') == 'browse' && basename($_SERVER['PHP_SELF']) == 'index.php') ||
-             (basename($_SERVER['PHP_SELF']) == 'browse.php')) ? 'current' : '__noselection'
+            (($GLOBALS['prefs']->getValue('defaultview') == 'browse' && basename($_SERVER['PHP_SELF']) == 'index.php')
+             || (basename($_SERVER['PHP_SELF']) == 'browse.php')) ? 'current' : '__noselection'
         );
 
         if ($GLOBALS['registry']->getAuth()) {
             $url = Ansel::getUrlFor(
                 'view',
-                array(
+                [
                     'owner' => $GLOBALS['registry']->getAuth(),
                     'groupby' => 'owner',
-                    'view' => 'List')
+                    'view' => 'List']
             );
 
             $menu->add(
@@ -130,21 +132,21 @@ class Ansel_Application extends Horde_Registry_Application
                 null,
                 null,
                 null,
-                (Horde_Util::getFormData('owner', false) == $GLOBALS['registry']->getAuth())
+                (Util::getFormData('owner', false) == $GLOBALS['registry']->getAuth())
                     ? 'current'
                     : '__noselection'
             );
         }
 
         $menu->add(
-            Ansel::getUrlFor('view', array('view' => 'List')),
+            Ansel::getUrlFor('view', ['view' => 'List']),
             _("_All Galleries"),
             'ansel-allgalleries',
             null,
             null,
             null,
-            (($GLOBALS['prefs']->getValue('defaultview') == 'galleries' && basename($_SERVER['PHP_SELF']) == 'index.php') ||
-            (basename($_SERVER['PHP_SELF']) == 'group.php' && Horde_Util::getFormData('owner') !== $GLOBALS['registry']->getAuth())
+            (($GLOBALS['prefs']->getValue('defaultview') == 'galleries' && basename($_SERVER['PHP_SELF']) == 'index.php')
+            || (basename($_SERVER['PHP_SELF']) == 'group.php' && Util::getFormData('owner') !== $GLOBALS['registry']->getAuth())
                    ? 'current'
                    : '__noselection')
         );
@@ -162,9 +164,9 @@ class Ansel_Application extends Horde_Registry_Application
     public function sidebar($sidebar)
     {
         /* Let authenticated users create new galleries. */
-        if ($GLOBALS['registry']->isAdmin() ||
-            (!$GLOBALS['injector']->getInstance('Horde_Perms')->exists('ansel') && $GLOBALS['registry']->getAuth()) ||
-             $GLOBALS['injector']->getInstance('Horde_Perms')->hasPermission('ansel', $GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
+        if ($GLOBALS['registry']->isAdmin()
+            || (!$GLOBALS['injector']->getInstance('Horde_Perms')->exists('ansel') && $GLOBALS['registry']->getAuth())
+             || $GLOBALS['injector']->getInstance('Horde_Perms')->hasPermission('ansel', $GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
 
 
             $sidebar->addNewButton(

@@ -11,7 +11,7 @@ class Ansel_Report_mail extends Ansel_Report
     /**
      * Report
      */
-    public function report($message, $users = array())
+    public function report($message, $users = [])
     {
         global $conf;
 
@@ -26,13 +26,13 @@ class Ansel_Report_mail extends Ansel_Report
             }
         }
 
-        $mail = new Horde_Mime_Mail(array(
+        $mail = new Horde_Mime_Mail([
             'body' => $this->getMessage($message),
             'Subject' => $this->getTitle(),
             'To' => $to,
             //FIXME: This address should be configurable
             'Sender' => 'horde-problem@' . $conf['report_content']['maildomain'],
-            'From' => $this->getUserEmail()));
+            'From' => $this->getUserEmail()]);
 
         return $mail->send($GLOBALS['injector']->getInstance('Horde_Mail'));
     }

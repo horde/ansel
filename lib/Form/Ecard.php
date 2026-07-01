@@ -33,7 +33,7 @@ class Ansel_Form_Ecard extends Horde_Form
         }
 
         $this->addVariable(_("Send ecard to the following address:"), 'ecard_addr', 'text', true);
-        $this->addVariable(_("Comments:"), 'ecard_comments', 'longtext', false, false, null, array('15', '60'));
+        $this->addVariable(_("Comments:"), 'ecard_comments', 'longtext', false, false, null, ['15', '60']);
         if (empty($user) && !empty($conf['ecard']['captcha'])) {
             $this->addVariable(
                 _("Spam protection"),
@@ -42,10 +42,10 @@ class Ansel_Form_Ecard extends Horde_Form
                 true,
                 false,
                 null,
-                array(
+                [
                     Ansel::getCAPTCHA(!$this->isSubmitted()),
-                    $conf['ecard']['figlet_font']
-                )
+                    $conf['ecard']['figlet_font'],
+                ]
             );
         }
     }
@@ -65,10 +65,10 @@ class Ansel_Form_Ecard extends Horde_Form
                     true,
                     false,
                     null,
-                    array(
+                    [
                         Ansel::getCAPTCHA(true),
-                        $conf['ecard']['figlet_font']
-                    )
+                        $conf['ecard']['figlet_font'],
+                    ]
                 );
             }
             return false;

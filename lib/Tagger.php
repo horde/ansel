@@ -4,7 +4,7 @@
  * The Ansel_Tagger:: class wraps Ansel's interaction with the Content/Tagger
  * system.
  *
- * Copyright 2010-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2010-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -17,7 +17,7 @@
 class Ansel_Tagger extends Horde_Core_Tagger
 {
     protected $_app = 'ansel';
-    protected $_types = array('image', 'gallery');
+    protected $_types = ['image', 'gallery'];
 
     /**
      * Searches for resources that are tagged with all of the requested tags.
@@ -31,9 +31,9 @@ class Ansel_Tagger extends Horde_Core_Tagger
      * @return  A hash of 'gallery' and 'image' ids.
      * @throws Ansel_Exception
      */
-    public function search($tags, $filter = array())
+    public function search($tags, $filter = [])
     {
-        $args = array();
+        $args = [];
 
         /* These filters are mutually exclusive */
         if (!empty($filter['user'])) {
@@ -41,7 +41,7 @@ class Ansel_Tagger extends Horde_Core_Tagger
         } elseif (!empty($filter['gallery'])) {
             // Only events located in specific galleries
             if (!is_array($filter['gallery'])) {
-                $filter['gallery'] = array($filter['gallery']);
+                $filter['gallery'] = [$filter['gallery']];
             }
             $args['gallery'] = $filter['gallery'];
         }
@@ -51,7 +51,7 @@ class Ansel_Tagger extends Horde_Core_Tagger
             $args['tagId'] = $this->_tagger->getTagIds($tags);
 
             /* Restrict to images or galleries */
-            $gal_results = $image_results = array();
+            $gal_results = $image_results = [];
             if (empty($filter['type']) || $filter['type'] == 'gallery') {
                 $args['typeId'] = $this->_type_ids['gallery'];
                 $gal_results = $this->_tagger->getObjects($args);
@@ -66,8 +66,8 @@ class Ansel_Tagger extends Horde_Core_Tagger
         }
 
         /* TODO: Filter out images whose gallery has already matched? */
-        $results = array('galleries' => array_values($gal_results),
-                         'images' => array_values($image_results));
+        $results = ['galleries' => array_values($gal_results),
+            'images' => array_values($image_results)];
 
         return $results;
     }
@@ -84,31 +84,31 @@ class Ansel_Tagger extends Horde_Core_Tagger
      */
     public function listRelatedImages(Ansel_Image $image, $ownerOnly = true)
     {
-        $args = array('typeId' => 'image', 'limit' => 10);
+        $args = ['typeId' => 'image', 'limit' => 10];
         if ($ownerOnly) {
             $gallery = $GLOBALS['injector']->getInstance('Ansel_Storage')->getGallery($image->gallery);
             $args['userId'] = $gallery->get('owner');
         }
 
         try {
-            $ids = $GLOBALS['injector']->getInstance('Content_Tagger')->getSimilarObjects(array('object' => (string)$image->id, 'type' => 'image'), $args);
+            $ids = $GLOBALS['injector']->getInstance('Content_Tagger')->getSimilarObjects(['object' => (string) $image->id, 'type' => 'image'], $args);
         } catch (Content_Exception $e) {
             throw new Ansel_Exception($e);
         }
 
         if (count($ids) == 0) {
-            return array();
+            return [];
         }
 
         try {
-            $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImages(array('ids' => array_keys($ids)));
+            $images = $GLOBALS['injector']->getInstance('Ansel_Storage')->getImages(['ids' => array_keys($ids)]);
         } catch (Horde_Exception_NotFound $e) {
-            $images = array();
+            $images = [];
         }
 
-        $results = array();
+        $results = [];
         foreach ($images as $key => $image) {
-            $results[] = array('image' => $image, 'rank' => $ids[$key]);
+            $results[] = ['image' => $image, 'rank' => $ids[$key]];
         }
         return $results;
     }

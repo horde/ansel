@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
  * Ansel uses two patterns:
  * 1. Compress: collect files → compressFiles() → raw ZIP string for download
  * 2. Decompress: ZIP_LIST for listing, ZIP_DATA for raw file content passed to addImage()
+ * @coversNothing
  */
 class AnselCompressTest extends TestCase
 {

@@ -3,7 +3,7 @@
 /**
  * Fix column type of ansel_shares_users.user_uid.
  *
- * Copyright 2014-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2014-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -20,7 +20,7 @@ class AnselUpgradeFixshareusers extends Horde_Db_Migration_Base
      */
     public function up()
     {
-        $this->changeColumn('ansel_shares_users', 'user_uid', 'string', array('limit' => 255, 'null' => false));
+        $this->changeColumn('ansel_shares_users', 'user_uid', 'string', ['limit' => 255, 'null' => false]);
 
     }
 

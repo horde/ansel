@@ -11,7 +11,7 @@
  * Ansel_View_GalleryRenderer_GalleryLightbox:: Class wraps display of the lightbox
  * style gallery views.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * See the enclosed file LICENSE for license information (GPL). If you
  * did not receive this file, see http://www.horde.org/licenses/gpl.
@@ -24,7 +24,7 @@
  */
 class Ansel_View_GalleryRenderer_GalleryLightbox extends Ansel_View_GalleryRenderer_Base
 {
-    public function __construct(Ansel_View_Gallery $view = null)
+    public function __construct(?Ansel_View_Gallery $view = null)
     {
         parent::__construct($view);
         $this->title = _("Lightbox Gallery");
@@ -64,29 +64,29 @@ class Ansel_View_GalleryRenderer_GalleryLightbox extends Ansel_View_GalleryRende
         if ($this->mode == Ansel_GalleryMode_Base::MODE_NORMAL) {
             $json = Ansel_View_Base::json(
                 $this->view->gallery,
-                array(
+                [
                     'full' => !empty($this->view->api),
-                    'perpage' => $this->perpage
-                )
+                    'perpage' => $this->perpage,
+                ]
             );
         } else {
             if (!empty($this->date['day']) && $this->numTiles) {
                 $json = Ansel_View_Base::json(
                     $this->view->gallery,
-                    array(
+                    [
                         'full' => !empty($this->view->api),
-                        'perpage' => $this->perpage
-                    )
+                        'perpage' => $this->perpage,
+                    ]
                 );
             } else {
                 $json = '[]';
             }
         }
 
-        $date_params = Ansel::getDateParameter(array(
+        $date_params = Ansel::getDateParameter([
             'year' => !empty($this->view->year) ? $this->view->year : 0,
             'month' => !empty($this->view->month) ? $this->view->month : 0,
-            'day' => !empty($this->view->day) ? $this->view->day : 0));
+            'day' => !empty($this->view->day) ? $this->view->day : 0]);
 
         $pagerurl = $this->_getPagerUrl();
         $graphics_dir = Horde::url(Horde_Themes::img(), true, -1);
@@ -98,26 +98,26 @@ class Ansel_View_GalleryRenderer_GalleryLightbox extends Ansel_View_GalleryRende
         } else {
             $gallery_url = $pagerurl . '&';
         }
-        $js = array();
+        $js = [];
         $js[] = <<<EOT
-        LightboxOptions = {
-            gallery_json: {$json},
-            fileLoadingImage: '{$graphics_dir}/lightbox/loading.gif',
-            fileBottomNavCloseImage: '{$graphics_dir}/lightbox/closelabel.gif',
-            overlayOpacity: 0.8,   // controls transparency of shadow overlay
-            animate: true,         // toggles resizing animations
-            resizeSpeed: 7,        // controls the speed of the image resizing animations (1=slowest and 10=fastest)
-            borderSize: 10,        // if you adjust the padding in the CSS, you will need to update this variable
+                    LightboxOptions = {
+                        gallery_json: {$json},
+                        fileLoadingImage: '{$graphics_dir}/lightbox/loading.gif',
+                        fileBottomNavCloseImage: '{$graphics_dir}/lightbox/closelabel.gif',
+                        overlayOpacity: 0.8,   // controls transparency of shadow overlay
+                        animate: true,         // toggles resizing animations
+                        resizeSpeed: 7,        // controls the speed of the image resizing animations (1=slowest and 10=fastest)
+                        borderSize: 10,        // if you adjust the padding in the CSS, you will need to update this variable
 
-            // Used to write: Image # of #.
-            labelImage: '{$image_text}',
-            labelOf: '{$of}',
-            //URL to return to when the lightbox closes
-            returnURL: '{$gallery_url}',
-            startPage: '{$view->page}'
-        };
-        document.lb = new Lightbox(LightboxOptions); if (window.location.hash.length) document.lb.start(window.location.hash.substring(1));
-EOT;
+                        // Used to write: Image # of #.
+                        labelImage: '{$image_text}',
+                        labelOf: '{$of}',
+                        //URL to return to when the lightbox closes
+                        returnURL: '{$gallery_url}',
+                        startPage: '{$view->page}'
+                    };
+                    document.lb = new Lightbox(LightboxOptions); if (window.location.hash.length) document.lb.start(window.location.hash.substring(1));
+            EOT;
         $GLOBALS['page_output']->addInlineScript($js, true);
 
         // Output js/css here if we are calling via the api
@@ -125,9 +125,9 @@ EOT;
             Horde::startBuffer();
             global $page_output;
             $page_output->addThemeStylesheet('lightbox.css');
-            $page_output->includeStylesheetFiles(array('nobase' => true), true);
+            $page_output->includeStylesheetFiles(['nobase' => true], true);
 
-            foreach (array('prototype.js', 'accesskeys.js', 'scriptaculous/effects.js') as $val) {
+            foreach (['prototype.js', 'accesskeys.js', 'scriptaculous/effects.js'] as $val) {
                 $tmp = new Horde_Script_File_JsDir($val, 'horde');
                 echo $tmp->tag_full;
             }

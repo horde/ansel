@@ -6,7 +6,7 @@ use Horde\Util\Variables;
  * Ansel_Ajax_Imple_ToggleOtherGalleries:: class for performing Ajax setting of
  * the gallery show_actions user pref.
  *
- * Copyright 2008-2017 Horde LLC (http://www.horde.org/)
+ * Copyright 2008-2026 Horde LLC (http://www.horde.org/)
  *
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
@@ -27,8 +27,6 @@ class Ansel_Ajax_Imple_ToggleOtherGalleries extends Horde_Core_Ajax_Imple
     /**
      * Noop.
      */
-    protected function _handle(Variables|Horde_Variables $vars)
-    {
-    }
+    protected function _handle(Variables|Horde_Variables $vars) {}
 
 }
