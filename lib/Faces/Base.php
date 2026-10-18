@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
 /**
  * Face recognition class
  *
@@ -392,6 +394,7 @@ class Ansel_Faces_Base
      */
     public function getFaceUrl($image_id, $face_id, $full = false)
     {
+        $config = $injector->get('AnselConfig');
         global $conf;
 
         // If we won't be using img.php to generate it, make sure the image
@@ -405,7 +408,7 @@ class Ansel_Faces_Base
             return Horde::url('faces/img.php', $full)->add('face', $face_id);
         } else {
             $path = substr(str_pad($image_id, 2, 0, STR_PAD_LEFT), -2) . '/faces';
-            return $GLOBALS['conf']['vfs']['path']
+            return $config->get('vfs.path')
                 . htmlspecialchars($path . '/' . $face_id
                 . Ansel_Faces::getExtension());
         }
@@ -521,6 +524,7 @@ class Ansel_Faces_Base
      */
     public function getFromPicture($image, $create = false)
     {
+        $config = $injector->get('AnselConfig');
         // get image if ID is passed
         if (!($image instanceof Ansel_Image)) {
             $image = $GLOBALS['injector']
@@ -579,7 +583,7 @@ class Ansel_Faces_Base
             throw new Ansel_Exception($e);
         }
         // Expire gallery cache
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')
                 ->expire('Ansel_Gallery' . $gallery->id);
         }
@@ -640,8 +644,9 @@ class Ansel_Faces_Base
      */
     public function saveSignature($image_id, $face_id)
     {
+        $config = $injector->get('AnselConfig');
         // can we get it?
-        if (empty($GLOBALS['conf']['faces']['search'])
+        if (empty($config->get('faces.search'))
             || extension_loaded('libpuzzle') === false) {
 
             return;
@@ -677,7 +682,7 @@ class Ansel_Faces_Base
         }
 
         // create index
-        $word_len = $GLOBALS['conf']['faces']['search'];
+        $word_len = $config->get('faces.search');
         $str_len = strlen($signature);
         $GLOBALS['ansel_db']->delete('DELETE FROM ansel_faces_index WHERE face_id = ' . $face_id);
         $q = 'INSERT INTO  () VALUES (?, ?, ?)';
@@ -706,7 +711,8 @@ class Ansel_Faces_Base
      */
     public function getSignatureFromFile($filename)
     {
-        if ($GLOBALS['conf']['faces']['search'] == 0
+        $config = $injector->get('AnselConfig');
+        if ($config->get('faces.search') == 0
             || extension_loaded('libpuzzle') === false) {
 
             return '';
@@ -781,6 +787,7 @@ class Ansel_Faces_Base
      */
     public function getFaceById($face_id, $full = false)
     {
+        $config = $injector->get('AnselConfig');
         $sql = 'SELECT face_id, image_id, gallery_id, face_name';
         if ($full) {
             $sql .= ', face_x1, face_y1, face_x2, face_y2, face_signature';
@@ -795,7 +802,7 @@ class Ansel_Faces_Base
             throw new Horde_Exception_NotFound('Face does not exist');
         }
 
-        if ($full && $GLOBALS['conf']['faces']['search']
+        if ($full && $config->get('faces.search')
             && function_exists('puzzle_uncompress_cvec')) {
             $columns = $GLOBALS['ansel_db']->columns('ansel_faces');
             $face['face_signature'] = puzzle_uncompress_cvec($columns['face_signature']->binaryToString($face['face_signature']));
@@ -835,7 +842,8 @@ class Ansel_Faces_Base
      */
     public function getSignatureMatches($signature, $face_id = 0, $from = 0, $count = 0)
     {
-        $word_len = $GLOBALS['conf']['faces']['search'];
+        $config = $injector->get('AnselConfig');
+        $word_len = $config->get('faces.search');
         $str_len = strlen($signature);
         $c = $str_len - $word_len;
         $indexes = [];

@@ -6,6 +6,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_ImageGenerator_Screen extends Ansel_ImageGenerator
 {
     /**
@@ -14,18 +17,19 @@ class Ansel_ImageGenerator_Screen extends Ansel_ImageGenerator
      */
     protected function _create()
     {
+        config = $injector->get('AnselConfig');
         $this->_image->resize(
-            min($GLOBALS['conf']['screen']['width'], $this->_dimensions['width']),
-            min($GLOBALS['conf']['screen']['height'], $this->_dimensions['height']),
+            min($config->get('screen.width'), $this->_dimensions['width']),
+            min($config->get('screen.height'), $this->_dimensions['height']),
             true
         );
-        if ($GLOBALS['conf']['screen']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
+        if ($config->get('screen.unsharp') && Ansel::isAvailable('Unsharpmask')) {
             try {
                 $this->_image->addEffect(
                     'Unsharpmask',
-                    ['radius' => $GLOBALS['conf']['screen']['radius'],
-                        'threshold' => $GLOBALS['conf']['screen']['threshold'],
-                        'amount' => $GLOBALS['conf']['screen']['amount']]
+                    ['radius' => $config->get('screen.radius'),
+                        'threshold' => $config->get('screen.threshold'),
+                        'amount' => $config->get('screen.amount')]
                 );
                 $this->_image->applyEffects();
             } catch (Horde_Image $e) {

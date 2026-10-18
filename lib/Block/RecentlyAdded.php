@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Display most recently added images.
  *
@@ -29,6 +32,7 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
      */
     protected function _params()
     {
+        $config = $injector->get('AnselConfig');
         $params = [
             'gallery' => [
                 'name' => _("Gallery"),
@@ -43,13 +47,13 @@ class Ansel_Block_Recentlyadded extends Horde_Core_Block
             ],
         ];
 
-        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+        if (empty($config->get('gallery.listlimit'))
             || ($GLOBALS['injector']
                 ->getInstance('Ansel_Storage')
                 ->countGalleries(
                     $GLOBALS['registry']->getAuth(),
                     ['perm' => Horde_Perms::READ]
-                ) < $GLOBALS['conf']['gallery']['listlimit'])) {
+                ) < $config->get('gallery.listlimit'))) {
 
             foreach ($GLOBALS['injector']->getInstance('Ansel_Storage')->listGalleries(['perm' => Horde_Perms::READ]) as $gal) {
                 if (!$gal->hasPasswd() && $gal->isOldEnough()) {

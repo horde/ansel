@@ -1,6 +1,7 @@
 <?php
 
 use Horde\Util\Util;
+use Horde\\Ansel\\AnselConfig;
 
 /**
  * The Ansel_View_List:: provides a view for handling lists of galleries.
@@ -175,12 +176,13 @@ class Ansel_View_List extends Ansel_View_Ansel
      */
     public function getTitle()
     {
+        $config = $injector->get('AnselConfig');
         if ($this->_owner) {
             if ($this->_owner == $GLOBALS['registry']->getAuth()
                 && empty($this->_params['api'])) {
 
                 return  _("My Galleries");
-            } elseif (!empty($GLOBALS['conf']['gallery']['customlabel'])) {
+            } elseif (!empty($config->get('gallery.customlabel'))) {
                 $uprefs = $GLOBALS['injector']
                   ->getInstance('Horde_Core_Factory_Prefs')
                   ->create('ansel', [

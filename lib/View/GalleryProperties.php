@@ -1,6 +1,7 @@
 <?php
 
 use Horde\Util\Util;
+use Horde\\Ansel\\AnselConfig;
 
 /**
  * Class to encapsulate the UI for adding/viewing/changing galleries.
@@ -14,6 +15,7 @@ use Horde\Util\Util;
  * @author  Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
 class Ansel_View_GalleryProperties
 {
     /**
@@ -99,6 +101,7 @@ class Ansel_View_GalleryProperties
      */
     private function _output()
     {
+        $config = $injector->get('AnselConfig');
         $view = $GLOBALS['injector']->createInstance('Horde_View');
         $view->addTemplatePath([
             ANSEL_TEMPLATES . '/gallery',
@@ -115,11 +118,11 @@ class Ansel_View_GalleryProperties
         $view->isOwner = $GLOBALS['registry']->getAuth()
                          && $GLOBALS['registry']->getAuth() == $this->_properties['owner'];
 
-        $view->havePretty = $GLOBALS['conf']['image']['prettythumbs'];
-        $view->ages = $GLOBALS['conf']['ages']['limits'];
+        $view->havePretty = $config->get('image.prettythumbs');
+        $view->ages = $config->get('ages.limits');
 
         $js = ['$("gallery_name").focus()'];
-        if ($GLOBALS['conf']['image']['type'] != 'png') {
+        if ($config->get('image.type') != 'png') {
             $js[] = 'function checkStyleSelection()
                 {
                     var s, bg = $F("background_color");
@@ -241,6 +244,7 @@ class Ansel_View_GalleryProperties
      */
     private function _runSave()
     {
+        $config = $injector->get('AnselConfig');
         // Check general permissions.
         if (!$GLOBALS['registry']->isAdmin()
             && ($GLOBALS['injector']->getInstance('Horde_Perms')->exists('ansel')
@@ -412,7 +416,7 @@ class Ansel_View_GalleryProperties
         }
 
         // Clear the OtherGalleries widget cache
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')->expire('Ansel_OtherGalleries' . $gallery->get('owner'));
         }
 

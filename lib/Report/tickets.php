@@ -6,6 +6,9 @@
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_Report_tickets extends Ansel_Report
 {
     /**
@@ -13,8 +16,9 @@ class Ansel_Report_tickets extends Ansel_Report
      */
     public function report($message)
     {
+        $config = $injector->get('AnselConfig');
         $info = array_merge(
-            $GLOBALS['conf']['report_content']['ticket_params'],
+            $config->get('report_content.ticket_params'),
             ['summary' => $this->getTitle(),
                 'comment' => $message,
                 'user_email' => $this->getUserEmail()]

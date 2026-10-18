@@ -12,6 +12,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
 {
     /**
@@ -162,6 +165,8 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
      */
     public function moveImagesTo($images, $gallery)
     {
+        $config = $injector->get('AnselConfig');
+
         if (!$gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::EDIT)) {
             throw new Horde_Exception_PermissionDenied(("Access denied moving photos to this gallery."));
         } elseif (!$this->_gallery->hasPermission($GLOBALS['registry']->getAuth(), Horde_Perms::DELETE)) {
@@ -182,7 +187,7 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
         $gallery->updateImageCount(count($ids), true);
 
         /* Expire the cache since we have no reason to save() the gallery */
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')->expire('Ansel_Gallery' . $gallery->id);
             $GLOBALS['injector']->getInstance('Horde_Cache')->expire('Ansel_Gallery' . $this->_gallery->id);
         }
@@ -201,6 +206,8 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
      */
     public function removeImage($image, $isStack)
     {
+        $config = $injector->get('AnselConfig');
+
         // Make sure $image is an Ansel_Image; if not, try loading it.
         if (!($image instanceof Ansel_Image)) {
             $image = $this->_gallery->getImage($image);
@@ -249,7 +256,7 @@ class Ansel_GalleryMode_Normal extends Ansel_GalleryMode_Base
         }
 
         /* Clear any comments */
-        if (($GLOBALS['conf']['comments']['allow'] == 'all' || ($GLOBALS['conf']['comments']['allow'] == 'authenticated' && $GLOBALS['registry']->getAuth()))
+        if (($config->get('comments.allow') == 'all' || ($config->get('comments.allow') == 'authenticated' && $GLOBALS['registry']->getAuth()))
             && $GLOBALS['registry']->hasMethod('forums/deleteForum')) {
 
             try {

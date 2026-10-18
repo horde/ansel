@@ -2,6 +2,7 @@
 
 use Horde\Compress\CompressFactory;
 use Horde\Util\Util;
+use Horde\Ansel\AnselConfig;
 
 /**
  * Ansel Base Class.
@@ -107,9 +108,9 @@ class Ansel
     public static function getUrlFor($controller, $data, $full = false, $append_session = 0)
     {
         global $prefs;
+        $config = $injector->get('AnselConfig');
 
-        $rewrite = isset($GLOBALS['conf']['urls']['pretty'])
-                   && $GLOBALS['conf']['urls']['pretty'] == 'rewrite';
+        $rewrite = ($config?->get('urls.pretty') === 'rewrite');
 
         switch ($controller) {
             case 'view':
@@ -434,9 +435,11 @@ class Ansel
      */
     public static function getImageObject($params = [])
     {
+        $config = $injector->get('AnselConfig');
+
         return $GLOBALS['injector']
             ->getInstance('Horde_Core_Factory_Image')
-            ->create(['type' => $GLOBALS['conf']['image']['type']]);
+            ->create(['type' => $config?->get('image.type')]);
     }
 
     /**
@@ -528,6 +531,7 @@ class Ansel
     {
         global $prefs;
 
+        $config = $injector->get('AnselConfig');
         $ansel_storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
         $groupby = Util::getFormData('groupby', $prefs->getValue('groupby'));
         $owner = Util::getFormData('owner');
@@ -567,7 +571,7 @@ class Ansel
                 $owner_title = _("System Galleries");
             } elseif ($owner == $GLOBALS['registry']->getAuth()) {
                 $owner_title = _("My Galleries");
-            } elseif (!empty($GLOBALS['conf']['gallery']['customlabel'])) {
+            } elseif (!empty($config->get('gallery.customlabel'))) {
                 $uprefs = $GLOBALS['injector']
                     ->getInstance('Horde_Core_Factory_Prefs')
                     ->create(
@@ -765,8 +769,9 @@ class Ansel
     public static function downloadImagesAsZip($gallery = null, $images = [])
     {
         global $session;
+        $config = $injector->get('AnselConfig');
 
-        if (empty($GLOBALS['conf']['gallery']['downloadzip'])) {
+        if (empty($config->get('gallery.downloadzip'))) {
             $GLOBALS['notification']->push(
                 _("Downloading zip files is not enabled. Talk to your server administrator.")
             );
@@ -909,6 +914,8 @@ class Ansel
      */
     public static function initJSVariables()
     {
+        $config = $injector->get('AnselConfig');
+
         if (!$GLOBALS['browser']->isMobile()) {
             $code['conf'] = [
                 'BASE_URI' => (string) Horde::url(
@@ -919,11 +926,11 @@ class Ansel
                         'append_session' => -1]
                 )];
 
-            $code['conf']['maps'] = $GLOBALS['conf']['maps'];
+            $code['conf']['maps'] = $config->get('maps');
             $code['conf']['pixeluri'] = (string) $GLOBALS['registry']->getServiceLink('pixel', 'ansel');
             $code['conf']['markeruri'] = (string) Horde_Themes::img('photomarker.png');
             $code['conf']['shadowuri'] = (string) Horde_Themes::img('photomarker-shadow.png');
-            $code['conf']['havetwitter'] = !empty($GLOBALS['conf']['twitter']['enabled']);
+            $code['conf']['havetwitter'] = !empty($config->get('twitter.enabled'));
             $code['ajax'] = new stdClass();
             $code['widgets'] = new stdClass();
 

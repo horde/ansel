@@ -11,11 +11,14 @@
  * @author Duck <duck@obala.net>
  */
 
+use Horde\Ansel\AnselConfig;
+
 require_once __DIR__ . '/../lib/Application.php';
 Horde_Registry::appInit('ansel');
 
 $face_id = Horde_Util::getFormData('face');
 $faces = $GLOBALS['injector']->getInstance('Ansel_Faces');
+$config = $injector->get('AnselConfig');
 
 // Sendfile support. Lighttpd < 1.5 only understands the X-LIGHTTPD-send-file
 // header
@@ -28,6 +31,7 @@ if ($conf['vfs']['src'] == 'sendfile') {
         exit;
     }
 
+    
     // We definitely have an image for the face.
     try {
         $filename = $GLOBALS['injector']->getInstance('Horde_Core_Factory_Vfs')->create('images')->readFile(
@@ -38,7 +42,7 @@ if ($conf['vfs']['src'] == 'sendfile') {
         Horde::log($e, 'ERR');
         exit;
     }
-    header('Content-type: image/' . $GLOBALS['conf']['image']['type']);
+    header('Content-type: image/' . $config->get('image.type'));
     header('X-LIGHTTPD-send-file: ' . $filename);
     header('X-Sendfile: ' . $filename);
     exit;
@@ -46,5 +50,5 @@ if ($conf['vfs']['src'] == 'sendfile') {
 
 // Run it through PHP
 $img = $faces->getFaceImageObject($face_id);
-header('Content-type: image/' . $GLOBALS['conf']['image']['type']);
+header('Content-type: image/' . $config->get('image.type'));
 echo $img->raw();

@@ -11,6 +11,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_ImageGenerator_SquareThumb extends Ansel_ImageGenerator
 {
     public function __construct($params)
@@ -31,28 +34,30 @@ class Ansel_ImageGenerator_SquareThumb extends Ansel_ImageGenerator
      */
     protected function _create()
     {
+        $config = $injector->get('AnselConfig');
+
         // Take the largest requested dimension
         if (empty($this->_params['width'])) {
-            $size = min($GLOBALS['conf']['thumbnail']['height'], $GLOBALS['conf']['thumbnail']['width']);
+            $size = min($config->get('thumbnail.height'), $config->get('thumbnail.width'));
         } else {
             $size = min($this->_params['width'], $this->_params['height']);
         }
 
         // Use smartcrop algorithm if we have it, otherwise a plain center crop.
-        if (Ansel::isAvailable('SmartCrop') && $GLOBALS['conf']['image']['smartcrop']) {
+        if (Ansel::isAvailable('SmartCrop') && $config->get('image.smartcrop')) {
             $this->_image->addEffect('SmartCrop', ['width' => $size, 'height' => $size]);
         } else {
             $this->_image->addEffect('CenterCrop', ['width' => $size, 'height' => $size]);
         }
         $this->_image->applyEffects();
 
-        if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
+        if ($config->get('thumbnail.unsharp') && Ansel::isAvailable('Unsharpmask')) {
             try {
                 $this->_image->addEffect(
                     'Unsharpmask',
-                    ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                        'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                        'amount' => $GLOBALS['conf']['thumbnail']['amount']]
+                    ['radius' => $config->get('thumbnail.radius'),
+                        'threshold' => $config->get('thumbnail.threshold'),
+                        'amount' => $config->get('thumbnail.amount')]
                 );
                 $this->_image->applyEffects();
             } catch (Horde_Image_Exception $e) {

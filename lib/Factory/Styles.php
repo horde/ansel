@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 use Horde\Injector\Injector;
 
 /**
@@ -14,6 +17,7 @@ class Ansel_Factory_Styles extends Horde_Core_Factory_Injector
 {
     public function create(Horde_Injector|Injector $injector)
     {
+        $config = $injector->get('AnselConfig');
         /**
          * ARCHITECTURE VIOLATION: Using deprecated Horde::loadConfiguration()
          * @deprecated Use $registry->loadConfigFile() instead
@@ -23,7 +27,7 @@ class Ansel_Factory_Styles extends Horde_Core_Factory_Injector
         $styles = Horde::loadConfiguration('styles.php', 'styles', 'ansel');
 
         /* No prettythumbs allowed at all by admin choice */
-        if (empty($GLOBALS['conf']['image']['prettythumbs'])) {
+        if (empty($config->get('image.prettythumbs'))) {
             $test = $styles;
             foreach ($test as $key => $style) {
                 if ($style['thumbstyle'] != 'Thumb') {
@@ -33,7 +37,7 @@ class Ansel_Factory_Styles extends Horde_Core_Factory_Injector
         }
 
         /* Check if the browser / server has png support */
-        if ($GLOBALS['conf']['image']['type'] != 'png') {
+        if ($config->get('image.type') != 'png') {
             $test = $styles;
             foreach ($test as $key => $style) {
                 if (!empty($style['requires_png'])) {

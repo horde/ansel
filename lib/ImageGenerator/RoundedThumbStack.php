@@ -6,6 +6,9 @@
  * @package Ansel
  *
  */
+
+use Horde\Ansel\AnselConfig;
+ 
 class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
 {
     public $need = ['PhotoStack'];
@@ -16,6 +19,7 @@ class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
      */
     protected function _create()
     {
+        $config = $injector->get('AnselConfig');
         $imgobjs = $this->_getStackImages();
         $style = $this->_params['style'];
         $params = ['width' => 100,
@@ -28,7 +32,7 @@ class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
             $baseImg->addEffect(
                 'PhotoStack',
                 ['images' => $imgobjs,
-                    'resize_height' => $GLOBALS['conf']['thumbnail']['height'],
+                    'resize_height' => $config->get('thumbnail.height'),
                     'padding' => 0,
                     'background' => $style->background,
                     'type' => 'rounded']
@@ -36,8 +40,8 @@ class Ansel_ImageGenerator_RoundedThumbStack extends Ansel_ImageGenerator
 
             $baseImg->applyEffects();
             $baseImg->resize(
-                $GLOBALS['conf']['thumbnail']['width'],
-                $GLOBALS['conf']['thumbnail']['height']
+                $config->get('thumbnail.width'),
+                $config->get('thumbnail.height')
             );
         } catch (Horde_Image_Exception $e) {
             throw new Ansel_Exception($e);
