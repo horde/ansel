@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Horde_Widget_ImageFaces:: class to display a widget containing mini
  * thumbnails of faces in the image.
@@ -29,7 +32,8 @@ class Ansel_Widget_ImageFaces extends Ansel_Widget_Base
      */
     public function attach(Ansel_View_Base $view)
     {
-        if (empty($GLOBALS['conf']['faces']['driver'])) {
+        $config = $injector->get('AnselConfig');
+        if (empty($config->get('faces.driver'))) {
             return false;
         }
         $GLOBALS['page_output']->addScriptFile('imagefaces.js');

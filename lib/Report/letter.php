@@ -6,6 +6,9 @@
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_Report_letter extends Ansel_Report
 {
     /**
@@ -13,16 +16,17 @@ class Ansel_Report_letter extends Ansel_Report
      */
     public function report($message, $users = [])
     {
+        $config = $injector->get('AnselConfig');
         if (!empty($users)) {
             // We are sending a report to to the gallery owner
             $admins = [$users];
-        } elseif (empty($GLOBALS['conf']['report_content']['users'])) {
+        } elseif (empty($config->get('report_content.users'))) {
             $admins = $this->getAdmins();
             if (empty($admins)) {
                 return true;
             }
         } else {
-            $admins = $GLOBALS['conf']['report_content']['users'];
+            $admins = $config->get('report_content.users');
         }
 
         $title = $this->getTitle();

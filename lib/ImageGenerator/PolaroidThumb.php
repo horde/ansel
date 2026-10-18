@@ -6,6 +6,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
 {
     public $need = ['PolaroidImage'];
@@ -22,9 +25,11 @@ class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
      */
     protected function _create()
     {
+        $config = $injector->get('AnselConfig');
+
         $this->_image->resize(
-            min($GLOBALS['conf']['thumbnail']['width'], $this->_dimensions['width']),
-            min($GLOBALS['conf']['thumbnail']['height'], $this->_dimensions['height']),
+            min($config->get('thumbnail.width'), $this->_dimensions['width']),
+            min($config->get('thumbnail.height'), $this->_dimensions['height']),
             true
         );
 
@@ -43,12 +48,12 @@ class Ansel_ImageGenerator_PolaroidThumb extends Ansel_ImageGenerator
                     ['background' => $styleDef->background,
                         'padding' => 5]
                 );
-                if ($GLOBALS['conf']['thumbnail']['unsharp'] && Ansel::isAvailable('Unsharpmask')) {
+                if ($config->get('thumbnail.unsharp') && Ansel::isAvailable('Unsharpmask')) {
                     $this->_image->addEffect(
                         'Unsharpmask',
-                        ['radius' => $GLOBALS['conf']['thumbnail']['radius'],
-                            'threshold' => $GLOBALS['conf']['thumbnail']['threshold'],
-                            'amount' => $GLOBALS['conf']['thumbnail']['amount']]
+                        ['radius' => $config->get('thumbnail.radius'),
+                            'threshold' => $config->get('thumbnail.threshold'),
+                            'amount' => $config->get('thumbnail.amount')]
                     );
                 }
                 $this->_image->applyEffects();

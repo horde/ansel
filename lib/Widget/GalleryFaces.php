@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Horde_Widget_GalleryFaces:: class to display a widget containing mini
  * thumbnails of faces in the gallery.
@@ -39,7 +42,8 @@ class Ansel_Widget_GalleryFaces extends Ansel_Widget_Base
      */
     public function html()
     {
-        if ($GLOBALS['conf']['faces']['driver']) {
+        $config = $injector->get('AnselConfig');
+        if ($config->get('faces.driver')) {
             $html = $this->_getFaceNames();
             return $this->_htmlBegin() . $html . $this->_htmlEnd();
         } else {

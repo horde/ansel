@@ -16,6 +16,9 @@
  * @author  Duck <duck@obala.net>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_Report
 {
     public $_title = '';
@@ -25,12 +28,14 @@ class Ansel_Report
      */
     public function factory($driver = null, $params = [])
     {
+        $config = $injector->get('AnselConfig');
+
         if ($driver === null) {
-            $driver = $GLOBALS['conf']['report_content']['driver'];
+            $driver = $config->get('report_content.driver');
         }
 
         if (empty($params)) {
-            $params = $GLOBALS['conf']['report_content'];
+            $params = $config->get('report_content');
         }
 
         $class_name = 'Ansel_Report_' . $driver;

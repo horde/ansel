@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 use Horde\Util\Util;
 
 /**
@@ -51,7 +54,8 @@ class Ansel_Application extends Horde_Registry_Application
      */
     protected function _init()
     {
-        if (!$GLOBALS['conf']['image']['driver']) {
+        $config = $injector->get('AnselConfig');
+        if (!$config->get('image.driver')) {
             throw new Ansel_Exception('You must configure a Horde_Image driver to use Ansel');
         }
 

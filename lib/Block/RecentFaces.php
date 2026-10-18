@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * This file provides a recent faces display in a block.
  *
@@ -16,9 +19,10 @@ class Ansel_Block_RecentFaces extends Horde_Core_Block
      */
     public function __construct($app, $params = [])
     {
+        $config = $injector->get('AnselConfig');
         parent::__construct($app, $params);
 
-        $this->enabled = !empty($GLOBALS['conf']['faces']['driver']);
+        $this->enabled = !empty($config->get('faces.driver'));
         $this->_name = _("Recent faces");
     }
 

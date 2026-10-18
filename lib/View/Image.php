@@ -1,5 +1,7 @@
 <?php
 
+use Horde\\Ansel\\AnselConfig;
+
 /**
  * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
  *
@@ -213,6 +215,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
      */
     protected function _prepare()
     {
+        $config = $injector->get('AnselConfig');
         global $conf;
 
         $this->_page = $this->_params['page'] ?? 0;
@@ -227,7 +230,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
             $this->_geometry = $this->resource->getDimensions('screen');
         } catch (Ansel_Exception $e) {
             Horde::log($e, 'ERR');
-            $this->_geometry = $GLOBALS['conf']['screen'];
+            $this->_geometry = $config->get('screen');
         }
 
         // Get the image lists
@@ -279,7 +282,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
                 $this->_urls['download'] = Horde::url('img/download.php', true)->add('image', $this->resource->id);
             }
             if ((!$GLOBALS['registry']->getAuth() || $this->gallery->get('owner') != $GLOBALS['registry']->getAuth())
-                && !empty($GLOBALS['conf']['report_content']['driver'])
+                && !empty($config->get('report_content.driver'))
                 && (($conf['report_content']['allow'] == 'authenticated' && $GLOBALS['registry']->isAuthenticated())
                  || $conf['report_content']['allow'] == 'all')) {
 

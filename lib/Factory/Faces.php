@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 use Horde\Injector\Injector;
 
 /**
@@ -14,8 +17,9 @@ class Ansel_Factory_Faces extends Horde_Core_Factory_Injector
 {
     public function create(Horde_Injector|Injector $injector)
     {
-        $driver = $GLOBALS['conf']['faces']['driver'];
-        $params = $GLOBALS['conf']['faces'];
+        $config = $injector->get('AnselConfig');
+        $driver = $config->get('faces.driver');
+        $params = $config->get('faces');
         $class_name = 'Ansel_Faces_' . ucfirst($driver);
 
         return new $class_name($params);

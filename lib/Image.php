@@ -12,6 +12,9 @@
  * @author Michael J. Rubinsky <mrubinsk@horde.org>
  * @package Ansel
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_Image implements Iterator
 {
     /**
@@ -260,6 +263,7 @@ class Ansel_Image implements Iterator
      */
     public function getVFSName($view)
     {
+        $config = $injector->get('AnselConfig');
         $vfsname = $this->id;
 
         if ($view == 'full' && $this->type) {
@@ -269,7 +273,7 @@ class Ansel_Image implements Iterator
             if ($ext = Horde_Mime_Magic::mimeToExt($type)) {
                 $vfsname .= '.' . $ext;
             }
-        } elseif (($GLOBALS['conf']['image']['type'] == 'jpeg') || $view == 'screen') {
+        } elseif (($config->get('image.type') == 'jpeg') || $view == 'screen') {
             $vfsname .= '.jpg';
         } else {
             $vfsname .= '.png';
@@ -359,6 +363,7 @@ class Ansel_Image implements Iterator
      */
     public static function viewExists($id, $view, Ansel_Style $style)
     {
+        $config = $injector->get('AnselConfig');
         // We cannot check empty styles since we cannot get the hash
         if (empty($style)) {
             return false;
@@ -373,7 +378,7 @@ class Ansel_Image implements Iterator
 
         // Get VFS name
         $vfsname = $id . '.';
-        if ($GLOBALS['conf']['image']['type'] == 'jpeg' || $view == 'screen') {
+        if ($config->get('image.type') == 'jpeg' || $view == 'screen') {
             $vfsname .= 'jpg';
         } else {
             $vfsname .= 'png';
@@ -396,6 +401,8 @@ class Ansel_Image implements Iterator
      */
     public function createView($view, ?Ansel_Style $style = null, $watermark = '')
     {
+        $config = $injector->get('AnselConfig');
+
         // Default to the gallery's style
         if (empty($style)) {
             $style = $GLOBALS['injector']
@@ -422,7 +429,7 @@ class Ansel_Image implements Iterator
         }
 
         // Force screen images to ALWAYS be jpegs for performance/size
-        if ($view == 'screen' && $GLOBALS['conf']['image']['type'] != 'jpeg') {
+        if ($view == 'screen' && $config->get('image.type') != 'jpeg') {
             $originalType = $this->_image->setType('jpeg');
         } else {
             $originalType = false;
@@ -686,6 +693,8 @@ class Ansel_Image implements Iterator
      */
     public function getEXIF($replacing = false)
     {
+        $config = $injector->get('AnselConfig');
+
         /* Clear the local copy */
         $this->_exif = [];
 
@@ -701,12 +710,10 @@ class Ansel_Image implements Iterator
         } catch (Horde_Vfs_Exception $e) {
             throw new Ansel_Exception($e);
         }
-        $params = !empty($GLOBALS['conf']['exif']['params'])
-                ? $GLOBALS['conf']['exif']['params']
-                : [];
+        $params = $config->get('exif.params') ?? [];
         $params['logger'] = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
         $exif = Horde_Image_Exif::factory(
-            $GLOBALS['conf']['exif']['driver'],
+            $config->get('exif.driver'),
             $params
         );
 
@@ -1081,6 +1088,8 @@ class Ansel_Image implements Iterator
         $valign = null,
         $font = null
     ) {
+        $config = $injector->get('AnselConfig');
+
         if (empty($watermark)) {
             $watermark = $GLOBALS['prefs']->getValue('watermark_text');
         }
@@ -1111,8 +1120,8 @@ class Ansel_Image implements Iterator
             'halign' => $halign,
             'valign' => $valign,
             'fontsize' => $font];
-        if (!empty($GLOBALS['conf']['image']['font'])) {
-            $params['font'] = $GLOBALS['conf']['image']['font'];
+        if (!empty($config->get('image.font'))) {
+            $params['font'] = $config->get('image.font');
         }
 
         try {
@@ -1307,12 +1316,14 @@ class Ansel_Image implements Iterator
      */
     public function getType($view = 'full')
     {
+        $config = $injector->get('AnselConfig');
+
         if ($view == 'full') {
             return $this->type;
         } elseif ($view == 'screen') {
             return 'image/jpeg';
         } else {
-            return 'image/' . $GLOBALS['conf']['image']['type'];
+            return 'image/' . $config->get('image.type');
         }
     }
 
@@ -1347,17 +1358,16 @@ class Ansel_Image implements Iterator
      */
     public function getAttributes()
     {
+        $config = $injector->get('AnselConfig');
         $attributes = $GLOBALS['injector']
             ->getInstance('Ansel_Storage')
             ->getImageAttributes($this->id);
 
-        $params = !empty($GLOBALS['conf']['exif']['params'])
-                ? $GLOBALS['conf']['exif']['params']
-                : [];
+        $params = $config->get('exif.params') ?? [];
         $params['logger'] = $GLOBALS['injector']->getInstance('Horde_Log_Logger');
 
         $exif = Horde_Image_Exif::factory(
-            $GLOBALS['conf']['exif']['driver'],
+            $config->get('exif.driver'),
             $params
         );
         $fields = Horde_Image_Exif::getFields($exif);
@@ -1369,7 +1379,7 @@ class Ansel_Image implements Iterator
             }
             $output[$field] = $value = Horde_Image_Exif::getHumanReadable(
                 $field,
-                Horde_String::convertCharset($attributes[$field], $GLOBALS['conf']['sql']['charset'], 'UTF-8')
+                Horde_String::convertCharset($attributes[$field], $config->get('sql.charset'), 'UTF-8')
             );
         }
 

@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Face recognition class
  *
@@ -105,7 +108,8 @@ class Ansel_Faces
      */
     public static function getExtension()
     {
-        if ($GLOBALS['conf']['image']['type'] == 'jpeg') {
+        $config = $injector->get('AnselConfig');
+        if ($config->get('image.type') == 'jpeg') {
             return '.jpg';
         } else {
             return '.png';
@@ -163,11 +167,12 @@ class Ansel_Faces
         // Build the actual html
         $html = '<div id="face' . $face_id . '"><table><tr><td>' . $img_view_url->link() . $imghtml . '</a></td><td>';
         if (!empty($face['face_name'])) {
+        $config = $injector->get('AnselConfig');
             $html .= Horde::url('faces/face.php')->add('face', $face['face_id'])->link() . $face['face_name'] . '</a><br />';
         }
 
         // Display the face name or a link to claim the face.
-        if (empty($face['face_name']) && $GLOBALS['conf']['report_content']['driver']) {
+        if (empty($face['face_name']) && $config->get('report_content.driver')) {
             $html .= Horde::url('faces/claim.php')->add('face', $face_id)->link(['title' => _("Do you know someone in this photo?")]) . _("Claim") . '</a>';
         }
 

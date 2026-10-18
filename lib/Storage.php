@@ -11,6 +11,7 @@
  */
 
 use Horde\Injector\Attribute\Factory;
+use Horde\Ansel\AnselConfig;
 
 /**
  * Class for interfacing with back end data storage.
@@ -102,6 +103,8 @@ class Ansel_Storage
         ?Horde_Perms_Permission $perm = null,
         $parent = null
     ) {
+        $config = $injector->get('AnselConfig');
+
         // Required values.
         if (empty($attributes['owner'])) {
             $attributes['owner'] = $GLOBALS['registry']->getAuth();
@@ -171,7 +174,7 @@ class Ansel_Storage
         // Set the gallery's parent if needed, and clear the parent's cache
         if (!is_null($parent)) {
             $gallery->setParent($parent);
-            if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+            if ($config->get('ansel_cache.usecache')) {
                 $GLOBALS['injector']->getInstance('Horde_Cache')
                     ->expire('Ansel_Gallery' . $parent);
             }
@@ -302,8 +305,10 @@ class Ansel_Storage
      */
     public function getGallery($gallery_id, array $overrides = [])
     {
-        if (!count($overrides) && $GLOBALS['conf']['ansel_cache']['usecache']
-            && ($gallery = $GLOBALS['injector']->getInstance('Horde_Cache')->get('Ansel_Gallery' . $gallery_id, $GLOBALS['conf']['cache']['default_lifetime'])) !== false) {
+        $config = $injector->get('AnselConfig');
+
+        if (!count($overrides) && $config->get('ansel_cache.usecache')
+            && ($gallery = $GLOBALS['injector']->getInstance('Horde_Cache')->get('Ansel_Gallery' . $gallery_id, $config->get('cache.default_lifetime'))) !== false) {
 
             if ($cached_gallery = unserialize($gallery)) {
                 return $cached_gallery;
@@ -320,7 +325,7 @@ class Ansel_Storage
 
         // Don't cache if we have overridden anything
         if (!count($overrides)) {
-            if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+            if ($config->get('ansel_cache.usecache')) {
                 $GLOBALS['injector']->getInstance('Horde_Cache')
                     ->set('Ansel_Gallery' . $gallery_id, serialize($result));
             }
@@ -413,7 +418,7 @@ class Ansel_Storage
         $gallery->set('images', 0, true);
 
         // Clear the OtherGalleries widget cache
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']
                 ->getInstance('Horde_Cache')
                 ->expire('Ansel_OtherGalleries' . $gallery->get('owner'));
@@ -432,6 +437,7 @@ class Ansel_Storage
      */
     public function removeGallery(Ansel_Gallery $gallery)
     {
+        $config = $injector->get('AnselConfig');
         // Get any children and empty them
         $children = $gallery->getChildren(null, null, true);
         foreach ($children as $child) {
@@ -459,7 +465,7 @@ class Ansel_Storage
         }
 
         // Expire the cache
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')
                 ->expire('Ansel_Gallery' . $id);
         }
@@ -468,7 +474,7 @@ class Ansel_Storage
         if ($parent instanceof Ansel_Gallery) {
             if (!$parent->countChildren($GLOBALS['registry']->getAuth(), Horde_Perms::SHOW, false)) {
                 $parent->set('has_subgalleries', 0, true);
-                if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+                if ($config->get('ansel_cache.usecache')) {
                     $GLOBALS['injector']
                         ->getInstance('Horde_Cache')
                         ->expire('Ansel_Gallery' . $parent->id);
@@ -487,6 +493,8 @@ class Ansel_Storage
      */
     public function &getImage($id)
     {
+        $config = $injector->get('AnselConfig');
+
         if (isset($this->_images[$id])) {
             return $this->_images[$id];
         }
@@ -505,12 +513,12 @@ class Ansel_Storage
             $columns = $this->_db->columns('ansel_images');
             $image['image_filename'] = Horde_String::convertCharset(
                 $image['image_filename'],
-                $GLOBALS['conf']['sql']['charset'],
+                $config->get('sql.charset'),
                 'UTF-8'
             );
             $image['image_caption'] = Horde_String::convertCharset(
                 $columns['image_caption']->binaryToString($image['image_caption']),
-                $GLOBALS['conf']['sql']['charset'],
+                $config->get('sql.charset'),
                 'UTF-8'
             );
             $this->_images[$id] = new Ansel_Image($image);
@@ -529,6 +537,7 @@ class Ansel_Storage
      */
     public function saveImage(Ansel_Image $image)
     {
+        $config = $injector->get('AnselConfig');
         // If we have an id, then it's an existing image.
         if ($image->id) {
             $update = 'UPDATE ansel_images SET image_filename = ?, '
@@ -539,9 +548,9 @@ class Ansel_Storage
             try {
                 return $this->_db->update(
                     $update,
-                    [Horde_String::convertCharset($image->filename, 'UTF-8', $GLOBALS['conf']['sql']['charset']),
+                    [Horde_String::convertCharset($image->filename, 'UTF-8', $config->get('sql.charset')),
                         $image->type,
-                        Horde_String::convertCharset($image->caption, 'UTF-8', $GLOBALS['conf']['sql']['charset']),
+                        Horde_String::convertCharset($image->caption, 'UTF-8', $config->get('sql.charset')),
                         $image->sort,
                         $image->originalDate,
                         $image->lat,
@@ -574,13 +583,13 @@ class Ansel_Storage
                     Horde_String::convertCharset(
                         $image->filename,
                         'UTF-8',
-                        $GLOBALS['conf']['sql']['charset']
+                        $config->get('sql.charset')
                     ),
                     $image->type,
                     Horde_String::convertCharset(
                         $image->caption,
                         'UTF-8',
-                        $GLOBALS['conf']['sql']['charset']
+                        $config->get('sql.charset')
                     ),
                     $image->uploaded,
                     $image->sort,
@@ -608,6 +617,7 @@ class Ansel_Storage
      */
     public function saveImageAttribute($image_id, $attribute, $value)
     {
+        $config = $injector->get('AnselConfig');
         try {
             $this->_db->insert(
                 'INSERT INTO ansel_image_attributes '
@@ -615,7 +625,7 @@ class Ansel_Storage
                 [
                     $image_id,
                     $attribute,
-                    Horde_String::convertCharset($value, 'UTF-8', $GLOBALS['conf']['sql']['charset'])]
+                    Horde_String::convertCharset($value, 'UTF-8', $config->get('sql.charset'))]
             );
         } catch (Horde_Db_Exception $e) {
             throw new Ansel_Exception($e);
@@ -696,6 +706,7 @@ class Ansel_Storage
      */
     public function getImages(array $params = [])
     {
+        $config = $injector->get('AnselConfig');
         // First check if we want a specific gallery or a list of images
         if (!empty($params['gallery_id'])) {
             $sql = 'SELECT ' . $this->_getImageFields()
@@ -731,8 +742,8 @@ class Ansel_Storage
         $return = [];
         $columns = $this->_db->columns('ansel_images');
         foreach ($images as $image) {
-            $image['image_filename'] = Horde_String::convertCharset($image['image_filename'], $GLOBALS['conf']['sql']['charset'], 'UTF-8');
-            $image['image_caption'] = Horde_String::convertCharset($columns['image_caption']->binaryToString($image['image_caption']), $GLOBALS['conf']['sql']['charset'], 'UTF-8');
+            $image['image_filename'] = Horde_String::convertCharset($image['image_filename'], $config->get('sql.charset'), 'UTF-8');
+            $image['image_caption'] = Horde_String::convertCharset($columns['image_caption']->binaryToString($image['image_caption']), $config->get('sql.charset'), 'UTF-8');
             $return[$image['image_id']] = new Ansel_Image($image);
             $this->_images[(int) $image['image_id']] = &$return[$image['image_id']];
         }
@@ -798,6 +809,7 @@ class Ansel_Storage
      */
     public function getRecentImages(array $galleries = [], $limit = 10, array $slugs = [])
     {
+        $config = $injector->get('AnselConfig');
         $results = [];
 
         if (!count($galleries) && !count($slugs)) {
@@ -836,8 +848,8 @@ class Ansel_Storage
         }
         $columns = $this->_db->columns('ansel_images');
         foreach ($images as $image) {
-            $image['image_filename'] = Horde_String::convertCharset($image['image_filename'], $GLOBALS['conf']['sql']['charset'], 'UTF-8');
-            $image['image_caption'] = Horde_String::convertCharset($columns['image_caption']->binaryToString($image['image_caption']), $GLOBALS['conf']['sql']['charset'], 'UTF-8');
+            $image['image_filename'] = Horde_String::convertCharset($image['image_filename'], $config->get('sql.charset'), 'UTF-8');
+            $image['image_caption'] = Horde_String::convertCharset($columns['image_caption']->binaryToString($image['image_caption']), $config->get('sql.charset'), 'UTF-8');
             $results[] = new Ansel_Image($image);
         }
 

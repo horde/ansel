@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Copyright 2009-2026 Horde LLC (http://www.horde.org/)
  *
@@ -39,7 +42,8 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
      */
     public function attach(Ansel_View_Base $view)
     {
-        if (empty($GLOBALS['conf']['maps']['driver'])) {
+        $config = $injector->get('AnselConfig');
+        if (empty($config->get('maps.driver'))) {
             return false;
         }
         return parent::attach($view);
@@ -52,6 +56,7 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
      */
     public function html()
     {
+        $config = $injector->get('AnselConfig');
         global $page_output;
 
         $view = $GLOBALS['injector']->getInstance('Horde_View');
@@ -209,7 +214,7 @@ class Ansel_Widget_Geotag extends Ansel_Widget_Base
             'updateEndpoint' => strval($geotagUrl),
             'layerUpdateEndpoint' => strval($layerUrl),
             'layerUpdatePref' => 'current_maplayer',
-            'geocoder' => $GLOBALS['conf']['maps']['geocoder'],
+            'geocoder' => $config->get('maps.geocoder'),
         ];
         $js = [
             'Ansel.widgets = Ansel.widgets || {};',

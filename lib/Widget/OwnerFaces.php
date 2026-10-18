@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Ansel_Widget_OwnerFaces:: class to display a widget containing mini
  * thumbnails of faces that have been tagged by the gallery owner.
@@ -20,7 +23,8 @@ class Ansel_Widget_OwnerFaces extends Ansel_Widget_Base
      */
     public function html()
     {
-        if (!$GLOBALS['conf']['faces']['driver']) {
+        $config = $injector->get('AnselConfig');
+        if (!$config->get('faces.driver')) {
             return '';
         }
 

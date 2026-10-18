@@ -1,5 +1,6 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
 use Horde\Compress\CompressFactory;
 use Horde\Compress\Driver\Zip as CompressZip;
 use Horde\Compress\Exception as CompressException;
@@ -357,6 +358,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
      */
     protected function _handleFileUpload()
     {
+        $config = $injector->get('AnselConfig');
         if ($filename = Util::getFormData('name')) {
             if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
                 $type = $_SERVER["HTTP_CONTENT_TYPE"];
@@ -387,7 +389,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
                 }
 
                 // Don't know type. Try to deduce it.
-                if (!($type = Horde_Mime_Magic::analyzeFile($temp, $GLOBALS['conf']['mime']['magic_db'] ?? null))) {
+                if (!($type = Horde_Mime_Magic::analyzeFile($temp, $config->get('mime.magic_db') ?? null))) {
                     $type = Horde_Mime_Magic::filenameToMime($filename);
                 }
             } elseif (strpos($type, "multipart") !== false) {

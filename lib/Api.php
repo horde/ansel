@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Ansel external API interface.
  *
@@ -226,7 +229,8 @@ class Ansel_Api extends Horde_Registry_Api
      */
     public function commentCallback($image_id)
     {
-        if (!$GLOBALS['conf']['comments']['allow']) {
+        $config = $injector->get('AnselConfig');
+        if (!$config->get('comments.allow')) {
             return false;
         }
 
@@ -248,8 +252,9 @@ class Ansel_Api extends Horde_Registry_Api
      */
     public function hasComments()
     {
-        if (($GLOBALS['conf']['comments']['allow'] == 'all'
-            || ($GLOBALS['conf']['comments']['allow'] == 'authenticated'
+        $config = $injector->get('AnselConfig');
+        if (($config->get('comments.allow') == 'all'
+            || ($config->get('comments.allow') == 'authenticated'
             && $GLOBALS['registry']->getAuth()))) {
             return true;
         } else {
@@ -847,6 +852,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
      */
     public function listImages($gallery_id, array $params = [])
     {
+        $config = $injector->get('AnselConfig');
         $params = new Horde_Support_Array($params);
         if ($params->app) {
             $GLOBALS['injector']->getInstance('Ansel_Config')
@@ -880,7 +886,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
                 $params->get('full', false),
                 $params->style
             );
-            if ($params->app && $GLOBALS['conf']['vfs']['src'] != 'direct') {
+            if ($params->app && $config->get('vfs.src') != 'direct') {
                 $imagelist[$id]['url']->add('app', $params->app);
             }
             $imagelist[$id]['url'] = $imagelist[$id]['url']->toString();
@@ -909,6 +915,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
      */
     public function getRecentImages(array $params = [])
     {
+        $config = $injector->get('AnselConfig');
         $params = new Horde_Support_Array($params);
 
         if ($params->app) {
@@ -941,7 +948,7 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
             $imagelist[$id]['uploaded'] = $image->uploaded;
             $imagelist[$id]['original_date'] = $image->originalDate;
 
-            if ($params->app && $GLOBALS['conf']['vfs']['src'] != 'direct') {
+            if ($params->app && $config->get('vfs.src') != 'direct') {
                 $imagelist[$id]['url']->add('app', $params->app);
             }
         }

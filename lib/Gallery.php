@@ -14,6 +14,9 @@
  *
  * @property-read  integer  $id  The gallery id.
  */
+
+use Horde\Ansel\AnselConfig;
+
 class Ansel_Gallery implements Serializable
 {
     /**
@@ -217,6 +220,7 @@ return Horde::callHook('can_download', [$this->id]);
      */
     public function save()
     {
+        $config = $injector->get('AnselConfig');
         // Check for invalid characters in the slug.
         $slug = $this->get('slug');
         if ($slug && preg_match('/[^a-zA-Z0-9_@]/', $slug)) {
@@ -240,7 +244,7 @@ return Horde::callHook('can_download', [$this->id]);
             }
         }
 
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')
                 ->expire('Ansel_Gallery' . $this->id);
         }
@@ -263,6 +267,7 @@ return Horde::callHook('can_download', [$this->id]);
      */
     public function updateImageCount($images, $add = true)
     {
+        $config = $injector->get('AnselConfig');
         /* Updating self */
         if ($add) {
             $this->set('images', $this->get('images') + $images);
@@ -277,7 +282,7 @@ return Horde::callHook('can_download', [$this->id]);
         }
 
         /* Need to expire the cache for the gallery that was changed */
-        if ($GLOBALS['conf']['ansel_cache']['usecache']) {
+        if ($config->get('ansel_cache.usecache')) {
             $GLOBALS['injector']->getInstance('Horde_Cache')
                 ->expire('Ansel_Gallery' . $this->id);
         }
@@ -951,8 +956,9 @@ return Horde::callHook('can_download', [$this->id]);
      */
     public function getStyle()
     {
+        $config = $injector->get('AnselConfig');
         // No styles allowed per admin.
-        if (!$GLOBALS['conf']['image']['prettythumbs']) {
+        if (!$config->get('image.prettythumbs')) {
             return Ansel::getStyleDefinition('ansel_default');
         }
 
@@ -969,7 +975,7 @@ return Horde::callHook('can_download', [$this->id]);
         // Check browser requirements. If we require PNG support, and do not
         // have it, revert to the basic ansel_default style.
         if ($style->requiresPng()
-            && $GLOBALS['conf']['image']['type'] != 'png') {
+            && $config->get('image.type') != 'png') {
             $style = Ansel::getStyleDefinition('ansel_default');
         }
 
@@ -1015,10 +1021,11 @@ return Horde::callHook('can_download', [$this->id]);
     public function isOldEnough()
     {
         global $session;
+        $config = $injector->get('AnselConfig');
 
         if (($GLOBALS['registry']->getAuth()
              && $this->get('owner') == $GLOBALS['registry']->getAuth())
-            || empty($GLOBALS['conf']['ages']['limits'])
+            || empty($config->get('ages.limits'))
             || !$this->get('age')) {
 
             return true;
@@ -1036,7 +1043,7 @@ return Horde::callHook('can_download', [$this->id]);
         }
 
         // Can we hook user's age?
-        if ($GLOBALS['conf']['ages']['hook']
+        if ($config->get('ages.hook')
             && $GLOBALS['registry']->isAuthenticated()) {
             try {
                 /**
@@ -1244,6 +1251,7 @@ $result = Horde::callHook('user_age', [], 'ansel');
      */
     public function toJson($full = false)
     {
+        $config = $injector->get('AnselConfig');
         // @TODO: Support date grouped galleries
         $vMode = $this->get('view_mode');
         if ($vMode != 'Normal') {
@@ -1279,8 +1287,8 @@ $result = Horde::callHook('user_age', [], 'ansel');
         }
 
         if ($full) {
-            $json->tiny = ($GLOBALS['conf']['image']['tiny']
-                           && ($GLOBALS['conf']['vfs']['src'] == 'direct' || $this->_share->hasPermission('', Horde_Perms::READ)));
+            $json->tiny = ($config->get('image.tiny')
+                           && ($config->get('vfs.src') == 'direct' || $this->_share->hasPermission('', Horde_Perms::READ)));
             $json->sg = [];
             if ($this->hasSubGalleries()) {
                 $sgs = $this->getChildren(

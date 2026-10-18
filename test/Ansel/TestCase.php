@@ -1,5 +1,7 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
 /**
  * Basic Ansel test case.
  *
@@ -33,6 +35,7 @@ class Ansel_TestCase extends PHPUnit_Framework_TestCase
 {
     protected static function createBasicAnselSetup(Horde_Test_Setup $setup)
     {
+        $config = $injector->get('AnselConfig');
         $setup->setup(
             [
                 '_PARAMS' => [
@@ -58,9 +61,9 @@ class Ansel_TestCase extends PHPUnit_Framework_TestCase
         );
 
         // TODO: need separate test bundles
-        $GLOBALS['conf']['image']['driver'] = 'Gd';
-        $GLOBALS['conf']['image']['type'] = 'jpg';
-        $GLOBALS['conf']['exif']['driver'] = 'Bundled';
+        $config->get('image.driver') = 'Gd';
+        $config->get('image.type') = 'jpg';
+        $config->get('exif.driver') = 'Bundled';
     }
 
     protected static function createTestVFS(Horde_Test_Setup $setup)

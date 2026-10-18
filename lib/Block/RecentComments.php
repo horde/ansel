@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Display most recent image comments for galleries.
  *
@@ -36,6 +39,7 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
      */
     protected function _params()
     {
+        $config = $injector->get('AnselConfig');
         $params = [
             'gallery' => [
                 'name' => _("Gallery"),
@@ -45,11 +49,11 @@ class Ansel_Block_RecentComments extends Horde_Core_Block
             ],
         ];
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+        if (empty($config->get('gallery.listlimit'))
             || ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
                 ['perm' => Horde_Perms::READ]
-            ) < $GLOBALS['conf']['gallery']['listlimit'])) {
+            ) < $config->get('gallery.listlimit'))) {
 
             foreach ($storage->listGalleries(['perm' => Horde_Perms::READ]) as $gal) {
                 $params['gallery']['values'][$gal->id] = $gal->get('name');

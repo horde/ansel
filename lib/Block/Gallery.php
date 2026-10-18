@@ -1,5 +1,8 @@
 <?php
 
+use Horde\Ansel\AnselConfig;
+
+
 /**
  * Displays mini thumbnails of images in the selected (or random) gallery.
  *
@@ -31,6 +34,7 @@ class Ansel_Block_Gallery extends Horde_Core_Block
      */
     protected function _params()
     {
+        $config = $injector->get('AnselConfig');
         $params = [
             'gallery' => [
                 'name' => _("Gallery"),
@@ -51,11 +55,11 @@ class Ansel_Block_Gallery extends Horde_Core_Block
         ];
 
         $storage = $GLOBALS['injector']->getInstance('Ansel_Storage');
-        if (empty($GLOBALS['conf']['gallery']['listlimit'])
+        if (empty($config->get('gallery.listlimit'))
             || ($storage->countGalleries(
                 $GLOBALS['registry']->getAuth(),
                 ['perm' => Horde_Perms::READ]
-            ) < $GLOBALS['conf']['gallery']['listlimit'])) {
+            ) < $config->get('gallery.listlimit'))) {
 
             foreach ($storage->listGalleries() as $gal) {
                 $params['gallery']['values'][$gal->id] = $gal->get('name');
