@@ -168,16 +168,19 @@
             'panzoom': false,
             'layerSwitcher': false,
             'onHover': false,
-            'markerDragEnd': Prototype.EmptyFunction,
+            'markerDragEnd': function() {},
             'markerLayerTitle': '',
             'onBaseLayerChange': false
         }
-        var opts = Object.extend(o, op || {});
+        var opts = Object.assign(o, op || {});
         var layers = [];
         if (Ansel.conf.maps.providers) {
-            Ansel.conf.maps.providers.each(function(l) {
+            Ansel.conf.maps.providers.forEach(function(l) {
                 var p = new HordeMap[l]();
-                $H(p.getLayers()).values().each(function(e) { layers.push(e); });
+                var providerLayers = p.getLayers();
+                Object.keys(providerLayers).forEach(function(k) {
+                    layers.push(providerLayers[k]);
+                });
             });
         }
         var mapOpts = {
@@ -194,7 +197,7 @@
             onHover: opts.onHover,
             onClick: opts.onClick,
             markerDragEnd: opts.markerDragEnd,
-            mapClick: (opts.mapClick) ? opts.mapClick.bind(this) : Prototype.EmptyFunction,
+            mapClick: (opts.mapClick) ? opts.mapClick.bind(this) : function() {},
             delayed: (opts.delayed) ? true : false,
             markerLayerTitle: opts.markerLayerTitle
         }
@@ -326,7 +329,10 @@
 
     onDomLoad: function()
     {
-        this.maps.each(function(x) { x.display(); });
+        var self = this;
+        Object.keys(this.maps).forEach(function(k) {
+            self.maps[k].display();
+        });
     }
 
 }
