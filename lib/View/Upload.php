@@ -60,8 +60,7 @@ class Ansel_View_Upload
      * <pre>
      *   'browse_button' - Dom id of button to open file system browser.
      *   'target'        - Url of the target page to upload images to.
-     *   'drop_target'   - Dom id of the element to receive drag and drop images
-     *                     (If runtime supports it).
+     *   'drop_target'   - Dom id of the element to receive drag and drop images.
      *   'gallery'       - The gallery id we are uploading to.
      * </pre>
      * @param <type> $params
@@ -86,14 +85,8 @@ class Ansel_View_Upload
         // Check for file upload
         $this->_handleFileUpload();
 
-        // TODO: Configure which runtimes to allow?
         global $page_output;
-        $page_output->addScriptFile('plupload/plupload.js', 'horde');
-        $page_output->addScriptFile('plupload/plupload.flash.js', 'horde');
-        $page_output->addScriptFile('plupload/plupload.silverlight.js', 'horde');
-        $page_output->addScriptFile('plupload/plupload.html5.js', 'horde');
-        $page_output->addScriptFile('plupload/plupload.browserplus.js', 'horde');
-        $page_output->addScriptFile('plupload/uploader.js', 'horde');
+        $page_output->addScriptFile('uploader.js');
 
         $startText = _("Upload");
         $addText = _("Add Images");
@@ -104,52 +97,55 @@ class Ansel_View_Upload
         $typeError = _("File type error.");
 
         $this->_params['target']->add('gallery', $this->_params['gallery']->id);
-        $jsuri = $GLOBALS['registry']->get('jsuri', 'horde');
-        // workaround for older mozilla browsers that incorrectly enocde as utf8
-        if ($GLOBALS['browser']->getBrowser() == 'mozilla' && $GLOBALS['browser']->getMajor() <= 4) {
-            $multipart = 'true';
-        } else {
-            $multipart = 'false';
-        }
+        $target = json_encode((string) $this->_params['target']);
+        $dropTarget = json_encode($this->_params['drop_target']);
+        $returnTarget = json_encode((string) $this->_params['return_target']);
+        $galleryId = json_encode((string) $this->_gallery->id);
+        $text = json_encode([
+            'start' => $startText,
+            'add' => $addText,
+            'header' => $header,
+            'returnButton' => $returnText,
+            'subheader' => $subText,
+            'size' => $sizeError,
+            'type' => $typeError,
+        ]);
         $js = <<< EOT
-                    var uploader = new Horde_Uploader({
-                        'target': "{$this->_params['target']}",
-                        drop_target: "{$this->_params['drop_target']}",
-                        swf_path: '{$jsuri}/plupload/plupload.flash.swf',
-                        xap_path: '{$jsuri}/plupload/plupload.silverlight.xap',
+                    var uploader = new AnselUploader({
+                        target: {$target},
+                        drop_target: {$dropTarget},
                         container: 'anseluploader',
-                        text: { start: '{$startText}',
-                                add: '{$addText}',
-                                header: '{$header}',
-                                returnButton: '{$returnText}',
-                                subheader: '{$subText}',
-                                size: '{$sizeError}',
-                                type: '{$typeError}'
-                        },
                         container_class: 'uploaderContainer',
-                        return_target: '{$this->_params['return_target']}',
-                        multipart: {$multipart}
+                        return_target: {$returnTarget},
+                        text: {$text}
                     },
                     {
-                        'uploadcomplete': function(up, files) {
-                            $('uploadimages').hide();
+                        uploadcomplete: function(files) {
+                            var uploadBtn = document.getElementById('uploadimages');
+                            if (uploadBtn) {
+                                uploadBtn.style.display = 'none';
+                            }
                             Ansel.uploadedImages = files;
                             if (Ansel.conf.havetwitter) {
-                                $('twitter').toggleClassName('hidden');
+                                var tweet = document.getElementById('twitter');
+                                if (tweet) {
+                                    tweet.classList.toggle('hidden');
+                                }
                             }
                         }
                     });
                     uploader.init();
-                    $('twitter').observe('click', function() {
+                    document.getElementById('twitter').addEventListener('click', function() {
                         HordeCore.doAction(
                             'uploadNotification',
                             {
                                 s: 'twitter',
-                                g: '{$this->_gallery->id}'
+                                g: {$galleryId}
                             },
                             {
-                                 callback: function(r) { $('twitter').hide(); }
-
+                                callback: function(r) {
+                                    document.getElementById('twitter').style.display = 'none';
+                                }
                             }
                         );
                     });
@@ -353,8 +349,8 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
     }
 
     /**
-     * Checks for a file uploaded via the pluploader. If one is found, handle
-     * it, send the server json response and exit.
+     * Checks for a file uploaded via the asynchronous uploader.
+     * Handle if found and send the server json response.
      */
     protected function _handleFileUpload()
     {
