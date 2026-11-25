@@ -73,10 +73,10 @@ class Ansel_Widget_ImageFaces extends Ansel_Widget_Base
         // Iterate over all the found faces and build the tiles.
         foreach ($view->images as $face) {
             // Attach events to the face tile for showing the overlay
-            $faces_js .= '$(\'facediv' . $face['face_id'] . '\').observe(\'mouseover\', function() {showFace(' . $face['face_id'] . ')});'
-                . '$(\'facediv' . $face['face_id'] . '\').observe(\'mouseout\', function() {hideFace(' . $face['face_id'] . ')});'
-                . '$(\'face' . $face['face_id'] . '\').firstDescendant().observe(\'mouseover\', function() {showFace(' . $face['face_id'] . ')});'
-                . '$(\'face' . $face['face_id'] . '\').firstDescendant().observe(\'mouseout\', function() {hideFace(' . $face['face_id'] . ')});';
+            $faces_js .= 'document.getElementById(\'facediv' . $face['face_id'] . '\').addEventListener(\'mouseover\', function() {showFace(' . $face['face_id'] . ')});'
+                . 'document.getElementById(\'facediv' . $face['face_id'] . '\').addEventListener(\'mouseout\', function() {hideFace(' . $face['face_id'] . ')});'
+                . 'document.getElementById(\'face' . $face['face_id'] . '\').firstElementChild.addEventListener(\'mouseover\', function() {showFace(' . $face['face_id'] . ')});'
+                . 'document.getElementById(\'face' . $face['face_id'] . '\').firstElementChild.addEventListener(\'mouseout\', function() {hideFace(' . $face['face_id'] . ')});';
         }
         $GLOBALS['page_output']->addInlineScript($faces_js, 'dom');
 

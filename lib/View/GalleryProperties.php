@@ -1,7 +1,7 @@
 <?php
 
 use Horde\Util\Util;
-use Horde\\Ansel\\AnselConfig;
+use Horde\Ansel\AnselConfig;
 
 /**
  * Class to encapsulate the UI for adding/viewing/changing galleries.
@@ -121,26 +121,26 @@ class Ansel_View_GalleryProperties
         $view->havePretty = $config->get('image.prettythumbs');
         $view->ages = $config->get('ages.limits');
 
-        $js = ['$("gallery_name").focus()'];
+        $js = ['document.getElementById("gallery_name").focus()'];
         if ($config->get('image.type') != 'png') {
             $js[] = 'function checkStyleSelection()
                 {
-                    var s, bg = $F("background_color");
-                    $A($("thumbnail_style").options).each(function(o) {
+                    var s, bg = document.getElementById("background_color").value;
+                    Array.prototype.forEach.call(document.getElementById("thumbnail_style").options, function(o) {
                         if (o.value == "Thumb" && o.selected == "1") {
                            s = true;
                         }
                     });
                     if (bg == "none" && !s) {
                         alert("' . _("Your server does not support thumbnails with transparent backgrounds.  Either select a background color or use the 'Basic Thumbnail' type. Please contact your server administrator for more information.") . '");
-                        $A($("thumbnail_style").options).each(function(o) {
+                        Array.prototype.forEach.call(document.getElementById("thumbnail_style").options, function(o) {
                             if (o.value == "Thumb") {
                                 o.selected = "1";
                             }
-                        })
+                        });
                     }
                 }';
-            $js[] = '$("background_color").observe("change", checkStyleSelection); $("thumbnail_style").observe("change", checkStyleSelection);';
+            $js[] = 'document.getElementById("background_color").addEventListener("change", checkStyleSelection); document.getElementById("thumbnail_style").addEventListener("change", checkStyleSelection);';
         }
 
         global $page_output;
