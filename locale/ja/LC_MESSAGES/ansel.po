@@ -1967,3 +1967,23 @@ msgstr "_P印刷"
 #: lib/Exif.php:302
 msgid "sRGB"
 msgstr "sRGB"
+
+#: lib/View/Upload.php:399 lib/View/Upload.php:409 lib/View/Upload.php:414
+msgid "Not a valid, supported image file."
+msgstr "有効な対応画像ファイルではありません。"
+
+#: lib/View/Upload.php:115
+msgid "Size"
+msgstr "サイズ"
+
+#: lib/View/Upload.php:114
+msgid "Status"
+msgstr "状態"
+
+#: lib/View/Upload.php:370 lib/View/Upload.php:373 lib/View/Upload.php:438 lib/View/Upload.php:444
+msgid "The uploaded file could not be read."
+msgstr "アップロードされたファイルを読み取れませんでした。"
+
+#: lib/View/Upload.php:113
+msgid "Filename"
+msgstr "ファイル名"

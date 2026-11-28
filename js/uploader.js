@@ -1,4 +1,18 @@
 /**
+ * Copyright 2026 The Horde Project (http://www.horde.org/)
+ *
+ * See the enclosed file LICENSE for license information (GPL). If you
+ * did not receive this file, see http://www.horde.org/licenses/gpl.
+ *
+ * @author Michael J Rubinsky <mrubinsk@horde.org>
+ * @author Ralf Lang <ralf.lang@ralf-lang.de>
+ * @author Torben Dannhauer <torben@dannhauer.de>
+ * @category Horde
+ * @license http://www.horde.org/licenses/gpl GPL
+ * @package Ansel
+ */
+
+/**
  * Vanilla JS file upload widget for Ansel.
  *
  * Replaces the former plupload-based Horde_Uploader.
@@ -64,6 +78,7 @@ var AnselUploader = (function () {
         // Files queued for upload, keyed by a generated id.
         this._queue = [];
         this._seq = 0;
+        this._uploading = false;
     }
 
     AnselUploader.prototype = {
@@ -137,6 +152,12 @@ var AnselUploader = (function () {
                 ul = this._ul;
 
             files.forEach(function (file) {
+                if (!self._isAccepted(file)) {
+                    window.alert((self.params.text.type || 'File type error.') +
+                        ' ' + file.name);
+                    return;
+                }
+
                 if (self.params.max_file_size &&
                     file.size > self.params.max_file_size) {
                     window.alert((self.params.text.size || 'File size error.') +
@@ -175,9 +196,7 @@ var AnselUploader = (function () {
          * Remove a queued but not yet uploaded file.
          */
         _remove: function (id) {
-            this._queue = this._queue.filter(function (entry) {
-                return entry.id !== id;
-            });
+            this._dequeue(id);
             var li = document.getElementById(id);
             if (li) {
                 li.parentNode.removeChild(li);
@@ -191,6 +210,10 @@ var AnselUploader = (function () {
          * Upload every queued file sequentially.
          */
         _startUpload: function () {
+            if (this._uploading || !this._queue.length) {
+                return;
+            }
+            this._uploading = true;
             this._setHidden(this.params.upload_button, true);
 
             var self = this,
@@ -199,8 +222,10 @@ var AnselUploader = (function () {
 
             function next(index) {
                 if (index >= queue.length) {
-                    self._setHidden(self.params.return_button, false);
-                    if (typeof self.handlers.uploadcomplete === 'function') {
+                    self._uploading = false;
+                    self._setHidden(self.params.return_button, uploaded.length === 0);
+                    self._setHidden(self.params.upload_button, self._queue.length === 0);
+                    if (uploaded.length && typeof self.handlers.uploadcomplete === 'function') {
                         self.handlers.uploadcomplete(uploaded);
                     }
                     return;
@@ -233,50 +258,96 @@ var AnselUploader = (function () {
                     'name=' + encodeURIComponent(file.name);
 
             data.append('file', file, file.name);
-            this._setStatus(entry.id, '0%');
 
             return fetch(url, {
                 method: 'POST',
                 body: data,
                 credentials: 'same-origin'
             }).then(function (response) {
-                return response.json().catch(function () {
-                    return { status: response.status };
-                });
-            }).then(function (result) {
-                if (parseInt(result.status, 10) === 200) {
-                    self._markDone(entry.id);
-                    return result;
+                return response.text();
+            }).then(function (body) {
+                var result = null;
+                if (body) {
+                    try {
+                        result = JSON.parse(body);
+                    } catch (e) {
+                        result = null;
+                    }
                 }
-                var message = (result.error && result.error.message) ||
-                    (self.params.text.type || 'File type error.');
-                self._markError(entry.id, message);
-                return Promise.reject(result);
+                if (!result || parseInt(result.status, 10) !== 200) {
+                    var message = (result && result.error && result.error.message) ||
+                        (self.params.text.type || 'File type error.');
+                    self._markError(entry.id, message);
+                    throw new Error(message);
+                }
+                self._markDone(entry.id);
+                return result;
             }).catch(function (err) {
-                self._markError(entry.id,
-                    self.params.text.type || 'File type error.');
+                var li = document.getElementById(entry.id);
+                if (!li || li.dataset.settled !== '1') {
+                    self._markError(
+                        entry.id,
+                        self.params.text.type || 'File type error.'
+                    );
+                }
                 return Promise.reject(err);
+            });
+        },
+
+        /**
+         * Accept images and zip archives. An empty or generic browser type
+         * is left for the server to judge.
+         */
+        _isAccepted: function (file) {
+            var type = (file.type || '').toLowerCase();
+            if (!type || type === 'application/octet-stream') {
+                return true;
+            }
+            if (type.indexOf('image/') === 0) {
+                return true;
+            }
+            return type === 'application/zip' ||
+                type === 'application/x-zip-compressed' ||
+                type === 'application/x-compressed';
+        },
+
+        _dequeue: function (id) {
+            this._queue = this._queue.filter(function (entry) {
+                return entry.id !== id;
             });
         },
 
         _markDone: function (id) {
             var li = document.getElementById(id);
+            this._dequeue(id);
             if (!li) {
                 return;
             }
+            li.dataset.settled = '1';
             li.classList.add(this.params.filelistitemdone_class);
-            this._setStatus(id, ' ', this.params.success_class);
+            this._setStatus(id, ' ');
             this._dropRemove(li);
+            this._markAction(li, this.params.success_class);
         },
 
         _markError: function (id, message) {
             var li = document.getElementById(id);
-            if (!li) {
+            this._dequeue(id);
+            if (!li || li.dataset.settled === '1') {
                 return;
             }
+            li.dataset.settled = '1';
             li.classList.add(this.params.filelistitemerror_class);
-            this._setStatus(id, message, this.params.error_class);
+            this._setStatus(id, message);
             this._dropRemove(li);
+            this._markAction(li, this.params.error_class);
+        },
+
+        _markAction: function (li, cls) {
+            var action = li.querySelector('.hordeUploaderFileaction');
+            if (action && cls) {
+                action.classList.add(cls);
+            }
         },
 
         _dropRemove: function (li) {
@@ -286,7 +357,7 @@ var AnselUploader = (function () {
             }
         },
 
-        _setStatus: function (id, text, cls) {
+        _setStatus: function (id, text) {
             var li = document.getElementById(id);
             if (!li) {
                 return;
@@ -294,9 +365,6 @@ var AnselUploader = (function () {
             var status = li.querySelector('.hordeUploaderFilestatus');
             if (status) {
                 status.textContent = text;
-                if (cls) {
-                    status.classList.add(cls);
-                }
             }
         },
 
@@ -344,10 +412,10 @@ var AnselUploader = (function () {
 
             var fileHeader = document.createElement('div');
             fileHeader.className = 'hordeUploaderFilelistHeader';
-            fileHeader.appendChild(this._cell('hordeUploaderFilename', 'Filename'));
+            fileHeader.appendChild(this._cell('hordeUploaderFilename', text.filename || 'Filename'));
             fileHeader.appendChild(this._cell('hordeUploaderFileaction', ''));
-            fileHeader.appendChild(this._cell('hordeUploaderFilestatus', 'Status'));
-            fileHeader.appendChild(this._cell('hordeUploaderFilesize', 'Size'));
+            fileHeader.appendChild(this._cell('hordeUploaderFilestatus', text.status || 'Status'));
+            fileHeader.appendChild(this._cell('hordeUploaderFilesize', text.sizeLabel || 'Size'));
 
             var ul = document.createElement('ul');
             ul.className = 'hordeUploaderFileUl';
@@ -371,6 +439,7 @@ var AnselUploader = (function () {
             var input = document.createElement('input');
             input.type = 'file';
             input.multiple = true;
+            input.accept = 'image/*,.zip,application/zip,application/x-zip-compressed';
             input.style.display = 'none';
             this._fileInput = input;
 

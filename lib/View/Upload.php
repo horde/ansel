@@ -1,7 +1,7 @@
 <?php
 
-use Horde\Ansel\AnselConfig;
 use Horde\Compress\CompressFactory;
+use Horde\Core\Config\ConfigLoader;
 use Horde\Compress\Driver\Zip as CompressZip;
 use Horde\Compress\Exception as CompressException;
 use Horde\Util\Util;
@@ -95,6 +95,7 @@ class Ansel_View_Upload
         $subText = _("Add files to the upload queue and click the start button.");
         $sizeError = _("File size error.");
         $typeError = _("File type error.");
+        $maxFileSize = $this->_uploadByteLimit();
 
         $this->_params['target']->add('gallery', $this->_params['gallery']->id);
         $target = json_encode((string) $this->_params['target']);
@@ -109,6 +110,9 @@ class Ansel_View_Upload
             'subheader' => $subText,
             'size' => $sizeError,
             'type' => $typeError,
+            'filename' => _("Filename"),
+            'status' => _("Status"),
+            'sizeLabel' => _("Size"),
         ]);
         $js = <<< EOT
                     var uploader = new AnselUploader({
@@ -117,14 +121,11 @@ class Ansel_View_Upload
                         container: 'anseluploader',
                         container_class: 'uploaderContainer',
                         return_target: {$returnTarget},
+                        max_file_size: {$maxFileSize},
                         text: {$text}
                     },
                     {
                         uploadcomplete: function(files) {
-                            var uploadBtn = document.getElementById('uploadimages');
-                            if (uploadBtn) {
-                                uploadBtn.style.display = 'none';
-                            }
                             Ansel.uploadedImages = files;
                             if (Ansel.conf.havetwitter) {
                                 var tweet = document.getElementById('twitter');
@@ -354,117 +355,171 @@ Horde::callHook('postupload', [$image_ids], 'ansel');
      */
     protected function _handleFileUpload()
     {
-        $config = $injector->get('AnselConfig');
-        if ($filename = Util::getFormData('name')) {
-            if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
-                $type = $_SERVER["HTTP_CONTENT_TYPE"];
-            } elseif (isset($_SERVER["CONTENT_TYPE"])) {
-                $type = $_SERVER["CONTENT_TYPE"];
+        $filename = Util::getFormData('name');
+        if (!$filename) {
+            return;
+        }
+
+        $requestType = $_SERVER['HTTP_CONTENT_TYPE'] ?? $_SERVER['CONTENT_TYPE'] ?? '';
+        if ($requestType === '' || $requestType === 'application/octet-stream') {
+            $source = 'php://input';
+        } elseif (strpos($requestType, 'multipart') !== false) {
+            $uploadError = $_FILES['file']['error'] ?? UPLOAD_ERR_NO_FILE;
+            $source = $_FILES['file']['tmp_name'] ?? '';
+            if ($uploadError !== UPLOAD_ERR_OK || $source === '') {
+                $this->_sendUploadJson('400', _("The uploaded file could not be read."));
+            }
+        } else {
+            $this->_sendUploadJson('400', _("The uploaded file could not be read."));
+        }
+
+        [$temp, $out] = $this->_copyUploadToTemp($source);
+        $data = stream_get_contents($out);
+        fclose($out);
+
+        $magicDb = $GLOBALS['injector']->get(ConfigLoader::class)->load('horde')->get('mime.magic_db');
+        $type = $this->_detectUploadMime($temp, $filename, is_string($magicDb) ? $magicDb : null);
+        $nameType = Horde_Mime_Magic::filenameToMime($filename);
+        $zipTypes = [
+            'x-extension/zip',
+            'application/x-compressed',
+            'application/x-zip-compressed',
+            'application/zip',
+        ];
+
+        $image_ids = [];
+        if (in_array($type, $zipTypes, true) || in_array($nameType, $zipTypes, true)) {
+            try {
+                $image_ids = $this->_handleZip($temp);
+            } catch (Ansel_Exception $e) {
+                $this->_sendUploadJson('400', $e->getMessage());
+            }
+        } else {
+            if (getimagesize($temp) === false) {
+                $this->_sendUploadJson('400', _("Not a valid, supported image file."));
             }
 
-            if (empty($type) || $type == 'application/octet-stream') {
-                $temp = Util::getTempFile('', true);
-                $out = fopen($temp, 'w+');
-                if ($out) {
-                    // Read binary input stream and append it to temp file
-                    $in = fopen("php://input", "rb");
-                    if ($in) {
-                        stream_copy_to_stream($in, $out);
-                        rewind($out);
-                        fclose($in);
-                    } else {
-                        fclose($out);
-                        header('Content-Type: application/json');
-                        echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open input stream." } }');
-                        exit;
-                    }
-                } else {
-                    header('Content-Type: application/json');
-                    echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open output stream." } }');
-                    exit;
-                }
-
-                // Don't know type. Try to deduce it.
-                if (!($type = Horde_Mime_Magic::analyzeFile($temp, $config->get('mime.magic_db') ?? null))) {
-                    $type = Horde_Mime_Magic::filenameToMime($filename);
-                }
-            } elseif (strpos($type, "multipart") !== false) {
-                // Handle multipart uploads
-                $temp = Util::getTempFile('', true);
-                $out = fopen($temp, 'w+');
-                if ($out) {
-                    $in = fopen($_FILES['file']['tmp_name'], 'rb');
-                    if ($in) {
-                        stream_copy_to_stream($in, $out);
-                        rewind($out);
-                        fclose($in);
-                    } else {
-                        fclose($out);
-                        header('Content-Type: application/json');
-                        echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open input stream." } }');
-                        exit;
-                    }
-                } else {
-                    header('Content-Type: application/json');
-                    echo('{ "status" : "500", "file": "' . $temp . '", error" : { "message": "Failed to open output stream." } }');
-                    exit;
-                }
-            }
-
-            // Figure out what to do with the file
-            if (in_array(
-                $type,
-                [
-                    'x-extension/zip',
-                    'application/x-compressed',
-                    'application/x-zip-compressed',
-                    'application/zip']
-            )
-                || Horde_Mime_Magic::filenameToMime($temp) == 'application/zip') {
-
-                // ZIP file
-                try {
-                    $image_ids = $this->_handleZip($temp);
-                } catch (Ansel_Exception $e) {
-                    $notification->push(
-                        sprintf(_("There was an error processing the uploaded archive: %s"), $e->getMessage()),
-                        'horde.error'
-                    );
-                }
-            } else {
-                // Try and make sure the image is in a recognizeable format.
-                if (getimagesize($temp) === false) {
-                    header('Content-Type: application/json');
-                    echo('{ "status" : "400", "error" : { "message": "Not a valid, supported image file." }, "id" : "id" }');
-                    exit;
-                }
-
-                // Add the image to the gallery
-                $image_data = [
+            try {
+                $image_ids = [$this->_gallery->addImage([
                     'image_filename' => $filename,
                     'image_type' => $type,
-                    'data' => stream_get_contents($out)];
-
-                fclose($out);
-                try {
-                    $image_ids = [$this->_gallery->addImage($image_data)];
-                } catch (Ansel_Exception $e) {
-                    header('Content-Type: application/json');
-                    echo('{ "status" : "400", "error" : { "message": "Not a valid, supported image file." }, "id" : "id" }');
-                    exit;
-                }
-                unset($data);
+                    'data' => $data,
+                ])];
+            } catch (Ansel_Exception $e) {
+                $this->_sendUploadJson('400', _("Not a valid, supported image file."));
             }
-
-            // Try to auto generate some thumbnails.
-            $qtask = new Ansel_Queue_ProcessThumbs($image_ids);
-            $queue = $GLOBALS['injector']->getInstance('Horde_Queue_Storage');
-            $queue->add($qtask);
-
-            header('Content-Type: application/json');
-            echo('{ "status" : "200", "error" : {} }');
-            exit;
         }
+
+        if (!$image_ids) {
+            $this->_sendUploadJson('400', _("Not a valid, supported image file."));
+        }
+
+        $qtask = new Ansel_Queue_ProcessThumbs($image_ids);
+        $queue = $GLOBALS['injector']->getInstance('Horde_Queue_Storage');
+        $queue->add($qtask);
+
+        $this->_sendUploadJson('200');
+    }
+
+    /**
+     * Copy an uploaded byte stream into a temporary file.
+     *
+     * Sends a JSON error and exits when the stream cannot be opened.
+     *
+     * @param string $source  php://input or a PHP upload tmp path.
+     *
+     * @return array{0: string, 1: resource}  Temp path and a handle rewound to the start.
+     */
+    private function _copyUploadToTemp(string $source): array
+    {
+        $temp = Util::getTempFile('', true);
+        $out = fopen($temp, 'w+');
+        if (!$out) {
+            $this->_sendUploadJson('500', _("The uploaded file could not be read."));
+        }
+
+        $in = fopen($source, 'rb');
+        if (!$in) {
+            fclose($out);
+            $this->_sendUploadJson('500', _("The uploaded file could not be read."));
+        }
+
+        stream_copy_to_stream($in, $out);
+        rewind($out);
+        fclose($in);
+
+        return [$temp, $out];
+    }
+
+    /**
+     * Detect the MIME type of an uploaded file from its contents, then its name.
+     */
+    private function _detectUploadMime(string $path, string $filename, ?string $magicDb): string
+    {
+        $type = Horde_Mime_Magic::analyzeFile($path, $magicDb);
+        if (!$type) {
+            $type = Horde_Mime_Magic::filenameToMime($filename);
+        }
+
+        return $type ?: 'application/octet-stream';
+    }
+
+    /**
+     * Emit the uploader JSON document and stop the request.
+     *
+     * An empty error is an object so the client can read error.message.
+     */
+    private function _sendUploadJson(string $status, ?string $error = null): void
+    {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => $status,
+            'error' => $error === null ? new stdClass() : ['message' => $error],
+        ]);
+        exit;
+    }
+
+    /**
+     * Smallest configured PHP limit that applies to one uploaded file, in bytes.
+     *
+     * A limit of 0 means that setting is unlimited and is ignored.
+     */
+    private function _uploadByteLimit(): int
+    {
+        $uploadMax = $this->_iniToBytes((string) ini_get('upload_max_filesize'));
+        $postMax = $this->_iniToBytes((string) ini_get('post_max_size'));
+        if ($uploadMax > 0 && $postMax > 0) {
+            return min($uploadMax, $postMax);
+        }
+
+        return max($uploadMax, $postMax);
+    }
+
+    /**
+     * Convert a php.ini size such as "8M" to bytes.
+     */
+    private function _iniToBytes(string $value): int
+    {
+        $value = trim($value);
+        if ($value === '') {
+            return 0;
+        }
+
+        $unit = strtolower(substr($value, -1));
+        $number = (float) $value;
+        switch ($unit) {
+            case 'g':
+                $number *= 1024 * 1024 * 1024;
+                break;
+            case 'm':
+                $number *= 1024 * 1024;
+                break;
+            case 'k':
+                $number *= 1024;
+                break;
+        }
+
+        return (int) $number;
     }
 
     /**

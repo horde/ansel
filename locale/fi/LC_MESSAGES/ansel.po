@@ -837,7 +837,7 @@ msgstr "Palvelimelle tuotava tiedosto"
 msgid "File type error."
 msgstr "Tiedostyyppi virhe"
 
-#: templates/faces/gallery.inc:5
+#: templates/faces/gallery.inc:5 lib/View/Upload.php:113
 msgid "Filename"
 msgstr "Tiedostonnimi"
 
@@ -2480,3 +2480,19 @@ msgstr "asetukset"
 #: templates/image/resize_image.inc:67
 msgid "width"
 msgstr "leveys"
+
+#: lib/View/Upload.php:399 lib/View/Upload.php:409 lib/View/Upload.php:414
+msgid "Not a valid, supported image file."
+msgstr "Ei kelvollinen tuettu kuvatiedosto."
+
+#: lib/View/Upload.php:115
+msgid "Size"
+msgstr "Koko"
+
+#: lib/View/Upload.php:114
+msgid "Status"
+msgstr "Tila"
+
+#: lib/View/Upload.php:370 lib/View/Upload.php:373 lib/View/Upload.php:438 lib/View/Upload.php:444
+msgid "The uploaded file could not be read."
+msgstr "Ladattua tiedostoa ei voitu lukea."

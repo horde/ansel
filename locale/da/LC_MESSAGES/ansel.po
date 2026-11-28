@@ -800,7 +800,7 @@ msgstr "Fil til upload"
 msgid "File type error."
 msgstr "Fil type fejl"
 
-#: templates/faces/gallery.inc:5
+#: templates/faces/gallery.inc:5 lib/View/Upload.php:113
 msgid "Filename"
 msgstr "Filnavn"
 
@@ -2442,3 +2442,19 @@ msgstr "indstillinger"
 #: templates/image/resize_image.inc:36
 msgid "width"
 msgstr "Bredde"
+
+#: lib/View/Upload.php:399 lib/View/Upload.php:409 lib/View/Upload.php:414
+msgid "Not a valid, supported image file."
+msgstr "Ikke en gyldig, understøttet billedfil."
+
+#: lib/View/Upload.php:115
+msgid "Size"
+msgstr "Størrelse"
+
+#: lib/View/Upload.php:114
+msgid "Status"
+msgstr "Status"
+
+#: lib/View/Upload.php:370 lib/View/Upload.php:373 lib/View/Upload.php:438 lib/View/Upload.php:444
+msgid "The uploaded file could not be read."
+msgstr "Den uploadede fil kunne ikke læses."
