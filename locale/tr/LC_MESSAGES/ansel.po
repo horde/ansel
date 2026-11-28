@@ -1025,7 +1025,7 @@ msgstr "Dosya bulunamadı."
 msgid "File to upload"
 msgstr "Yüklenecek dosya"
 
-#: templates/faces/gallery.inc:5
+#: templates/faces/gallery.inc:5 lib/View/Upload.php:113
 msgid "Filename"
 msgstr "Dosya adı"
 
@@ -2790,3 +2790,19 @@ msgstr "sRGB"
 #: templates/faces/define.inc:59
 msgid "width"
 msgstr "genişlik"
+
+#: lib/View/Upload.php:399 lib/View/Upload.php:409 lib/View/Upload.php:414
+msgid "Not a valid, supported image file."
+msgstr "Geçerli, desteklenen bir resim dosyası değil."
+
+#: lib/View/Upload.php:115
+msgid "Size"
+msgstr "Boyut"
+
+#: lib/View/Upload.php:114
+msgid "Status"
+msgstr "Durum"
+
+#: lib/View/Upload.php:370 lib/View/Upload.php:373 lib/View/Upload.php:438 lib/View/Upload.php:444
+msgid "The uploaded file could not be read."
+msgstr "Yüklenen dosya okunamadı."

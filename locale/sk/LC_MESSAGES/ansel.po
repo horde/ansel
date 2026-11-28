@@ -844,7 +844,7 @@ msgstr "Súbor na nahranie"
 msgid "File type error."
 msgstr "Neplatný typ súboru."
 
-#: templates/faces/gallery.inc:5
+#: templates/faces/gallery.inc:5 lib/View/Upload.php:113
 msgid "Filename"
 msgstr "Názov súboru"
 
@@ -2479,3 +2479,19 @@ msgstr "nastavenia"
 #: templates/image/resize_image.inc:67
 msgid "width"
 msgstr "šírka"
+
+#: lib/View/Upload.php:399 lib/View/Upload.php:409 lib/View/Upload.php:414
+msgid "Not a valid, supported image file."
+msgstr "Neplatný alebo nepodporovaný súbor obrázka."
+
+#: lib/View/Upload.php:115
+msgid "Size"
+msgstr "Veľkosť"
+
+#: lib/View/Upload.php:114
+msgid "Status"
+msgstr "Stav"
+
+#: lib/View/Upload.php:370 lib/View/Upload.php:373 lib/View/Upload.php:438 lib/View/Upload.php:444
+msgid "The uploaded file could not be read."
+msgstr "Nahraný súbor sa nepodarilo prečítať."

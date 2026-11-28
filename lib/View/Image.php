@@ -1,6 +1,6 @@
 <?php
 
-use Horde\\Ansel\\AnselConfig;
+use Horde\Ansel\AnselConfig;
 
 /**
  * Copyright 2003-2026 Horde LLC (http://www.horde.org/)
@@ -497,7 +497,7 @@ class Ansel_View_Image extends Ansel_View_Ansel
 
         $js = [];
         if (empty($this->_params['hide_slideshow'])) {
-            $js[] = '$$(\'.ssPlay\').each(function(n) { n.show(); });';
+            $js[] = 'document.querySelectorAll(\'.ssPlay\').forEach(function(n) { n.style.display = \'\'; });';
         }
         $js = array_merge($js, [
             'AnselImageView.nextImgSrc = "' . $nextImgSrc . '"',

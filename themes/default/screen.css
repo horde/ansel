@@ -397,7 +397,7 @@ a.latest:link, a.latest:visited, a.latest:hover, a.latest:active {
     color: #fff;
 }
 
-/* Pluploader */
+/* Uploader */
 #anseluploader {
     width: auto;
     padding: 2px;
@@ -405,6 +405,10 @@ a.latest:link, a.latest:visited, a.latest:hover, a.latest:active {
 .uploaderContainer {
     border: solid 1px #999999;
     margin: 3px;
+}
+.hordeUploaderDragOver {
+    outline: 2px dashed #3f7fbf;
+    outline-offset: -4px;
 }
 .uploadnotification {
   min-height: 20px;

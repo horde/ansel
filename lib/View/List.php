@@ -1,7 +1,7 @@
 <?php
 
 use Horde\Util\Util;
-use Horde\\Ansel\\AnselConfig;
+use Horde\Ansel\AnselConfig;
 
 /**
  * The Ansel_View_List:: provides a view for handling lists of galleries.
